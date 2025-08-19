@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Tomar una foto</h2>
+<mat-dialog-content>
+  <video #video autoplay style="width:100%; border-radius:8px;"></video>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)="tomarFoto()">Tomar Foto</button>
+    <button class="btn-action" mat-flat-button color="warn" (click)="cerrar()">Cancelar</button>
+</mat-dialog-actions>
+

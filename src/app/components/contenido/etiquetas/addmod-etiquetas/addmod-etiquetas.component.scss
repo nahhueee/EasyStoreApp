@@ -1,0 +1,198 @@
+.uppercase{
+    text-transform: uppercase !important;
+}
+
+.contenido{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 60px;
+    flex-wrap: wrap;
+
+    .izq{
+        flex: 1;
+        max-width: 650px;
+
+        .horizontal{
+            display: flex;
+            gap: 10px;
+        }
+    }
+    .der{
+        max-width: 650px;
+        flex: 1;
+        align-items: flex-start;
+    }
+
+    .info{
+        color: var(--placeholders);
+        margin-bottom: 3px;
+    }
+}
+
+.pegajoso{
+    position: sticky;
+    top: 10px; /* distancia desde arriba */
+}
+
+.vista{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    
+    p{
+        margin: 0%;
+    }
+}
+
+.vistaPrevia{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    background-color: #d0d0d0;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+.recuadro{
+    background-color: whitesmoke;
+    border-style: solid;
+
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    width: 80%;
+    
+    .titulo{
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin: 5px 10px 3px 10px;
+
+        p{
+            margin: 0%;
+            font-size: 18px;
+            font-family: "Poppins-Regular";
+        }
+    }
+
+    .oferta{
+        color: #1b1b1b;
+        padding: 5px 0px;
+        font-size: 25px;
+        margin-bottom: 10px;
+
+        p{
+            margin: 0px 10px;
+        }
+    }
+
+    .codigo{
+        color: #1b1b1b;
+
+        .codBarras{
+            font-family: '3OF9';
+            font-size: 50px;
+            margin-bottom: -20px;
+            margin-top:  -16px;
+        }
+
+        p{
+            margin-bottom: 0%;
+        }
+    }
+    
+
+    .precio{
+        font-size: 35px;
+        margin-bottom: -5px;
+        margin-top: -5px;
+        font-weight: 500;
+        margin-left: 10px;
+        margin-right: 10px;
+        font-family: 'Roboto-Medium';
+    }
+
+    .producto{
+        color: #1b1b1b;
+        font-size: 14px;
+        margin: 2px 10px;
+    }
+
+    .vencimiento{
+        color: #1b1b1b;
+        font-size: 15px;
+        margin: 2px 10px;
+    }
+}
+
+.logo{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    p{
+        font-family: "Poppins-Regular";
+        margin: 0%;
+    }
+}
+
+.checks{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.seccion{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+
+    .conjunto{
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        flex-wrap: wrap;
+
+        p{
+            margin: 0%;
+            color: var(--placeholders);
+        }
+    }
+}
+
+mat-button-toggle{
+    height: 35px;
+
+    mat-icon{
+        margin-top: -15px;
+    }
+
+    p{
+        margin-top: -5px !important;
+        width: 24px !important;
+    }
+}
+
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}

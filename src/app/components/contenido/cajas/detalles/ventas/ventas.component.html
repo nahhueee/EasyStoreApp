@@ -1,0 +1,190 @@
+<div class="contenedor">
+    <div class="izq">
+        <mat-table mat-table [dataSource]="dataSource" class="full-width ppalTable mat-elevation-z1 tabla-ventas">
+
+            <!-- Hora -->
+            <ng-container matColumnDef="hora">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>Hora</mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Hora:</span><p>{{element.hora}}</p></mat-cell>
+            </ng-container>
+            
+            <!-- Cliente -->
+            <ng-container matColumnDef="cliente">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cliente:</span><p>{{element.cliente.nombre}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Total -->
+            <ng-container matColumnDef="total">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p>${{element.total | decimalFormat}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Pagado -->
+            <ng-container matColumnDef="pagado">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Pago</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
+                    <div *ngIf="element.pago.realizado">
+                        <mat-icon class="realizado">done</mat-icon>
+                      </div>
+                      <div *ngIf="!element.pago.realizado">
+                        <mat-icon class="noRealizado">clear</mat-icon>
+                      </div>
+                </mat-cell>
+            </ng-container>
+ 
+            <!-- TPago -->
+            <ng-container matColumnDef="tpago">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>TPago</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
+                    <div *ngIf="element.pago.realizado">
+                        <div *ngIf="element.pago.tipoPago === 'EFECTIVO'">
+                            <mat-icon class="efectivo">monetization_on</mat-icon>
+                        </div>
+                        <div *ngIf="element.pago.tipoPago === 'TARJETA'">
+                            <mat-icon class="tarjeta">credit_card</mat-icon>
+                        </div>
+                        <div *ngIf="element.pago.tipoPago === 'TRANSFERENCIA'">
+                            <mat-icon class="transferencia">account_balance</mat-icon>
+                        </div>
+                        <div *ngIf="element.pago.tipoPago === 'COMBINADO'">
+                            <mat-icon class="combinado">autorenew</mat-icon>
+                        </div>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+             <!-- Facturado -->
+             <ng-container matColumnDef="facturado">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Fact.</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element">
+                    <div *ngIf="element.factura.cae">
+                        <mat-icon class="realizado">receipt_long</mat-icon>
+                      </div>
+                    </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="MostrarDetalle(i);"  
+                [ngClass]="{'activa': row.activa}">
+            </mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[15, 30, 60]"
+            (page)="Buscar($event)"
+            aria-label="Select page"
+            class="mat-elevation-z1">
+        </mat-paginator>
+
+    </div>
+    <div class="der" >
+         <div *ngIf="seleccionoVenta; else noSeleccionado" class="seleccionada">
+
+            <div *ngIf="!sinPermisos">
+                <div class="informacion">
+                    <p><i>Método de Pago: </i> <span>{{ventaSeleccionada.pago.tipoPago}}</span> >> 
+                        <span *ngIf="ventaSeleccionada.pago.tipoPago === 'EFECTIVO'"> Descuento: {{ventaSeleccionada.pago.descuento}}%</span>
+                        <span *ngIf="ventaSeleccionada.pago.tipoPago === 'TARJETA'"> Recargo: {{ventaSeleccionada.pago.recargo}}%</span>
+                    </p>
+                    <div class="btnsComprobante">
+                        <!-- Ver Comprobante -->
+                        <button mat-raised-button color="primary" [matMenuTriggerFor]="menuVer" matTooltip="Ver Comprobante">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+
+                        <mat-menu #menuVer="matMenu">
+                            <button mat-menu-item (click)="VerComprobante('interno')">
+                                <span>Interno</span>
+                            </button>
+                            <button mat-menu-item (click)="VerComprobante('factura')" [disabled] = "!ventaSeleccionada.factura?.cae"> 
+                                <span>Factura</span>
+                            </button>
+                        </mat-menu>
+
+                        <!-- Imprimir Comprobante -->
+                        <button mat-raised-button color="primary" [matMenuTriggerFor]="menuFacturar"  matTooltip="Imprimir Comprobante">
+                            <mat-icon>print</mat-icon>
+                        </button>
+
+                        <mat-menu #menuFacturar="matMenu">
+                            <button mat-menu-item (click)="ImprimirComprobante('interno')">
+                                <span>Interno</span>
+                            </button>
+                            <button mat-menu-item (click)="ImprimirComprobante('factura')"  [disabled] = "!ventaSeleccionada.factura?.cae"> 
+                                <span>Factura</span>
+                            </button>
+                        </mat-menu>
+
+                        <!-- Facturar -->
+                        <button *siComputadorHabilitado mat-raised-button color="primary" (click)="Facturar()" matTooltip="Facturar" [disabled] = "ventaSeleccionada.factura?.cae">
+                            <mat-icon>attach_money</mat-icon>
+                        </button>
+                    </div>
+                </div>
+        
+                <mat-table mat-table [dataSource]="dtDetalleVenta" class="full-width mat-elevation-z1 tabla">
+                    
+                    <!-- Producto -->
+                    <ng-container matColumnDef="producto">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> {{element.producto.nombre}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Cantidad -->
+                    <ng-container matColumnDef="cantidad">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> {{element.cantidad}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Precio -->
+                    <ng-container matColumnDef="precio">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> ${{element.precio.toLocaleString('es-AR', {minimumFractionDigits:2})}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Total -->
+                    <ng-container matColumnDef="total">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> ${{element.total.toLocaleString('es-AR', {minimumFractionDigits:2})}} </mat-cell>
+                    </ng-container>
+        
+                    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsDetventa; sticky: true"></mat-header-row>
+                    <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumnsDetventa;"></mat-row>
+                </mat-table>
+
+                <div class="footer">
+                    <h4>▸ {{detallesVenta.length}} productos  |  ${{ventaSeleccionada.total.toLocaleString('es-AR', {minimumFractionDigits:2})}}</h4>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="Eliminar()">ELIMINAR</button>
+                </div>
+            </div>
+            
+            <div *ngIf="sinPermisos" class="sinPermiso">
+                <!-- Imprimir Comprobante -->
+                <button mat-raised-button color="primary" [matMenuTriggerFor]="menuFacturar"  matTooltip="Imprimir Comprobante">
+                    <mat-icon>print</mat-icon>
+                </button>
+
+                <mat-menu #menuFacturar="matMenu">
+                    <button mat-menu-item (click)="ImprimirComprobante('interno')">
+                        <span>Interno</span>
+                    </button>
+                    <button mat-menu-item (click)="ImprimirComprobante('factura')"  [disabled] = "!ventaSeleccionada.factura?.cae"> 
+                        <span>Factura</span>
+                    </button>
+                </mat-menu>
+                <!-- Facturar -->
+                <button *siComputadorHabilitado mat-raised-button color="primary" (click)="Facturar()" matTooltip="Facturar" [disabled] = "ventaSeleccionada.factura?.cae">
+                    <mat-icon>attach_money</mat-icon>
+                </button>
+            </div>
+
+        </div>
+        <ng-template #noSeleccionado >
+            <div class="noSeleccionada">
+                <mat-icon>analytics</mat-icon>
+                <p>Selecciona una venta para ver sus detalles</p>
+            </div>
+        </ng-template>
+
+    </div>
+</div>

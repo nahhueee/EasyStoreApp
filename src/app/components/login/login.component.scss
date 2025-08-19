@@ -1,0 +1,106 @@
+.fondo{
+  background: no-repeat center rgba(19, 19, 19, 0.63);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-blend-mode: multiply;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.setting{
+  color: white;
+  cursor: pointer;
+  position: fixed; 
+  top: 0;         
+  right: 0;      
+  margin: 20px;
+}
+
+.contenedor{
+  width: 450px;
+}
+
+/*#region FORMULARIO*/
+.form{
+  background: var(--color-background) !important;
+  display:grid;
+  width: 100%;
+  border-radius: 5px;
+  padding: 40px 50px;
+  padding-top: 70px; //Agrego este padding-top para separar el logo de el TITULO
+ }
+ .encabezado{
+  text-align: center;
+  margin-bottom: 10px;
+}
+.encabezado h2{
+  font-size: 25px;
+  font-family: "Poppins-Light";
+}
+button{
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+/*#endregion */
+
+/*#region LOGO*/
+.logo-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-background) !important;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  position: relative;
+  top:70px;//Pone al logo por sobre el form
+  margin-top: -70px;//Quito el margen para que todo quede centrado
+}
+.icon{
+  width: 100px;
+  height: 100px;
+}
+/*#endregion */
+
+/*#region WAVES*/
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+.wave svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 89px;
+}
+.wave .shape-fill {
+  fill: var(--color-primary) !important;
+}
+/*#endregion */
+
+
+
+
+//Mobile
+@media (max-width: 700px) {
+  .form{
+    padding: 40px 20px;
+    padding-top: 70px; //Agrego este padding-top para separar el logo de el TITULO
+   }
+}

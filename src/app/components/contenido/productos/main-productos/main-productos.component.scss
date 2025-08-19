@@ -1,0 +1,74 @@
+.select{
+    display: flex;
+    align-items: center;
+    width: 250px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    padding: 0px 10px;
+    height: 40px;
+}
+.select mat-icon{
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.filtros{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+// Boton Cambio de Vista
+.vista{
+    mat-button-toggle{
+        height: 38px;
+    }
+    mat-icon{
+        margin-top: -10px;
+    }
+
+    /* Cambia el color del ícono cuando el botón está activo */
+    .mat-button-toggle-checked mat-icon {
+    color: var(--color-primary); 
+    }
+
+    /* Cambia el color del ícono cuando está inactivo */
+    mat-button-toggle mat-icon {
+    color: var(--placeholders); /* Ejemplo: gris */
+    }
+} 
+
+.cellImagen:hover{
+    cursor: pointer;
+}
+
+//Mobile
+@media (min-width: 700px) {
+    //Tabla
+    .mat-column-codigo{
+        max-width: 220px;
+    }
+    .mat-column-cantidad{
+        max-width: 100px;
+    }
+    .mat-column-costo, .mat-column-precio, .mat-column-unidad{
+        max-width: 150px;
+    }
+    .mat-column-tipoPrecio{
+        max-width: 70px;
+    }
+    .mat-column-imagen{
+        max-width: 170px;
+    }
+
+    .filtros{
+        justify-content:left;
+    }
+}
+
+@media (max-width: 700px) {
+    .mat-column-imagen{
+        display: none;
+    }
+}

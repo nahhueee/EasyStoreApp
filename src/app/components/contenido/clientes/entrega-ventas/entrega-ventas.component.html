@@ -1,0 +1,23 @@
+<div class="contenido">
+    <div class="titulo">
+        ¿Cuanto dinero entrega a la deuda?
+        <hr>
+    </div>
+
+    <form [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off"> 
+        <!-- Entrega -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Dinero Entregado</mat-label>
+            <input matInput type="text" formControlName="entrega" [imask]="decimal_mask" (focus)="SelectContent($event)">
+            <mat-error>
+                El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+    </form>
+</div>
+
+
+<mat-dialog-actions align="center" class="botones">
+    <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()' >ACEPTAR</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>

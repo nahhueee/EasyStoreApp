@@ -1,0 +1,39 @@
+<div class="cabecera">
+    <mat-icon>format_list_bulleted</mat-icon>
+    <h2>Registro de entregas</h2>
+</div>
+
+<div class="contenido">
+    <div class="derecha">
+        <button type="button" class="btn btn-warning btn-sm" (click)="RevertirUltimaEntrega()" [disabled]="registros.length == 0"><mat-icon>replay</mat-icon>Revertir Última Entrega</button>
+    </div>
+
+
+    <mat-table mat-table [dataSource]="dataSource" class="full-width ppalTable mat-elevation-z1">
+
+        <!-- Fecha -->
+        <ng-container matColumnDef="fecha">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.fecha | date:'dd-MM-yy'}} {{element.hora}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Monto -->
+        <ng-container matColumnDef="monto">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Monto:</span><p>${{element.monto | decimalFormat}}</p></mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5]"
+        (page)="Buscar($event)"
+        aria-label="Select page"
+        class="mat-elevation-z1">
+    </mat-paginator>
+</div>
+
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CERRAR</button>
+</mat-dialog-actions>

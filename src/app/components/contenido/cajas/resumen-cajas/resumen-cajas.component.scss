@@ -1,0 +1,340 @@
+.contenido{
+    padding: 0px 20px;
+    padding-bottom: 30px;
+}
+
+::ng-deep .mat-dialog-content {
+    max-height: 100px; /* Ajusta esta altura según tus necesidades */
+    overflow: auto; /* Permitir desplazamiento si el contenido crece */
+}
+
+//Seccion Encabezad
+.encabezado{
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+   
+    h5{
+        margin: 0%;
+        font-size: 16px;
+        font-family: 'Poppins-Regular';
+    }
+}
+
+//Seccion Generales
+.generales{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    
+    p{
+        margin: 0%;
+        color: var(--color-primary);
+        font-size: 30px;
+    }
+
+    .item{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        width: 150px;
+
+        span{
+            font-size: 22px;
+            font-family: 'Poppins-Regular';            
+        }
+        hr{
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+        h5{
+            text-transform: uppercase;
+            margin: 0%;
+            font-weight: 500;
+            color: var(--color-elements);
+        }
+    }
+}
+
+//Seccion tipoPago
+.tipoPago{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0px;
+    flex-wrap: wrap;
+    text-align: center;
+    
+    span{
+        font-size: 23px;
+        font-family: 'Poppins-Regular';
+    }
+
+    .recuadro{
+        height: 250px;
+        width: 270px;
+        border-radius: 8px;
+
+        padding: 13px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+
+        img{
+            width: 80px;
+        }
+
+        p{
+            margin-bottom: 3px;
+            font-size: 16px;
+        }
+        h5{
+            font-size: 14px;
+            color: #868686;
+            margin: 0%;
+        }
+    }
+
+    .efectivo{
+        border: 1px solid #2dc051;
+    }
+    .transferencia{
+        border: 1px solid #2db6c8;
+    }
+    .tarjeta{
+        border: 1px solid #ee8b29;
+    }
+    .resto{
+        border: 1px solid #7d7d7d;
+    }
+}
+
+/*#region VENTAS*/
+.ventas{
+    display: flex;
+    gap: 30px;
+    margin: 10px 0px;
+    padding: 30px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    flex-wrap: wrap;
+
+    .izq{
+        flex: 2;
+        width: 60%;
+    }
+    .der{
+        flex: 1;
+        width: 40%;
+    }
+}
+
+.movimientos{
+    margin: 10px 0px;
+    padding: 30px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+}
+
+//Tabla
+.checks{
+    text-align: center;
+    margin-top: 20px;
+}
+::ng-deep .mdc-label{
+    display: flex;
+    align-items: center;
+    margin-left: -8px !important;
+}
+
+.realizado{
+    color: #2dc051;
+}
+.noRealizado{
+    color: #ff5e5e;
+}
+
+.icono-efectivo {
+    color: #2dc051; 
+}
+.icono-tarjeta {
+    color: #ee8b29; 
+}
+.icono-transferencia {
+    color: #2db6c8; 
+}
+
+@media only screen and (min-width: 701px){
+    .mat-column-hora{
+        max-width: 110px;
+    }
+
+    .mat-column-pagado, .mat-column-tpago, .mat-column-facturado{
+        flex: 0 0 80px !important;
+        white-space: unset !important;
+    } 
+    
+    ::ng-deep .table-row {
+        min-height: 35px !important;
+    }
+    ::ng-deep .table-header {
+        min-height: 40px !important;
+    }
+}
+
+
+//Recuadros de venta
+.rectangulo{
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--color-element-back);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    p{
+        display: flex;
+        align-items: center;
+        margin: 0%;
+        font-size: 15px;
+        font-family: 'Roboto-Regular';
+    }
+    mat-icon{
+        transform: scale(1.4);
+        margin-right: 15px;
+        color: var(--color-primary);
+    }
+
+    span{
+        font-size: 25px;
+        font-family: 'Afacad';
+    }
+}
+/*#endregion */
+
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}
+
+/*#region Mobile */
+@media only screen and (max-width: 700px){
+    .encabezado{
+        margin-bottom: 20px;
+        gap: 10px;
+       
+        h5{ font-size: 14px; }
+    }
+
+    .generales{
+        gap: 10px;
+        
+        p{ font-size: 18px; }
+    
+        .item{
+            width: 100px;
+    
+            span{ font-size: 17px; }
+            h5{ font-size: 10px; }
+            hr{ 
+                margin-top: 5px;
+                margin-bottom: 2px;
+            }
+        }
+    }
+
+
+    .tipoPago{
+        gap: 15px;
+        margin: 15px 0px;
+
+        .recuadro{
+            height: 80px;
+            width: 100%;
+            gap: 10px;
+    
+            img{
+                width: 50px;
+            }
+    
+            p{
+                font-size: 13px;
+    
+                span{
+                    font-size: 18px;
+                }
+            }
+            h5{
+                display: none;
+            }
+        }
+    }
+
+    .ventas{
+        padding: 10px;
+    }
+
+    //Posiciona el check de la venta a la derecha
+    .mat-column-pagado{
+        justify-content: end;
+        margin-bottom: -15px;
+        margin-right: -5px;
+    }
+}
+/*#endregion */
+
+
+//movimientos
+//Grilla
+@media (min-width: 701px) {
+    .mat-column-tipo{
+        flex: 0 0 200px !important;
+        white-space: unset !important;
+    }
+    
+    .mat-column-monto{
+        flex: 0 0 200px !important;
+        white-space: unset !important;
+    }
+}
+
+.entrada{
+    color: rgb(32, 158, 64);
+    font-size: 18px;
+    margin-right: 10px;
+}
+.salida{
+    color: #e96471;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+
+//Imprimir Resumen
+@media print {
+    .contenido{
+        color: #2c2c2c;
+    }
+    .no-imprimir {
+        display: none !important;
+    }
+}

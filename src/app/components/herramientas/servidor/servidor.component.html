@@ -1,0 +1,42 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
+
+<div *ngIf="esDark; else noDark">
+  <ngx-spinner name="resetSpinner" bdColor = "#212121" size = "medium" color = "#fff" type = "timer" [fullScreen] = "true"><p style="color: #fff" > Reiniciando servidor... </p></ngx-spinner>
+</div>
+<ng-template #noDark >
+  <ngx-spinner name="resetSpinner" bdColor = "#e6e6e6" size = "medium" color = "#353535" type = "timer" [fullScreen] = "true"><p style="color: #353535" > Reiniciando servidor... </p></ngx-spinner>
+</ng-template>
+
+<div *ngIf="verificando; else ocultar" class="verificando">
+    <mat-spinner></mat-spinner>
+    <p>Estamos verificando su identidad</p>
+</div>
+<ng-template #ocultar >
+    <div class="contenido">
+      <mat-slide-toggle color="primary" [formControl]="activarControl"><span>Activar Modo Servidor</span></mat-slide-toggle>
+    </div>
+    
+    <div class="info">
+      <div class="texto">
+        <h5>Modo Servidor</h5>
+        <p>Activa la opcion modo servidor para compartir la ip de tu maquina servidor en el ambiente de red, de esta manera puedes tener 
+          más de una maquina trabajando.
+          <br><br>
+          Puntos a considerar: <br>
+          ► Al activar o desactivar la función el servidor se reiniciara, tranquilo, es normal. <br>
+          ► Es importante que configures el router para que la máquina servidor tenga IP fija. <br>
+          ► Si el modo de red falla por alguna razón, siempre puedes continuar en tu máquina servidor. <br>
+          ► Para que las otras terminales puedan funcionar, es necesario que la máquina servidor este prendida y conectada a la red. <br>
+          ► El modo servidor está disponible con la mensualidad, disfrutalo.
+        </p>
+      </div>
+      <div class="imagen">
+        <img src="assets/ilustraciones/servidor.png" alt="imagen servidor" width="250px">
+      </div>
+    </div>
+
+    <hr>
+    <div class="botones">
+      <button mat-raised-button color="primary" (click)="GuardarParametro()"><mat-icon>save</mat-icon>GUARDAR</button>
+    </div>
+</ng-template>

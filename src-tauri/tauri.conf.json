@@ -1,0 +1,78 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:4200",
+    "distDir": "../build/tauri"
+  },
+  "package": {
+    "productName": "easysales",
+    "version": "2.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "dialog": {
+        "all": true
+      },
+      "shell": {
+        "all": false,
+        "execute": true,
+        "scope": [
+          {
+            "name": "run_updater",
+            "cmd": "../actualizador/Actualizador.exe",
+            "args": []
+          }
+        ]
+      },
+      "window": {
+        "all": true,
+        "create": true
+      },
+      "http": {
+        "scope": ["http://*"],
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/Logo.ico"
+      ],
+      "identifier": "easy.sales.tauri",
+      "longDescription": "",
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "updater": {
+      "active": false
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "url": "index.html",
+        "fullscreen": false,
+        "maximized": true,
+        "height": 600,
+        "resizable": true,
+        "title": "Easy Sales",
+        "width": 800
+      }
+    ]
+  }
+}

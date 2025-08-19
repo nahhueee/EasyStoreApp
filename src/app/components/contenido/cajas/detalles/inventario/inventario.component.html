@@ -1,0 +1,83 @@
+<div class="contenedor">
+    <!-- #region FILTRO -->
+    <div class="filtro">
+        <!-- Input de Busqueda -->
+        <app-busqueda (busqueda)="Buscar(undefined, $event)"></app-busqueda>
+    </div>
+    <!-- #endregion FILTRO -->
+
+    <div class="doble">
+        <div class="izq">
+            <!-- #region TABLA -->
+        <div class="table-container">
+            <mat-table mat-table [dataSource]="dataSource" class="ppalTable mat-elevation-z1 full-width">
+      
+              <!-- Codigo -->
+              <ng-container matColumnDef="codigo">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
+                  <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Codigo:</span><p>{{element.codigo}}</p></mat-cell>
+              </ng-container>
+      
+              <!-- Nombre -->
+              <ng-container matColumnDef="nombre">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+                  <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Nombre:</span><p>{{element.nombre}}</p></mat-cell>
+              </ng-container>
+      
+              <!-- Cantidad -->
+              <ng-container matColumnDef="cantidad">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                  <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cant:</span><p>{{element.cantidad}}</p></mat-cell>
+              </ng-container>
+      
+              <!-- Unidad -->
+              <ng-container matColumnDef="unidad">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef>Unidad</mat-header-cell>
+                  <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Uni:</span><p>{{element.unidad}}</p></mat-cell>
+              </ng-container>
+      
+              <!-- Precio -->
+              <ng-container matColumnDef="precio">
+                  <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                  <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>${{element.precio | decimalFormat}}</p></mat-cell>
+              </ng-container>
+      
+              <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+              <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="MostrarDetalle(i);"  [ngClass]="{'activo': row.activo}"></mat-row>
+            </mat-table>
+      
+            <mat-paginator [pageSizeOptions]="[15, 30, 60]"
+              (page)="Buscar($event)"
+              aria-label="Select page"
+              class="mat-elevation-z1">
+            </mat-paginator>
+          </div>
+          <!-- #endregion TABLA -->
+        </div>
+        
+        <div class="der">
+            <div *ngIf="seleccionoProducto; else noSeleccionado" class="seleccionado">
+                <div *ngIf="pathImgProd && pathImgProd!==''; else noImage">
+                    <img class="imagen" [src]="pathImgProd" alt="imagen del producto">
+                </div>
+                <ng-template #noImage>
+                    <img class="imagen" src="assets/noimage.png" alt="no image">
+                </ng-template>
+
+                <div class="letras">
+                    <hr>
+                    <h3>{{productoSeleccionado.nombre}}</h3>
+                    <p>{{productoSeleccionado.categoria?.nombre}}</p>
+                    <span>${{productoSeleccionado.precio! | decimalFormat}}</span>
+                </div>
+            </div>
+            <ng-template #noSeleccionado >
+                <div class="noSeleccionado">
+                    <mat-icon>playlist_add_check</mat-icon>
+                    <p>Selecciona un producto para ver sus detalles</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+  

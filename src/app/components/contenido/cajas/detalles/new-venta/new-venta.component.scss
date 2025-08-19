@@ -1,0 +1,195 @@
+.contenedor{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 178px);
+
+    .izq{
+        flex: 1;
+        align-content: center;
+        min-width: 300px;
+        max-width: 450px;
+        width: 40%;
+        padding: 0px 30px;
+        border-right: 1px solid var(--border-color);
+    }
+    .der{
+        width: 60%;
+        flex: 2;
+        position: relative;
+        
+        .ppalTable {
+            min-height: 0;
+            max-height: calc(100vh - 280px); 
+            overflow: auto;
+        }
+    }
+
+    .doble{
+        display: flex;
+        gap: 15px;
+    }
+
+    .uppercase{
+        text-transform: uppercase;
+    }
+   
+}
+
+.icono{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+.btnAdd{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+.unidad{
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--color-elements);
+}
+
+.nombreProdVario{
+    font-family: "Poppins-Regular";
+    margin-top: -15px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+//Botones de accion de cada item
+.boton{
+    width: 100%;
+    height: 28px;
+    border-radius: 8px;
+    border: solid 1px var(--color-elements);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1px 0px;
+    cursor: pointer;
+}
+
+.editar{
+    color: var(--color-elements);
+    margin-right: 10px;
+    cursor: pointer;
+}
+.borrar{
+    color: #ff9696;
+    cursor: pointer;
+}
+
+//Tabla
+//Solo PC
+@media (min-width: 701px) {
+    .mat-column-acciones{
+        max-width: 120px;
+    }
+    .mat-column-precio, .mat-column-total{
+         max-width: 150px;
+    }
+    .mat-column-cantidad, .mat-column-unidad{
+        max-width: 100px;
+    }
+}
+
+.acciones{
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    gap: 15px;
+
+    position: absolute;
+    bottom: 0%;
+    width: 100%;
+
+    @media (max-width: 905px) {
+        position: relative;
+    }
+
+
+    .botones{
+        display: flex;
+        gap: 10px;
+        width: 50%;
+        
+        button{
+            display: flex;
+            justify-content: center;
+            width: 200px;
+            height: 40px;
+        }
+    }
+
+    .total{
+        display: flex;
+        align-items: center;
+
+        height: 40px;
+        background-color: rgb(24, 24, 24);
+        border-radius: 4px;
+        color: #63ff44;
+        padding: 5px 20px;
+        font-size: 28px;
+        max-width: 250px;
+        width: 40%;
+    }
+}
+
+//Mobile
+@media (max-width: 700px) {
+    .mobile-label {
+        width: 60px;
+    }
+
+    .contenedor{
+        flex-direction: column;
+        .izq{
+            min-width: none;
+            max-width: none;
+            width: 100%;
+            border-right: none;
+            padding: 0%;
+        }
+        .der{
+            width: 100%;
+        }
+    }
+
+    .acciones{
+        .total{
+            width: 100%;
+            max-width: none;
+        }
+        .botones {
+            width: 100%;
+
+            button{
+                width: 100%;
+            }
+        }
+    }
+
+    //Poner los botones de accion de la grilla a la derecha
+    .mat-column-acciones{
+       justify-content: right;
+       margin-top: 5px;
+       margin-bottom: -10px;
+    }
+}
+
+
+//Cambia el color del elemento activo mat-select
+::ng-deep.mat-mdc-option:focus.mdc-list-item, .mat-mdc-option.mat-mdc-option-active.mdc-list-item{
+    background-color: var(--border-color);
+}

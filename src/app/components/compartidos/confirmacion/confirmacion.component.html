@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Confirmación</h1>
+<div mat-dialog-content >
+    <p>{{mensaje}}</p>
+</div>
+<div mat-dialog-actions align="end" (keyup.enter)='this.dialogRef.close(true)' (keyup.esc)="dialogRef.close(false)">
+    <button mat-flat-button color="primary" (click)="this.dialogRef.close(true)">Aceptar</button>
+    <button mat-flat-button color="warn" mat-dialog-close>Cancelar</button>
+</div>

@@ -1,0 +1,23 @@
+<ngx-spinner name="buscandoSpinner" bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Buscando Servidor... </p></ngx-spinner>
+
+<div class="cabecera">
+    <mat-icon>router</mat-icon>
+    <h2>Configurar Servidor</h2>
+</div>
+
+<div class="opciones">
+    <mat-button-toggle-group [formControl]="modo" appearance="legacy" exclusive (change)="CambiarModo()">
+        <mat-button-toggle matTooltip="Modo Local" [ngClass]="{'esDark':esDark}" value="local" class="cuadro-opcion"><mat-icon>computer</mat-icon></mat-button-toggle>
+        <mat-button-toggle matTooltip="Modo en Red" [ngClass]="{'esDark':esDark}" value="red" class="cuadro-opcion"><mat-icon>lan</mat-icon></mat-button-toggle>
+    </mat-button-toggle-group>
+    <div *ngIf="servidorEncontrado === 'true'" class="alert alert-success" role="alert">
+        {{urlServEncontrado}}
+    </div>
+    <div *ngIf="servidorEncontrado === 'false'" class="alert alert-warning" role="alert">
+        No se encontró servidor, se usará modo local.
+    </div>
+</div>
+
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CERRAR</button>
+</mat-dialog-actions>

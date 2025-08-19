@@ -1,0 +1,42 @@
+<div *ngIf="esDark; else noDark">
+  <ngx-spinner name="updateSpinner" bdColor = "#212121" size = "medium" color = "#fff" type = "timer" [fullScreen] = "true"><p style="color: #fff" > Ejecutando actualizador </p></ngx-spinner>
+</div>
+<ng-template #noDark >
+  <ngx-spinner name="updateSpinner" bdColor = "#e6e6e6" size = "medium" color = "#353535" type = "timer" [fullScreen] = "true"><p style="color: #353535" > Ejecutando actualizador </p></ngx-spinner>
+</ng-template>
+
+<!-- Ventana que se muestra cuando se va a actualizar el sistema -->
+<div *ngIf="ventana === 'info'">
+  <div class="cabecera">
+    <mat-icon>file_download</mat-icon>
+    <h2>Nueva versión disponible {{ultimaVersion.version}} </h2>
+  </div>
+  
+  <div class="contenido">
+    <div class="informacion" >
+      <h4>¿Que traemos de nuevo?</h4>
+      <div class="recuadro"><p [innerHTML]="ultimaVersion.info"></p></div>
+    </div>
+  </div>
+
+  <mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)="Actualizar()">ACTUALIZAR</button>
+    <button mat-stroked-button color="primary" (click)="Ignorar()">DESCARTAR</button>
+  </mat-dialog-actions>
+  
+</div>
+
+<!-- Ventana que se muestra cuando el sistema se actualizó correctamente -->
+<div *ngIf="ventana === 'actualizado'" class="actualizado">
+  <img src="assets/ilustraciones/actualizado.png" alt="imagen actualizado">
+
+  <p>El sistema se actualizó correctamente a la última versión</p>
+
+  <mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)="AceptarActualizado()">ACEPTAR</button>
+  </mat-dialog-actions>
+  
+</div>
+
+
+

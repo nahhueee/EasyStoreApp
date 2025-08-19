@@ -1,0 +1,126 @@
+<div class="cabecera">
+    <mat-icon>request_quote</mat-icon>
+    <h2>{{titulo}}</h2>
+</div>
+
+<div class="encabezado">
+    <p>
+        Deuda total actual:
+        <span>${{totalDeuda | decimalFormat}}</span>
+    </p>
+    <h5>{{cliente.nombre}}</h5>
+</div>
+<hr>
+
+<div class="contenido">
+    <div class="contenedor">
+        <div class="izq">
+            <mat-radio-group class="checks" aria-label="Select an option" [(ngModel)]="estado" (change)="Buscar(); seleccionoVenta=false; ">
+                <mat-radio-button value="Impagas"><mat-icon>money_off</mat-icon><span>Ventas Impagas</span></mat-radio-button>
+                <mat-radio-button *ngIf="verVentasPagas" value="Pagas"><mat-icon>attach_money</mat-icon><span>Ventas Pagas</span></mat-radio-button>
+            </mat-radio-group>
+
+            <mat-table mat-table [dataSource]="dataSource" class="full-width ppalTable mat-elevation-z1 tabla-ventas">
+
+                <!-- Fecha -->
+                <ng-container matColumnDef="fecha">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.fecha | date:'dd-MM-yy'}} {{element.hora}}</p></mat-cell>
+                </ng-container>
+      
+                <!-- Total -->
+                <ng-container matColumnDef="total">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p>${{element.total | decimalFormat}}</p></mat-cell>
+                </ng-container>
+
+                <!-- Entrega -->
+                <ng-container matColumnDef="entrega">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Entrega</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Entrega:</span><p>${{element.pago?.entrega | decimalFormat}}</p></mat-cell>
+                </ng-container>
+
+                <!-- Restante -->
+                <ng-container matColumnDef="restante">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Restante</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Restante:</span><p>${{element.pago?.restante | decimalFormat}}</p></mat-cell>
+                </ng-container>
+
+                <!-- Acciones -->
+                <ng-container matColumnDef="accion">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element">
+                        <div *ngIf="!element.pago?.realizado" class="boton realizado" matTooltip="Marcar como pago" (click)="ActualizarEstado(element)"><mat-icon>paid</mat-icon></div>
+                        <div *ngIf="element.pago?.realizado" class="boton noRealizado" matTooltip="Revertir pago" (click)="ActualizarEstado(element)"><mat-icon>undo</mat-icon></div>
+                    </mat-cell>
+                </ng-container>
+    
+                
+                <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index" (click)="MostrarDetalle(i);"  [ngClass]="{'activa': row.activa}"></mat-row>
+            </mat-table>
+    
+            <mat-paginator [pageSizeOptions]="[10]"
+                (page)="Buscar($event)"
+                aria-label="Select page"
+                class="mat-elevation-z1">
+            </mat-paginator>
+        </div>
+        <div class="der">
+            <div class="acciones">
+                <button mat-flat-button color="primary" (click)="EntregaDinero()"><mat-icon>payments</mat-icon>ENTREGA</button>
+                <button mat-flat-button color="primary" (click)="VerRegistrosEntrega()"><mat-icon>format_list_bulleted</mat-icon>REGISTROS</button>
+            </div>
+
+            <div *ngIf="seleccionoVenta; else noSeleccionado" class="seleccionada">
+                <mat-table mat-table [dataSource]="dtDetalleVenta" class="full-width mat-elevation-z1 tabla">
+                    
+                    <!-- Producto -->
+                    <ng-container matColumnDef="producto">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> {{element.producto?.nombre}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Cantidad -->
+                    <ng-container matColumnDef="cantidad">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Cant</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> {{element.cantidad}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Precio -->
+                    <ng-container matColumnDef="precio">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> ${{element.precio | decimalFormat}} </mat-cell>
+                    </ng-container>
+        
+                    <!-- Total -->
+                    <ng-container matColumnDef="total">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> ${{element.total | decimalFormat}} </mat-cell>
+                    </ng-container>
+        
+                    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsDetventa; sticky: true"></mat-header-row>
+                    <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumnsDetventa;"></mat-row>
+                </mat-table>
+                <div class="advertencia" *ngIf="advertencia!==''">{{advertencia}}</div>
+    
+                <h4>Total de venta:</h4>
+                <div class="footer">
+                    <p><strong>${{ventaSeleccionada.total | decimalFormat}}</strong> ▸ Al momento de realizar la venta</p>
+                    <p><strong>${{totalActualizado | decimalFormat}}</strong> ▸ Al día de la fecha | <span *ngIf="prodActualizados>0"> {{prodActualizados}} productos actualizaron su precio</span></p>
+                </div>
+            </div>
+            <ng-template #noSeleccionado >
+                <div class="noSeleccionada">
+                    <mat-icon>analytics</mat-icon>
+                    <p>Selecciona una venta para ver sus detalles</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    
+</div>
+
+<div class="botones">
+    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>

@@ -1,0 +1,273 @@
+<div class="cabecera">
+    <mat-icon>more</mat-icon>
+    <h2>{{titulo}}</h2>
+</div>
+
+<form class="contenido" [formGroup]="formParametros">
+    <div class="izq">
+        <!-- Descripcion -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción Etiqueta</mat-label>
+            <input matInput class="uppercase" type="text" 
+             formControlName="descripcion" 
+             placeholder="Ej. Etiquetas grandes con precio"
+             (focus)="SelectContent($event)">
+            <mat-error>
+                Completa con un nombre
+            </mat-error>
+        </mat-form-field>
+
+        <div class="horizontal">
+            <!-- Tamaño -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tamaño</mat-label>
+                <mat-select formControlName="tamanio">
+                    <mat-option *ngFor="let tamanio of tamanios" [value]="tamanio">{{tamanio}}</mat-option >
+                </mat-select>
+                <mat-error>
+                    Selecciona una opción
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Titulo Aclaracion -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Titulo o Aclaración</mat-label>
+                <input matInput type="text" formControlName="titulo" 
+                placeholder="Ej. Despensa Mi Lugar - Tiempo Limitado, etc."
+                (focus)="SelectContent($event)">
+            </mat-form-field>
+        </div>
+        
+        <hr>
+        <p class="info">Secciones a mostrar</p>
+
+        <div class="checks">
+            <mat-slide-toggle color="primary" formControlName="moferta">
+                <span>Mostrar como oferta</span>
+            </mat-slide-toggle>
+            <mat-slide-toggle color="primary" formControlName="mcodigo">
+                <span>Mostrar código barras producto</span>
+            </mat-slide-toggle>
+            <mat-slide-toggle color="primary" formControlName="mprecio">
+                <span>Mostrar precio producto</span>
+            </mat-slide-toggle>
+            <mat-slide-toggle color="primary" formControlName="mnombre">
+                <span>Mostrar nombre del producto</span>
+            </mat-slide-toggle>
+            <mat-slide-toggle color="primary" formControlName="mvencimiento">
+                <span>Mostrar vencimiento del producto</span>
+            </mat-slide-toggle>
+        </div>
+
+        <p class="info">Personalización</p>
+
+        <div class="personalizacion">
+            <!-- Bordes de la tarjeta -->
+            <div class="seccion">
+                <span>Borde ▶</span>
+                <div class="conjunto">
+                    <p>Color Borde | </p>
+                    <input type="color" formControlName="bordeColor">
+                </div>
+                <div class="conjunto">
+                    <p>Tamaño | </p>
+                    <mat-button-toggle-group formControlName="bordeAncho">
+                        <mat-button-toggle value="1px" aria-label="border 1px">
+                            <p>1p</p>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="3px" aria-label="border 3px">
+                            <p>3p</p>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="5px" aria-label="border 5px">
+                            <p>5p</p>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- Titulo Tarjeta -->
+            <div class="seccion" *ngIf="tituloTarjeta !== ''">
+                <span>Título ▶</span>
+                <div class="conjunto">
+                    <p>Color Letra | </p>
+                    <input type="color" formControlName="tituloColor">
+                </div>
+                <div class="conjunto">
+                    <p>Alineación | </p>
+                    <mat-button-toggle-group formControlName="tituloAlineacion">
+                        <mat-button-toggle value="left" aria-label="Text align left">
+                            <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center" aria-label="Text align center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right" aria-label="Text align right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- Oferta -->
+            <div class="seccion" *ngIf="mostrarOferta">
+                <span>Oferta ▶</span>
+                <div class="conjunto">
+                    <p>Color Fondo | </p>
+                    <input type="color" formControlName="ofertaFondo">
+                </div>
+                <div class="conjunto">
+                    <p>Alineación | </p>
+                    <mat-button-toggle-group formControlName="ofertaAlineacion">
+                        <mat-button-toggle value="left" aria-label="Text align left">
+                            <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center" aria-label="Text align center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right" aria-label="Text align right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- Precio Producto -->
+            <div class="seccion" *ngIf="mostrarPrecio">
+                <span>Precio ▶</span>
+                <div class="conjunto">
+                    <p>Color Letra | </p>
+                    <input type="color" formControlName="precioColor">
+                </div>
+                <div class="conjunto">
+                    <p>Alineación | </p>
+                    <mat-button-toggle-group formControlName="precioAlineacion">
+                        <mat-button-toggle value="left" aria-label="Text align left">
+                            <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center" aria-label="Text align center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right" aria-label="Text align right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- Nombre Producto -->
+            <div class="seccion" *ngIf="mostrarNombre">
+                <span>Nombre Prod ▶</span>
+                <div class="conjunto">
+                    <p>Alineación | </p>
+                    <mat-button-toggle-group formControlName="nombreAlineacion">
+                        <mat-button-toggle value="left" aria-label="Text align left">
+                            <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center" aria-label="Text align center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right" aria-label="Text align right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <!-- Vencimiento -->
+            <div class="seccion" *ngIf="mostrarVencimiento">
+                <span>Vencimiento ▶</span>
+                <div class="conjunto">
+                    <p>Alineación | </p>
+                    <mat-button-toggle-group formControlName="vencimientoAlineacion">
+                        <mat-button-toggle value="left" aria-label="Text align left">
+                            <mat-icon>format_align_left</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="center" aria-label="Text align center">
+                            <mat-icon>format_align_center</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="right" aria-label="Text align right">
+                            <mat-icon>format_align_right</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Vista previa -->
+    <div class="der">
+        <div class="pegajoso">
+            <div class="vista">
+                <p class="info">Vista Previa</p>
+                <button mat-flat-button color="primary" (click)="VerResultado()"><mat-icon>print</mat-icon>Ver en modo impresión</button>
+            </div>
+
+            <div class="vistaPrevia">
+                <div class="recuadro"
+                    [ngStyle]="{
+                        'border-color': bordeColor,
+                        'border-width': bordeAncho
+                    }"
+                >
+                    <div class="titulo" 
+                        [ngStyle]="{
+                            'justify-content': tituloAlineacion,
+                            'color': tituloColor
+                        }"
+                    >
+                        <p>{{tituloTarjeta}}</p>
+                    </div>
+                    
+                    <div class="oferta" 
+                        *ngIf="mostrarOferta"
+                        [ngStyle]="{
+                            'text-align': ofertaAlineacion,
+                            'background-color': ofertaFondo
+                        }"
+                    >
+                        <p>OFERTA</p>
+                    </div>
+
+                    <div class="codigo" *ngIf="mostrarCodigo">
+                        <p class="codBarras">77855223</p>
+                        <p>77855223</p>
+                    </div>
+                    
+                    <p *ngIf="mostrarPrecio" 
+                        class="precio"
+                        [ngStyle]="{
+                            'text-align': precioAlineacion,
+                            'color': precioColor
+                        }"
+                    >$3.500,0</p>
+
+                    <p *ngIf="mostrarNombre" 
+                        class="producto"
+                        [ngStyle]="{
+                            'text-align': nombreAlineacion
+                        }"
+                    >MI NOMBRE DE PRODUCTO</p>
+
+                    <p *ngIf="mostrarVencimiento" 
+                        class="vencimiento"
+                        [ngStyle]="{
+                            'text-align': vencimientoAlineacion
+                        }"
+                    >Vto: 20-05-25</p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info" role="alert">
+                La visualizacion solo es ilustrativa, dependiendo el tamaño de la etiqueta, pueden variar tambien los tamaños de letra. 
+                Podes elegir que mostrar y que no, según te parezca.
+            </div>
+        </div>
+    </div>
+</form>
+     
+<div class="botones">
+    <button mat-flat-button color="primary" (click)='Guardar()'>GUARDAR</button>
+    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>
+  

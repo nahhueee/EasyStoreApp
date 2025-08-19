@@ -1,0 +1,61 @@
+<div class="contenedor">
+  <div class="navInfo">
+    <div class="izq">
+      
+      @if(pantalla>450){
+        <button mat-mini-fab color="primary" class="btnPlegar" [class.oculto]="menuPlegado" matTooltip="Inicio" matTooltip="Plegar Menú" (click)="informarEstadoSidebar()"><mat-icon>chevron_left</mat-icon></button>
+        <button mat-mini-fab color="primary" class="btnDesplegar" [class.oculto]="!menuPlegado" matTooltip="Inicio" matTooltip="Desplegar Menú" (click)="informarEstadoSidebar()"><mat-icon>chevron_right</mat-icon></button>
+
+        <button mat-mini-fab color="primary" matTooltip="Cerrar Sesión" (click)="authService.CerrarSesion()"><mat-icon>power_settings_new</mat-icon></button>
+      }
+      
+      <div class="info">
+        <h5>{{Nombre}}</h5>
+        <p>{{Cargo}}</p>
+      </div>
+    </div>
+    <div class="acciones">
+      <button mat-mini-fab color="primary" matTooltip="Inicio" (click)="navegar('inicio')"><mat-icon>home</mat-icon></button>
+      <button mat-mini-fab color="primary" matTooltip="Preferencias" (click)="navegar('preferencias')" *ngIf="Cargo === 'ADMINISTRADOR'"><mat-icon>settings</mat-icon></button>
+
+      <button *ngIf="Cargo === 'ADMINISTRADOR'" mat-mini-fab color="primary" matTooltip="Otros" [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+
+      <mat-menu #menu="matMenu">
+        <button *ngIf="esApp && !modoRed" mat-menu-item (click)="navegar('identidad')">
+          <mat-icon>person_pin</mat-icon>
+          <span>Identidad</span>
+        </button>
+        <button *ngIf="esApp && !modoRed" mat-menu-item (click)="navegar('respaldos')"> 
+          <mat-icon>dns</mat-icon>
+          <span>Respaldos</span>
+        </button>
+        <button *ngIf="esApp && !modoRed" mat-menu-item (click)="navegar('servidor')"> 
+          <mat-icon>lan</mat-icon>
+          <span>Servidor</span>
+        </button>
+        <button mat-menu-item (click)="navegar('errores')">
+          <mat-icon>assignment_late</mat-icon>
+          <span>Registros</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Preferencias -->
+<div class="modal fade" id="ModalPreferencias" tabindex="-1" role="dialog" aria-labelledby="ModalPreferencias">
+  <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+          <div class="modal-header align-items-center h-100">
+              <h5 class="modal-title">Preferencias</h5>
+              <button id="btnCerrarModal" type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-body">
+              <div class="container">
+
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

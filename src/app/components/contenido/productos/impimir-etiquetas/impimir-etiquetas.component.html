@@ -1,0 +1,159 @@
+<div class="cabecera">
+    <mat-icon>more</mat-icon>
+    <h2>Imprimir Etiquetas</h2>
+</div>
+
+<div class="contenido">
+    <mat-stepper linear #stepper class="stepper">
+    <mat-step class="step">
+        <ng-template matStepLabel>Seleccionar Plantilla</ng-template>
+
+         <div *ngIf="etiquetas.length; else sinEtiquetas" class="plantillas">
+            <div class="plantilla" *ngFor="let item of etiquetas; let i = index" [ngClass]="{'seleccionada':item.seleccionada}" (click)="SeleccionarPlantilla(i)">
+                <p class="nombre">{{item.descripcion}}</p>
+                <p class="tamanio">{{item.tamanio}}</p>
+
+                <div class="recuadro"
+                    [ngStyle]="{
+                        'border-color': item.bordeColor,
+                        'border-width': item.bordeAncho
+                    }"
+                >
+                    <div class="titulo" 
+                        [ngStyle]="{
+                            'justify-content': item.tituloAlineacion,
+                            'color': item.tituloColor
+                        }"
+                    >
+                        <p>{{item.titulo}}</p>
+                    </div>
+                    
+                    <div class="oferta" 
+                        *ngIf="item.mOferta"
+                        [ngStyle]="{
+                            'text-align': item.ofertaAlineacion,
+                            'background-color': item.ofertaFondo
+                        }"
+                    >
+                        <p>OFERTA</p>
+                    </div>
+
+                    <div class="codigo" *ngIf="item.mCodigo">
+                        <p class="codBarras">77855223</p>
+                        <p>77855223</p>
+                    </div>
+                    
+                    <p *ngIf="item.mPrecio" 
+                        class="precio"
+                        [ngStyle]="{
+                            'text-align': item.precioAlineacion,
+                            'color': item.precioColor
+                        }"
+                    >$3.500,0</p>
+
+                    <p *ngIf="item.mNombre" 
+                        class="producto"
+                        [ngStyle]="{
+                            'text-align': item.nombreAlineacion
+                        }"
+                    >MI NOMBRE DE PRODUCTO</p>
+                </div>
+            </div>
+        </div>
+        <ng-template #sinEtiquetas >
+            <div class="sinEtiquetas">
+                <mat-icon>add_card</mat-icon>
+                <p>Todavia no creaste ninguna plantilla de etiquetas, empezá con una.</p>
+                <button mat-flat-button color="primary" (click)="NuevaEtiqueta()">Agregar Nueva Etiqueta</button>
+            </div>
+        </ng-template>
+
+        <div class="botones">
+            <button mat-flat-button color="warn" [mat-dialog-close]="false">CERRAR</button>
+            <button mat-flat-button color="primary" matStepperNext [disabled]="!etiquetaSeleccionada">SIGUIENTE</button>
+        </div>
+    </mat-step>
+    <mat-step>
+
+        <ng-template matStepLabel>Indicar Cantidades</ng-template>
+
+        <div class="cantidades">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nueva Nro Etiquetas</mat-label>
+                <input matInput type="number" [formControl]="nuevaCantidadVarios" (focus)="SelectContent($event)">
+                <mat-error>
+                    El campo no puede quedar vacio
+                </mat-error>
+            </mat-form-field>
+            <button mat-flat-button color="primary" matTooltip="Confirmar" (click)="ConfirmarNvaCantVarios()"><mat-icon>check</mat-icon></button>
+        </div>
+        
+        <mat-table mat-table [dataSource]="dataSourceProductos" class="ppalTable mat-elevation-z1 full-width" matSort >
+
+            <!-- Checkbox -->
+            <ng-container matColumnDef="select">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                            [checked]="seleccionados.hasValue() && isAllSelected()"
+                            [indeterminate]="seleccionados.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? seleccionados.toggle(row) : null"
+                            [checked]="seleccionados.isSelected(row)">
+                </mat-checkbox>
+            </mat-cell>
+            </ng-container>
+
+            <!-- Cantidad -->
+            <ng-container matColumnDef="cantidad">
+                <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Nro Etiquetas</mat-header-cell>
+                <mat-cell class="data-cell" mat-cell matTooltip="Click para editar" *matCellDef="let element; let i = index" (click)="HabEdicion(i,element.cantidad)"> 
+                    <ng-container *ngIf="editarCelda === i; else nonEditable">
+                        <span class="mobile-label">Nro Etiquetas:</span>
+                        <input matInput type="text" [formControl]="newCantidad" #inputEditable focused="true" (keyup.enter)="Editar(i)" (keyup.esc)="editarCelda=undefined" (blur)="Editar(i)">
+                    </ng-container>
+                    <!-- No editable -->
+                    <ng-template #nonEditable class="data-cell">
+                        <span class="mobile-label">Nro Etiquetas:</span>{{element.cantidad}}
+                    </ng-template>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Nombre -->
+            <ng-container matColumnDef="nombre">
+                <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.nombre}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Precio -->
+            <ng-container matColumnDef="precio">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>${{element.precio | decimalFormat}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Borrar -->
+            <ng-container matColumnDef="borrar">
+            <mat-header-cell mat-header-cell *matHeaderCellDef> Quitar </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index"> 
+                    <mat-icon (click)="BorrarFila(i)" class="borrar">clear</mat-icon>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="productosColumns; sticky: true"></mat-header-row>
+            <mat-row class="table-row" mat-row *matRowDef="let row; columns: productosColumns; let i = index" [class.selected-row]="seleccionados.isSelected(row)">
+            </mat-row>
+        </mat-table>
+
+        <div class="botones">
+            <button mat-flat-button color="warn" [mat-dialog-close]="false">CERRAR</button>
+            <button mat-flat-button color="primary" matStepperPrevious>ANTERIOR</button>
+            <button mat-flat-button color="primary" (click)="GenerarImpresion()">GENERAR PDF</button>
+        </div>
+        
+    </mat-step>
+    
+    
+    </mat-stepper>
+</div>

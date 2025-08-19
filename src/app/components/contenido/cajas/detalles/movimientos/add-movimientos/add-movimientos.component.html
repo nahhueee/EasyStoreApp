@@ -1,0 +1,41 @@
+<div class="cabecera">
+    <mat-icon>swap_horiz</mat-icon>
+    <h2>Agregar Movimiento</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Agregar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+
+    <div class="doble">
+        <!-- Tipo Movimiento -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo Movimiento</mat-label>
+            <mat-select formControlName="tipoMovimiento">
+                <mat-option *ngFor="let option of tiposMovimiento" [value]="option.descripcion">{{option.descripcion}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Monto -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Monto</mat-label>
+            <input matInput type="text" formControlName="monto" [imask]="decimal_mask">
+            <mat-error>
+                Completa con una monto
+            </mat-error>
+        </mat-form-field>
+    </div>
+   
+    <!-- Descripcion -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripcion</mat-label>
+        <input matInput type="text" formControlName="descripcion" placeholder="Ej: Pago Proveedor / Extraccion / Ingreso">
+        <mat-error>
+            Completa con una descripción
+        </mat-error>
+    </mat-form-field>
+
+</form>
+  
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" type="submit" (click)='Agregar()' >ACEPTAR</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>

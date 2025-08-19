@@ -1,0 +1,67 @@
+
+.form{
+    display: flex;
+    gap: 25px;
+    padding: 20px 30px 0px 30px;
+    flex-wrap: wrap;
+   
+    .izq{
+        flex: 1;
+        width: 48%;
+
+        .doble{
+            margin-top: 15px;
+        }
+    }
+    .der{
+        flex: 1;
+        width: 48%;
+
+        mat-slide-toggle{
+            margin-bottom: 23px;
+        }
+    }
+}
+
+.doble{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.total{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    background-color: rgb(24, 24, 24);
+    border-radius: 4px;
+    color: #63ff44;
+    padding: 5px 20px;
+    font-size: 25px;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.advertencia{
+    font-weight: 300;
+    color: var(--warn-text);
+    margin: 0%;
+    text-align: center;
+}
+
+.btn-facturar{
+    width: 350px;
+}
+.botones button{
+    width: 170px;
+}
+
+.error-facturacion{
+    margin: 0%;
+    color: var(--warn-text);
+    font-weight: 500;
+    font-size: 16px;
+    font-family: "Poppins-Regular";
+}
+

@@ -1,0 +1,53 @@
+.contenido{
+    padding: 30px;
+    padding-bottom: 60px;
+}
+
+.acciones{
+    display: flex;
+    gap: 20px;
+}
+
+.ppalTable{
+    margin-top: 20px;
+}
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}
+
+.vencimiento{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.fechaAviso{
+    color: #ffa033;
+}
+.fechaVencido{
+    color: #ff7b7b;
+}
+
+//Mobile
+@media (min-width: 700px) {
+    //Tabla
+    .mat-column-codigo{
+        max-width: 250px;
+    }
+}
+

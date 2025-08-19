@@ -1,0 +1,155 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
+
+
+<!-- #region BOTONES ABMC -->
+<div class="abmc">
+  <div class="botones">
+    <button type="button" class="btn btn-success btn-sm" (click)="Agregar()"><mat-icon>add_circle</mat-icon>Agregar</button>
+    <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Modificar</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
+  </div>
+
+  <form class="filtros" [formGroup]="filtros">
+    <mat-slide-toggle (click)="BuscarCFiltros()" color="primary" formControlName="finalizada"
+            [ngClass]="{'activo': finalizadaControl}"
+            ><span>Ver Finalizadas</span></mat-slide-toggle>
+
+    <div class="campo">
+      <mat-select formControlName="responsable" placeholder="Responsable" (selectionChange)="BuscarCFiltros()" (openedChange)="pantalla>700?inputFiltro.focus():''">
+        <div class="inputFiltro">
+          <input #inputFiltro
+                focused="'true'"
+                type="text"
+                (input)="filtrarResponsable($event)"
+                placeholder="Filtrar Responsable"
+                (keydown)="$event.stopPropagation()"
+                autocomplete="off">
+          <mat-icon>filter_list</mat-icon>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-option *ngFor="let option of responsablesFiltrado" [value]="option.id">{{option.nombre}}</mat-option>
+      </mat-select>
+      <mat-icon matTooltip="Limpiar" (click)="LimpiarResponsable()" style="color: rgb(255, 173, 173);">close</mat-icon>
+    </div>
+  
+    <div class="campo">
+      <input type="text" [matDatepicker]="picker" placeholder="Fecha" formControlName="fecha" (dateChange)="BuscarCFiltros()">
+      <mat-icon matTooltip="Selecionar Fecha" class="picker" (click)="toggleDatepicker()">event</mat-icon>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-icon matTooltip="Limpiar" (click)="LimpiarFecha()" style="color: rgb(255, 173, 173);">close</mat-icon>
+    </div>
+  </form>
+</div>
+<!-- #endregion ABMC -->
+
+<!-- #region HERRAMIENTAS -->
+<div class="herramientas">
+
+  <div class="etiqueta">
+    <mat-icon>construction</mat-icon>
+    <span>Herramientas</span>
+  </div>
+
+  <div class="acciones">
+    <button mat-flat-button color="primary" (click)="VerEstadisticas()"><mat-icon>trending_up</mat-icon>Estadisticas</button>
+    <button mat-flat-button color="primary" (click)="VerResumen()"><mat-icon>analytics</mat-icon>Resumen</button>
+  </div>
+  
+</div>
+
+
+<!-- #endregion HERRAMIENTAS -->
+
+
+<!-- #region TABLA -->
+<div class="table-container">
+  <mat-table mat-table [dataSource]="dataSource" class="ppalTable mat-elevation-z1 full-width" matSort >
+
+    <!-- Checkbox -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="seleccionados.hasValue() && isAllSelected()"
+                      [indeterminate]="seleccionados.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? seleccionados.toggle(row) : null"
+                      [checked]="seleccionados.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.fecha | date:'dd-MM-yyyy'}}</p></mat-cell>
+    </ng-container>
+
+     <!-- Responsable -->
+     <ng-container matColumnDef="responsable">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Responsable </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Resp.:</span><p>{{element.responsable}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Inicial -->
+    <ng-container matColumnDef="inicial">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Inicial </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Inicial:</span><p>${{element.inicial | decimalFormat}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Ventas -->
+    <ng-container matColumnDef="ventas">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Ventas </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Ventas:</span><p>${{element.ventas | decimalFormat}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Entradas -->
+    <ng-container matColumnDef="entradas">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Entradas </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Entradas:</span><p>${{element.entradas | decimalFormat}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Salidas -->
+    <ng-container matColumnDef="salidas">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Salidas </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Salidas:</span><p>${{element.salidas | decimalFormat}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Total -->
+    <ng-container matColumnDef="total">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Total </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p>${{element.total | decimalFormat}}</p></mat-cell>
+    </ng-container>
+
+    <!-- Estado -->
+    <ng-container matColumnDef="estado">
+      <mat-header-cell mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element"> 
+        <div *ngIf="element.finalizada">
+          <mat-icon class="finalizada">done</mat-icon>
+        </div>
+        <div *ngIf="!element.finalizada">
+          <mat-icon class="noFinalizada">schedule</mat-icon>
+        </div>
+      </mat-cell>
+    </ng-container>
+ 
+    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]="seleccionados.isSelected(row)"
+        (click)="OnCellClick(row)">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[15, 30, 60]"
+    (page)="Buscar($event)"
+    aria-label="Select page"
+    class="mat-elevation-z1">
+  </mat-paginator>
+</div>
+<!-- #endregion TABLA -->
+
+
+    
+  

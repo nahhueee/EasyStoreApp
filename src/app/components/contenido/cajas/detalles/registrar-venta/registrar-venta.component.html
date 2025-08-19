@@ -1,0 +1,107 @@
+<div class="cabecera">
+    <mat-icon>local_atm</mat-icon>
+    <h2>Registrar Venta</h2>
+</div>
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar();' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+    <div class="izq">
+        <div class="total">
+            ${{totalGeneral | decimalFormat}}
+        </div>
+
+        <p class="advertencia" *ngIf="advertencia!==''">{{advertencia}}</p>
+    
+        <div class="doble">
+            <!-- PagaCon -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Paga Con</mat-label>
+                <input matInput type="text" formControlName="pagaCon" [imask]="decimal_mask">
+            </mat-form-field>
+
+            <!-- Vuelto -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Vuelto</mat-label>
+                <input matInput type="text" formControlName="vuelto" [imask]="decimal_mask" readonly="true" tabindex="-1">
+            </mat-form-field>
+        </div>
+
+         <!-- Cliente -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cliente</mat-label>
+            <input autocomplete="off" matInput type="text" class="uppercase" formControlName="cliente" [matAutocomplete]="ClienteAuto">
+            <mat-autocomplete autoActivateFirstOption #ClienteAuto="matAutocomplete"
+                                (optionSelected)="ChangeCliente($event.option.value)">
+                <mat-option *ngFor="let cliente of filterClientes | async" [value]="cliente">
+                    {{cliente.nombre}}
+                </mat-option>
+            </mat-autocomplete>
+
+            <mat-icon matSuffix style="color: #268656;" matTooltip="Nuevo Cliente" (click)="NuevoCliente();$event.stopPropagation();">add_circle</mat-icon>       
+
+        </mat-form-field>
+        
+    </div>
+
+    <div class="der">
+        <!-- Paga esta venta -->
+        <mat-slide-toggle formControlName="pagado" tabIndex="-1" (keydown.enter)="$event.preventDefault()"><span>Paga esta Venta</span></mat-slide-toggle>
+        
+        <div *ngIf="pagadoControl==true; else impaga">
+
+            <!-- Tipo Pago -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Método de Pago</mat-label>
+                <mat-select formControlName="idTipoPago" (selectionChange)="TiposPagoChange()">
+                    <mat-option *ngFor="let tpPago of tiposDePago" [value]="tpPago.id">{{tpPago.nombre}}</mat-option>
+                </mat-select> 
+            </mat-form-field>
+
+            <!-- Descuento: Solo para efectivo -->
+            <mat-form-field appearance="outline" class="full-width" *ngIf="tipoPagoControl==1">
+                <mat-label>Descuento</mat-label>
+                <input matInput type="text" formControlName="descuento" [imask]="decimal_mask" placeholder="Descuento en porcentaje %">
+            </mat-form-field>
+
+            <!-- Recargo: Solo para tarjetas -->
+            <mat-form-field appearance="outline" class="full-width" *ngIf="tipoPagoControl==2">
+                <mat-label>Recargo</mat-label>
+                <input matInput type="text" formControlName="recargo" [imask]="decimal_mask" placeholder="Regargo en porcentaje %">
+            </mat-form-field>
+
+
+            <div class="doble" *ngIf="tipoPagoControl==4">
+                <!-- Efectivo-->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Efectivo</mat-label>
+                    <input matInput type="text" formControlName="efectivo"  [imask]="decimal_mask">
+                </mat-form-field>
+
+                <!-- Digital-->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Digital</mat-label>
+                    <input matInput type="text" formControlName="digital"  [imask]="decimal_mask" readonly="true">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <ng-template #impaga>
+
+            <!-- Entrega Dinero -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Entrega</mat-label>
+                <input matInput type="text" formControlName="entrega" [imask]="decimal_mask" (blur)="EvaluarEntrega()">
+            </mat-form-field>
+
+        </ng-template>
+    
+    </div>
+
+</form>
+
+<mat-dialog-actions align="center" *siComputadorHabilitado>
+    <button *ngIf="!errorFacturacion" class="btn-facturar" mat-flat-button color="accent" (click)='Facturar()'><mat-icon>receipt_long</mat-icon>ACEPTAR Y FACTURAR (F9)</button>
+    <p *ngIf="errorFacturacion" class="error-facturacion">No pudimos facturar esta venta</p>
+</mat-dialog-actions>
+<mat-dialog-actions align="center" class="botones">
+    <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()' >ACEPTAR (F1)</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR (ESC)</button>
+</mat-dialog-actions>

@@ -1,0 +1,31 @@
+.busqueda{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    width: 250px;
+    padding: 0px 10px;
+}
+.busqueda input{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: var(--color-font) !important;
+}
+.busqueda input:focus {
+    outline: none; /* Elimina el borde del input al hacer clic */
+}
+
+.busqueda input::placeholder {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--placeholders);
+    font-weight: 400;
+}
+
+.busqueda mat-icon{
+    cursor: pointer;
+}

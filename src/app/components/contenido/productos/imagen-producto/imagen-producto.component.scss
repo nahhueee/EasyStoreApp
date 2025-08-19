@@ -1,0 +1,21 @@
+.contenido{
+    padding: 15px;
+}
+
+.imagen{
+    text-align: center;
+
+    img{
+        border-radius: 8px;
+    }
+}
+
+.botones{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 15px;
+    button{
+        width: 220px;
+    }
+}

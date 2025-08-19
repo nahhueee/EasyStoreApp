@@ -1,0 +1,39 @@
+.contenido{
+    padding: 5px 25px;
+}
+
+h4{
+    font-size: 16px;
+    font-family: "Poppins-Regular";
+    font-weight: 500;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+.recuadro{
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    p{
+        margin: 0%;
+        font-size: 14px;
+    }
+}
+
+.actualizado{
+    padding: 18px;
+    text-align: center;
+
+    img{
+        width: 220px;
+    }
+
+    p{
+        font-size: 15px;
+        font-family: "Poppins-Regular";
+    }
+}

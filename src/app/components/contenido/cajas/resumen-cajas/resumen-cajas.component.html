@@ -1,0 +1,226 @@
+<div class="cabecera">
+    <mat-icon>analytics</mat-icon>
+    <h2>Resumen Caja</h2>
+</div>
+
+<div class="contenido">
+    <div class="encabezado">
+        <h5>{{caja.responsable?.nombre}}</h5>
+        |
+        <h5>{{caja.fecha | date:'dd-MM-yyyy'}}</h5>
+    </div>
+
+    <div class="generales">
+        <div class="item">
+            <span>${{caja.inicial! | decimalFormat}}</span>
+            <hr>
+            <h5>Inicial</h5>
+        </div>
+        <p>+</p>
+        <div class="item">
+            <span>${{caja.ventas! | decimalFormat}}</span>
+            <hr>
+            <h5>Ventas</h5>
+        </div>
+        <p>+</p>
+        <div class="item">
+            <span>${{caja.entradas! | decimalFormat}}</span>
+            <hr>
+            <h5>Entradas</h5>
+        </div>
+        <p>-</p>
+        <div class="item">
+            <span>${{caja.salidas! | decimalFormat}}</span>
+            <hr>
+            <h5>Salidas</h5>
+        </div>
+        <p>=</p>
+        <div class="item">
+            <span>${{totalCaja! | decimalFormat}}</span>
+            <hr>
+            <h5>Total</h5>
+        </div>
+    </div>
+    <hr>
+    
+
+    <div class="tipoPago">
+        <div class="recuadro efectivo">
+            
+            <img src="assets/ilustraciones/dinero.png" alt="vector money">
+            <span>${{totalEfectivo! | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Efectivo</p>
+                <h5>Inicial + Ventas + Entradas - Salidas</h5>
+            </div>
+        </div>
+        <div class="recuadro transferencia">
+            <img src="assets/ilustraciones/transferencia.png" alt="vector mobile">
+            <span>${{totalTransferencias | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Transferencias</p>
+                <h5>Transferencias y codigos QR</h5>
+            </div>
+        </div>
+        <div class="recuadro tarjeta">
+            <img src="assets/ilustraciones/tarjeta.png" alt="vector card">
+            <span>${{totalTarjetas | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Tarjetas</p>
+                <h5>Tarjetas debito y credito</h5>
+            </div>
+        </div>
+        <div class="recuadro resto">
+            <img src="assets/ilustraciones/otros.png" alt="vector card">
+            <span>${{totalRestoCombinados | decimalFormat}}</span>
+            <div>
+                <p>Dinero Resto Combinado</p>
+                <h5>Resto en digital de pago combinado</h5>
+            </div>
+        </div>
+    </div>
+
+
+    <mat-tab-group class="tabs no-imprimir" mat-align-tabs="center">
+            <mat-tab label="Detalles De Venta">
+                <div class="ventas">
+                    
+                    <div class="izq">
+                        <mat-table mat-table [dataSource]="dataSourceVentas" class="ppalTable mat-elevation-z1 full-width">
+                            <!-- Cliente -->
+                            <ng-container matColumnDef="cliente">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"> {{element.cliente.nombre}} </mat-cell>
+                            </ng-container>
+
+                            <!-- Hora -->
+                            <ng-container matColumnDef="hora">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Hora</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Hora:</span><p> {{element.hora}}</p></mat-cell>
+                            </ng-container>
+                            
+                            <!-- Total -->
+                            <ng-container matColumnDef="total">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total</span><p>${{element.total | decimalFormat}}</p></mat-cell>
+                            </ng-container>
+
+                            <!-- Pagado -->
+                            <ng-container matColumnDef="pagado">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Pago</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element">
+                                    <div *ngIf="element.pago.realizado">
+                                        <mat-icon class="realizado">done</mat-icon>
+                                        </div>
+                                        <div *ngIf="!element.pago.realizado">
+                                        <mat-icon class="noRealizado">clear</mat-icon>
+                                        </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- TPago -->
+                            <ng-container matColumnDef="tpago">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>TPago</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element">
+                                    <div *ngIf="element.pago.realizado">
+                                        <div *ngIf="element.pago.tipoPago === 'EFECTIVO'">
+                                            <mat-icon class="icono-efectivo">monetization_on</mat-icon>
+                                        </div>
+                                        <div *ngIf="element.pago.tipoPago === 'TARJETA'">
+                                            <mat-icon class="icono-tarjeta">credit_card</mat-icon>
+                                        </div>
+                                        <div *ngIf="element.pago.tipoPago === 'TRANSFERENCIA'">
+                                            <mat-icon class="icono-transferencia">account_balance</mat-icon>
+                                        </div>
+                                        <div *ngIf="element.pago.tipoPago === 'COMBINADO'">
+                                            <mat-icon class="icono-combinado">autorenew</mat-icon>
+                                        </div>
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Facturado -->
+                            <ng-container matColumnDef="facturado">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Fact.</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element">
+                                    <div *ngIf="element.factura.cae">
+                                        <mat-icon class="realizado">receipt_long</mat-icon>
+                                    </div>
+                                    </mat-cell>
+                            </ng-container>
+                    
+                            <mat-header-row class="table-header" mat-header-row *matHeaderRowDef="columnsVentas; sticky: true"></mat-header-row>
+                            <mat-row class="table-row" mat-row *matRowDef="let row; columns: columnsVentas;"></mat-row>
+                        </mat-table>
+                    
+                        <mat-paginator #paginator1 [pageSizeOptions]="[5]"
+                        (page)="BuscarVentas($event)"
+                        aria-label="Select page"
+                        class="mat-elevation-z1">
+                        </mat-paginator>
+                    </div>
+
+                    <div class="der">
+                        <div class="rectangulo">
+                            <p><mat-icon>shopping_cart</mat-icon>Cant. Ventas</p>
+                            <span>{{cantVentas}}</span>
+                        </div>
+                        <div class="rectangulo">
+                            <p><mat-icon>attach_money</mat-icon>Pagas</p>
+                            <span>{{cantPagas}}</span>
+                        </div>
+                        <div class="rectangulo">
+                            <p><mat-icon>money_off</mat-icon>Impagas</p>
+                            <span>{{cantImpagas}}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </mat-tab>
+            <mat-tab label="Movimientos de Caja"> 
+                <div class="movimientos">
+                    <mat-table mat-table [dataSource]="dataSourceMovimientos" class="ppalTable mat-elevation-z1 full-width">
+
+                        <!-- Tipo -->
+                        <ng-container matColumnDef="tipo">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Tipo Movimiento</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"> 
+                            <span *ngIf="element.tipoMovimiento==='ENTRADA'" class="entrada">🡇</span> 
+                            <span *ngIf="element.tipoMovimiento==='SALIDA'" class="salida">🡅</span> 
+                            {{element.tipoMovimiento}} 
+                        </mat-cell>
+                        </ng-container>
+
+                        <!-- Monto -->
+                        <ng-container matColumnDef="monto">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Monto:</span><p>{{element.monto | decimalFormat}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Descripcion -->
+                        <ng-container matColumnDef="descripcion">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Descr:</span><p>{{element.descripcion}}</p></mat-cell>
+                        </ng-container>
+
+                        <mat-header-row mat-header-row *matHeaderRowDef="columnsMovimientos; sticky: true"></mat-header-row>
+                        <mat-row class="table-row" mat-row *matRowDef="let row; columns: columnsMovimientos;"></mat-row>
+                    </mat-table>
+
+                    <mat-paginator #paginator2 [pageSizeOptions]="[5]"
+                        (page)="BuscarMovimientos($event)"
+                        aria-label="Select page"
+                        class="mat-elevation-z1">
+                    </mat-paginator>
+                </div>
+                
+
+            </mat-tab>
+    </mat-tab-group>
+
+</div>
+  
+<div class="botones no-imprimir">
+    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>
+  

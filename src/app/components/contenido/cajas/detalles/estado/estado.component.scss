@@ -1,0 +1,60 @@
+.contenedor{
+    gap: 30px;
+    padding: 25px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 178px);
+}
+
+.tipoPago{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0px;
+    flex-wrap: wrap;
+    text-align: center;
+    
+    span{
+        font-size: 23px;
+        font-family: 'Poppins-Regular';
+    }
+
+    .recuadro{
+        height: 250px;
+        width: 270px;
+        border-radius: 8px;
+
+        padding: 13px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+
+        img{
+            width: 80px;
+        }
+
+        p{
+            margin-bottom: 3px;
+            font-size: 16px;
+        }
+        h5{
+            font-size: 14px;
+            color: #868686;
+            margin: 0%;
+        }
+    }
+
+    .efectivo{
+        border: 1px solid #2dc051;
+    }
+    .transferencia{
+        border: 1px solid #2db6c8;
+    }
+    .tarjeta{
+        border: 1px solid #ee8b29;
+    }
+    .resto{
+        border: 1px solid #7d7d7d;
+    }
+}

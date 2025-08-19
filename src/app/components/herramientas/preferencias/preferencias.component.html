@@ -1,0 +1,224 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Probando conexión... </p></ngx-spinner>
+<div class="ventana">
+  <mat-accordion class="headers-align">
+    <!-- Perzonalizacion -->
+    <mat-expansion-panel hideToggle>
+  
+      <!-- Encabezado -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Personalización
+        </mat-panel-title>
+        <mat-panel-description>
+          Perzonaliza el aspecto de tu sistema
+          <mat-icon>palette</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <!-- Contenido -->
+      <form [formGroup]="formulario" class="form" autocomplete="off">
+        <!-- Cambiar al modo oscuro/claro -->
+        <mat-slide-toggle color="primary" formControlName="dark">
+          <span class="spanToggle">Modo Oscuro</span>
+        </mat-slide-toggle>
+                          
+        <!-- Cambiar el color del tema -->
+        <mat-form-field appearance="fill" color="primary" class="full-width">
+          <mat-label>Color de la interfaz</mat-label>
+          <mat-select formControlName="color">
+            <mat-option *ngFor="let color of colores" [value]="color.value">
+              <img src="{{ color.img }}" width="15px" height="15px"> {{color.texto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      
+      <button mat-raised-button color="primary" (click)="GuardarPreferencias()"><mat-icon>save</mat-icon>GUARDAR</button>
+  
+    </mat-expansion-panel>
+  
+    <!-- Impresion -->
+    <mat-expansion-panel hideToggle>
+  
+      <!-- Encabezado -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Impresión
+        </mat-panel-title>
+        <mat-panel-description>
+          Configura parametros de impresión
+          <mat-icon>print</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <!-- Contenido -->
+      <form [formGroup]="formulario" class="form" autocomplete="off">
+  
+        <!-- Nombre Local-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Nombre del local</mat-label>
+          <input matInput type="text" formControlName="nomLocal" placeholder="Ej: Tienda Mi Alegria">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Nombre impresora-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Nombre de la impresora</mat-label>
+          <input matInput type="text" formControlName="impresora">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Tamanio Papel-->
+        <mat-form-field appearance="fill" color="primary" class="full-width">
+          <mat-label>Tamaño de Papel</mat-label>
+          <mat-select formControlName="papel">
+            <mat-option *ngFor="let papel of papeles" [value]="papel.value">
+              {{papel.value}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+      
+      <button mat-raised-button color="primary" (click)="GuardarPreferencias()"><mat-icon>save</mat-icon>GUARDAR</button>
+  
+    </mat-expansion-panel>
+  
+    <!-- Facturacion -->
+    <mat-expansion-panel hideToggle *ngIf="esApp">
+  
+      <!-- Encabezado -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Facturación
+        </mat-panel-title>
+        <mat-panel-description>
+          Proporciona los datos para generar facturas
+          <mat-icon>receipt_long</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <!-- Contenido -->
+      <form [formGroup]="formFacturacion" class="form" autocomplete="off">
+        <!-- Condicion-->
+        <mat-form-field appearance="fill" color="primary" class="full-width">
+          <mat-label>Condición frente Arca</mat-label>
+          <mat-select formControlName="condicion">
+            <mat-option *ngFor="let condicion of condicionesIVA" [value]="condicion.value">
+              {{condicion.desc}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- Nro Punto Venta-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Punto de Venta</mat-label>
+          <input matInput type="number" formControlName="puntoVta">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- CUIL Titular-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>CUIL Titular</mat-label>
+          <input matInput type="number" formControlName="CUIL">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Razon Social-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Razón Social</mat-label>
+          <input matInput type="text" formControlName="razon">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Direccion-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Direccion</mat-label>
+          <input matInput type="text" formControlName="direccion">
+          <mat-error>
+            El campo no puede quedar vacio
+          </mat-error>
+        </mat-form-field>
+      </form>
+      
+      <button mat-raised-button color="primary" (click)="GuardarFacturacion()"><mat-icon>save</mat-icon>GUARDAR</button>
+  
+    </mat-expansion-panel>
+      
+    <!-- Permisos -->
+    <mat-expansion-panel hideToggle *ngIf="esApp">
+  
+      <!-- Encabezado -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Permisos y datos sensibles
+        </mat-panel-title>
+        <mat-panel-description>
+          Define permisos y accesos a funcionalidades
+          <mat-icon>lock</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <!-- Contenido -->
+      <form [formGroup]="formulario" class="form" autocomplete="off">
+        
+        <mat-slide-toggle color="primary" formControlName="ventasYtotales">
+          <span class="spanToggle">Permitir a los empleados ver ventas y totales de caja</span>
+        </mat-slide-toggle> <br>
+        <mat-slide-toggle color="primary" formControlName="resumenCaja">
+          <span class="spanToggle">Permitir a los empleados ver resumenes de caja</span> 
+        </mat-slide-toggle> <br>
+        <mat-slide-toggle color="primary" formControlName="cambioPrecio">
+          <span class="spanToggle">Permitir a los empleados actualizar varios precios</span> 
+        </mat-slide-toggle>
+        <hr>
+        <mat-slide-toggle color="primary" formControlName="ventasCliente">
+          <span class="spanToggle">Ver las ventas realizadas y pagadas de los clientes</span> 
+        </mat-slide-toggle>
+
+      </form>
+      
+      <button mat-raised-button color="primary" (click)="GuardarPreferencias()"><mat-icon>save</mat-icon>GUARDAR</button>
+  
+    </mat-expansion-panel>
+
+    <!-- Otros -->
+    <mat-expansion-panel hideToggle *ngIf="esApp">
+  
+      <!-- Encabezado -->
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Configuraciones Varias
+        </mat-panel-title>
+        <mat-panel-description>
+          Expora otras configuraciones
+          <mat-icon>tune</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+      <!-- Contenido -->
+      <form [formGroup]="formulario" class="form" autocomplete="off">
+        
+        <mat-slide-toggle color="primary" formControlName="edicionResultadoUnico">
+          <span class="spanToggle">Abrir ventana de edición o inserción de productos, cuando se busca uno</span>
+        </mat-slide-toggle> <br>
+        
+      </form>
+      
+      <button mat-raised-button color="primary" (click)="GuardarPreferencias()"><mat-icon>save</mat-icon>GUARDAR</button>
+  
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+
+

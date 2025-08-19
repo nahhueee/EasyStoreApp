@@ -1,0 +1,150 @@
+.contenedor{
+    gap: 30px;
+    padding: 25px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 178px);
+}
+
+/*#region FILTRO*/
+.filtro{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.select{
+    display: flex;
+    align-items: center;
+    width: 250px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    padding: 0px 10px;
+    height: 40px;
+    
+    mat-icon{
+        margin-left: 8px;
+    }
+}
+/*#endregion */
+
+.doble{
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+   
+    .izq{
+        flex: 2;
+        width: 60%;
+    }
+    .der{
+        flex: 1;
+        width: 40%;
+    }
+}
+
+//Tabla
+//Solo PC
+@media (min-width: 701px) {
+    .mat-column-cantidad, .mat-column-unidad, .mat-column-precio {
+        max-width: 120px;
+    }
+}
+
+
+/*#region DETALLE PRODUCTO*/
+.activo{
+    background-color: var(--color-background);
+}
+
+.seleccionado{
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+
+    .imagen{
+        width: 240px;
+        height: 200px;
+        border-radius: 8px;
+    }
+
+    .letras{
+        width: 100%;
+        text-align: center;
+
+        hr{
+            margin: 5px;
+        }
+
+        h3{
+            font-size: 17px;
+            font-family: 'Poppins-Regular';
+            text-transform: capitalize;
+            margin: 0%;
+        }
+
+        p{
+            color: #919191;
+            margin-bottom: 22px;
+        }
+
+        span{
+            color: var(--color-primary);
+            font-size: 25px;
+            font-family: 'Roboto-Medium';
+        }
+    }
+}
+
+.noSeleccionado{
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    height: 250px;
+    min-width: 350px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+
+    p{
+        margin: 0%;
+    }
+
+    mat-icon{
+        transform: scale(2);
+    }
+}
+/*#endregion */
+
+
+//Mobile
+@media (max-width: 700px) {
+    .filtro {
+        justify-content: center;
+    }
+    .seleccionado{
+        min-width: 0;
+        width: 100%;
+
+        .letras h3{
+            font-size: 15px;
+        }
+
+        .letras span{
+            font-size: 20px;
+        }
+    }
+    .noSeleccionado{
+        min-width: 0;
+        width: 100%;
+    }
+}

@@ -1,0 +1,71 @@
+<div *ngIf="verificando; else ocultar" class="verificando">
+    <mat-spinner></mat-spinner>
+    <p>Estamos verificando su identidad</p>
+</div>
+<ng-template #ocultar >
+    <div class="contenido">
+        <div class="validacion" *ngIf="solicitarDNI; else informacion">
+            <p>Es necesario validar tu identidad</p>
+        
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Ingresa tu DNI</mat-label>
+                <input matInput type="number" [formControl]="DNIcontrol" placeholder="DNI sin puntos" appMaxLengthNumber="8" autocomplete="off">
+            </mat-form-field>
+        
+            <button class="btn-action" mat-flat-button color="primary" (click)="Enviar()" [disabled]="!DNIcontrol.valid">ENVIAR</button>
+        
+        
+            <div *ngIf="DNIInvalido" class="alert alert-warning" role="alert">
+                <img src="assets/ilustraciones/not ok.png" alt="not ok">
+                <p>Parece que no figuras como cliente en nuestra base de datos, comunicate con el equipo de desarrollo.</p> 
+            </div>
+        </div>
+
+        <ng-template #informacion >
+            <div class="habilitado" *ngIf="habilitado">
+                <p class="mensaje">Hola, <span>{{cliente}}</span>, todo en orden para trabajar.</p>
+
+                <div class="recuadro">
+                    <div class="col1">
+                        <img src="assets/ilustraciones/habilitado.png" alt="ok">
+                    </div>
+                    <div class="col2">
+                        <p>Terminal Habilitada. Puedes acceder a las siguientes funciones:</p>
+                        <span>✔ Atención técnica personalizada</span><br>
+                        <span>✔ Descargar actualizaciones del sistema</span><br>
+                        <span>✔ Crear respaldo de datos periodicamente</span><br>
+                        <span>✔ Multicaja</span><br>
+                        <span>✔ Facturación electrónica</span><br>
+                        <span>☐ Aplicación para el telefono, administra tu inventario (proximamente)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inhabilitado" *ngIf="pcInhabilitada">
+                <p class="mensaje">Hola, <span>{{cliente}}</span>, nos encontramos con la siguiente situación.</p>
+
+                <div class="recuadro">
+                    <div class="col1">
+                        <img src="assets/ilustraciones/inhabilitado.png" alt="inhabilitado">
+                    </div>
+                    <div class="col2">
+                        <p>Tu terminal esta deshabilitada.<br> Comunicate con el equipo de desarrollo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="incorrecto" *ngIf="pcIncorrecta">
+                <p class="mensaje">Ups, tenemos un problema</p>
+
+                <div class="recuadro">
+                    <div class="col1">
+                        <img src="assets/ilustraciones/incorrecto.png" alt="incorrecto">
+                    </div>
+                    <div class="col2">
+                        <p>Esta pc no fue registrada para su uso.<br> Comunicate con el equipo de desarrollo.</p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</ng-template>

@@ -1,0 +1,244 @@
+@use '@angular/material' as mat;
+$mat-theme-ignore-duplication-warnings: true;
+
+/*#region Red-Theme*/
+$red-primary: mat.m2-define-palette(mat.$m2-red-palette, A400);
+$red-accent: mat.m2-define-palette(mat.$m2-red-palette, 500);
+
+$red-theme: mat.m2-define-light-theme((color: (primary: $red-primary, accent: $red-accent)));
+$red-theme-dark: mat.m2-define-dark-theme((color: (primary: $red-primary, accent: $red-accent)));
+
+.red-theme{
+  @include mat.all-component-colors($red-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($red-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($red-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 255, 255, 255;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #ebebeb;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+}
+.red-theme-dark{
+  @include mat.all-component-colors($red-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($red-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($red-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+
+/*#region Pink-Theme*/
+$pink-primary: mat.m2-define-palette(mat.$m2-pink-palette, A400);
+$pink-accent: mat.m2-define-palette(mat.$m2-pink-palette, 900);
+
+$pink-theme: mat.m2-define-light-theme((color: (primary: $pink-primary, accent: $pink-accent)));
+$pink-theme-dark: mat.m2-define-dark-theme((color: (primary: $pink-primary, accent: $pink-accent)));
+
+.pink-theme{
+  @include mat.all-component-colors($pink-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($pink-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($pink-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 209, 209, 209;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #e9e9e9;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+}
+.pink-theme-dark{
+  @include mat.all-component-colors($pink-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($pink-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($pink-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+
+/*#region Blue-Theme*/
+$blue-primary: mat.m2-define-palette(mat.$m2-blue-palette, A400);
+$blue-accent: mat.m2-define-palette(mat.$m2-indigo-palette, 600);
+
+$blue-theme: mat.m2-define-light-theme((color: (primary: $blue-primary, accent: $blue-accent)));
+$blue-theme-dark: mat.m2-define-dark-theme((color: (primary: $blue-primary, accent: $blue-accent)));
+
+.blue-theme{
+  @include mat.all-component-colors($blue-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($blue-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($blue-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 209, 209, 209;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #ebebeb;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+}
+.blue-theme-dark{
+  @include mat.all-component-colors($blue-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($blue-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($blue-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+
+/*#region Green-Theme*/
+$green-primary: mat.m2-define-palette(mat.$m2-green-palette, 700);
+$green-accent: mat.m2-define-palette(mat.$m2-teal-palette, 800);
+
+$green-theme: mat.m2-define-light-theme((color: (primary: $green-primary, accent: $green-accent)));
+$green-theme-dark: mat.m2-define-dark-theme((color: (primary: $green-primary, accent: $green-accent)));
+
+.green-theme{
+  @include mat.all-component-colors($green-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($green-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($green-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 209, 209, 209;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #ebebeb;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+}
+.green-theme-dark{
+  @include mat.all-component-colors($green-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($green-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($green-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+
+/*#region Yellow-Theme*/
+$yellow-primary: mat.m2-define-palette(mat.$m2-yellow-palette, 700);
+$yellow-accent: mat.m2-define-palette(mat.$m2-lime-palette, 400);
+
+$yellow-theme: mat.m2-define-light-theme((color: (primary: $yellow-primary, accent: $yellow-accent)));
+$yellow-theme-dark: mat.m2-define-dark-theme((color: (primary: $yellow-primary, accent: $yellow-accent)));
+
+.yellow-theme{
+  @include mat.all-component-colors($yellow-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($yellow-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($yellow-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 209, 209, 209;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #ebebeb;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+}
+.yellow-theme-dark{
+  @include mat.all-component-colors($yellow-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($yellow-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($yellow-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+
+/*#region Orange-Theme*/
+$orange-primary: mat.m2-define-palette(mat.$m2-orange-palette, A400);
+$orange-accent: mat.m2-define-palette(mat.$m2-deep-orange-palette, 400);
+
+$orange-theme: mat.m2-define-light-theme((color: (primary: $orange-primary, accent: $orange-accent)));
+$orange-theme-dark: mat.m2-define-dark-theme((color: (primary: $orange-primary, accent: $orange-accent)));
+
+.orange-theme{
+  @include mat.all-component-colors($orange-theme);
+  --color-primary: #{mat.m2-get-color-from-palette($orange-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($orange-accent)};
+  --color-background: #e6e6e6;
+  --color-background-rgb: 209, 209, 209;
+  --color-alternative: #424242;
+  --color-element-back: #ffffff;
+  --color-row: #ebebeb;
+  --color-font: #363636;
+  --border-color: #c1c1c1;
+  --color-elements: #5e5e5e;
+  --warn-text: #f86060;
+  --placeholders: rgba(0, 0, 0, 0.6);
+  
+}
+.orange-theme-dark{
+  @include mat.all-component-colors($orange-theme-dark);
+  --color-primary: #{mat.m2-get-color-from-palette($orange-primary)};
+  --color-accent: #{mat.m2-get-color-from-palette($orange-accent)};
+  --color-background: #212121;
+  --color-background-rgb: 17, 17, 17;
+  --color-alternative: #111111;
+  --color-element-back: #424242;
+  --color-row: #252525;
+  --color-font: #ffffff;
+  --border-color: #4e4e4e;
+  --color-elements: #c0c0c0;
+  --warn-text: #ffad42;
+  --placeholders: rgba(255, 255, 255, 0.6);
+  color: white;
+}
+/*#endregion */
+

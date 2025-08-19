@@ -1,0 +1,103 @@
+<div class="contenedor">
+    <div *ngIf="pantalla>768" class="navegacion" [ngClass]="{'plegado':menuPlegado}">
+
+        <div class="marca">
+            @if (!mostrarTextoChico) {
+                <h4 class="texto" @fade>Easy Sales</h4>
+            }
+            @else {
+                <h4 @fade>E.S</h4>
+            }
+        </div>
+        
+        @for(opcion of componentes; track opcion.id){
+            <div class="item"
+                [ngClass]="{ 
+                'active': componente === opcion.id, 
+                'mini': menuPlegado 
+                }"
+                (click)="Navegar(opcion.id)"
+                [matTooltip]="menuPlegado ? opcion.titulo : ''"
+                matTooltipPosition="right">
+                <mat-icon>{{ opcion.icon }}</mat-icon>
+
+                @if (!menuPlegado) {
+                    <span class="titulo">{{ opcion.titulo }}</span>
+                }
+            </div>
+        }
+
+       
+
+
+        <!-- <div class="marca">
+            <h4>Easy Sales</h4>
+            <span>by Creation Code</span>
+        </div>
+
+        <div class="item" (click)="Navegar('cajas')" [ngClass]="{'active': componente === 'cajas'}"><mat-icon>local_atm</mat-icon>Cajas</div>
+        <div class="item" (click)="Navegar('inventario')" [ngClass]="{'active': componente === 'inventario'}"><mat-icon>inventory_2</mat-icon>Inventario</div>
+        <div class="item" (click)="Navegar('etiquetas')" [ngClass]="{'active': componente === 'etiquetas'}"><mat-icon>more</mat-icon>Etiquetas</div>
+        <div class="item" (click)="Navegar('clientes')" [ngClass]="{'active': componente === 'clientes'}"><mat-icon>escalator_warning</mat-icon>Clientes</div>
+        <div *ngIf="!esEmpleado" class="item" (click)="Navegar('usuarios')" [ngClass]="{'active': componente === 'usuarios'}"><mat-icon>group</mat-icon>Usuarios</div>
+ -->
+
+        <div class="version"  [class.pequenio] = "menuPlegado">
+            <div class="actualizacion" 
+                    (click)="versionDisponible && AbrirModalActualizar('info')"
+                    [matBadge]="versionDisponible ? '!' : null"
+                    matBadgeColor="warn"
+                    matBadgeSize="small"
+                    [matTooltip]="versionDisponible ? 'Hay una versión disponible' : version"
+                    matTooltipPosition="right">
+                
+                    @if (!mostrarTextoChico) {
+                        <div @fade class="conjunto">
+                            <mat-icon>file_download</mat-icon>{{ version }}
+                        </div>
+                    }
+                    @else {
+                        <mat-icon @fade>info</mat-icon>
+                    }
+            </div>
+        </div>
+    </div>
+   
+    <div *ngIf="pantalla<=768" class="navegacion-movil">
+        <div class="bar">
+            <h4>Easy Sales</h4>
+            <div style="display: flex; align-items: center;">
+                <span>Menu</span>
+                <button mat-mini-fab color="accent" data-bs-toggle="collapse" data-bs-target="#burger" aria-expanded="false" aria-controls="burger">
+                    <mat-icon>menu</mat-icon>
+                </button>
+            </div>
+        </div>
+       
+        <div class="collapse" id="burger">
+            <div class="item" (click)="Navegar('cajas')" [ngClass]="{'active': componente === 'cajas'}"><mat-icon>local_atm</mat-icon>Cajas</div>
+            <div class="item" (click)="Navegar('inventario')" [ngClass]="{'active': componente === 'inventario'}"><mat-icon>inventory_2</mat-icon>Inventario</div>
+            <div class="item" (click)="Navegar('clientes')" [ngClass]="{'active': componente === 'clientes'}"><mat-icon>escalator_warning</mat-icon>Clientes</div>
+            <div *ngIf="!esEmpleado" class="item" (click)="Navegar('usuarios')" [ngClass]="{'active': componente === 'usuarios'}"><mat-icon>group</mat-icon>Usuarios</div>
+        </div>
+    </div>
+    
+
+    <div class="contenido">
+        <app-herramientas-bar (plegado)="AccionarMenu($event)"></app-herramientas-bar>
+        
+       
+        <div *ngIf="componente==='usuarios'"  class="child"><app-usuarios></app-usuarios></div>
+        <div *ngIf="componente==='clientes'"  class="child"><app-clientes></app-clientes></div>
+        <div *ngIf="componente==='inventario'"  class="child"><app-productos></app-productos></div>
+        <div *ngIf="componente==='etiquetas'"  class="child"><app-etiquetas></app-etiquetas></div>
+        <div *ngIf="componente==='cajas'"  class="child"><app-cajas></app-cajas></div>
+
+        <div *ngIf="componente==='inicio'" class="child"><app-inicio></app-inicio></div>
+        <div *ngIf="componente==='preferencias'"  class="child"><app-preferencias></app-preferencias></div>
+        <div *ngIf="componente==='respaldos'"  class="child"><app-respaldos></app-respaldos></div>
+        <div *ngIf="componente==='servidor'"  class="child"><app-servidor></app-servidor></div>
+        <div *ngIf="componente==='identidad'"  class="child"><app-identidad></app-identidad></div>
+        <div *ngIf="componente==='errores'"  class="child"><app-errores></app-errores></div>
+    </div>
+</div>

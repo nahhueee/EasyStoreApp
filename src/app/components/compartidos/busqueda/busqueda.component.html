@@ -1,0 +1,10 @@
+<div class="busqueda">
+    <input id="inputBusqueda" type="text" placeholder="ENTER para buscar" 
+        [(ngModel)]="txtBusqueda" 
+        (keyup.enter)="Buscar()" 
+        (keyup.escape)="LimpiarBusqueda()"
+        (focus)="SelectContent($event)">
+    <mat-icon *ngIf="txtBusqueda" matTooltip="Limpiar" (click)="LimpiarBusqueda()" style="color: rgb(255, 173, 173);">close</mat-icon>
+    <mat-icon matTooltip="Buscar" (click)="Buscar()">search</mat-icon>
+</div>
+

@@ -1,0 +1,65 @@
+.contenedor{
+    gap: 30px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 178px);
+}
+
+.select{
+    display: flex;
+    align-items: center;
+    width: 300px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    padding: 0px 10px;
+    height: 40px;
+    
+    mat-icon{
+        margin-left: 8px;
+    }
+}
+
+
+
+//Grilla
+@media (min-width: 701px) {
+    .mat-column-tipo{
+        flex: 0 0 200px !important;
+        white-space: unset !important;
+    }
+    
+    .mat-column-monto{
+        flex: 0 0 200px !important;
+        white-space: unset !important;
+    }
+}
+
+.entrada{
+    color: rgb(32, 158, 64);
+    font-size: 18px;
+    margin-right: 10px;
+}
+.salida{
+    color: #e96471;
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+
+
+//Mobile
+@media (max-width: 700px) {
+    .mobile-label {
+        width: 60px;
+    }
+
+    .botones {
+        width: 100%;
+       
+        button{
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}

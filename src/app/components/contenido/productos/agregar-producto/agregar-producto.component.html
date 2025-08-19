@@ -1,0 +1,26 @@
+<div class="cabecera">
+    <mat-icon>post_add</mat-icon>
+    <h2>Agregar Cantidad</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off"> 
+
+    <p class="producto">{{producto.nombre}}</p>
+    <p class="cantidad">Cant. actual: <span>{{producto.cantidad}}</span></p>
+
+    <!-- Entrega -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cant. a añadir</mat-label>
+        <input matInput type="text" formControlName="cantidad" [imask]="decimal_mask">
+        <mat-error>
+            El campo es obligatorio
+        </mat-error>
+    </mat-form-field>
+</form>
+
+ 
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()'>ACEPTAR</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>
+  

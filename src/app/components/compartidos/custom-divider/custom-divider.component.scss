@@ -1,0 +1,26 @@
+.divider{
+  display: flex;
+  align-items: center;
+  gap: 10px; //Separacion de elementos
+  margin-bottom: 10px;
+}
+.divider .der{ //Linea derecha
+  width: 100%;
+  border-top: 1px solid;
+}
+.divider .izq{ //Linea izquierda
+  width: 4%;
+  border-top: 1px solid;
+}
+
+.texto{
+  display: flex;
+  align-items: center;
+}
+.texto p{
+  margin-bottom: 0px;
+  margin-left: 5px;
+}
+.texto mat-icon{
+  font-size: 23px;
+}

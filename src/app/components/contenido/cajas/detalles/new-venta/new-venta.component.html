@@ -1,0 +1,125 @@
+<div class="contenedor">
+    <form class="izq" [formGroup]="formulario" method="POST" (keyup.esc)="Limpiar()"  (keyup.enter)="AgregarProducto($event)" autocomplete="off">
+        
+        <div class="icono">
+            <img src="{{pathIcon}}" alt="" width="100px" >
+        </div>
+
+        <!-- Código -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Código</mat-label>
+            <input #inputCodigo matInput class="uppercase" type="text"  formControlName="codigo" placeholder="Presiona * para productos varios" 
+            (keyup)="codigoKeyUp()"
+            (input)="codigoInputChange()"
+            (focus)="SelectContent($event)">
+        </mat-form-field>
+        <p *ngIf="prodVario" class="nombreProdVario">{{prodVarioNombre}}</p>
+
+        <div *ngIf="!prodVario; else productoVario">
+            <!-- Producto -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Producto</mat-label>
+                <input autocomplete="off" matInput type="text" class="uppercase" formControlName="producto" [matAutocomplete]="ProductoAuto">
+                <mat-autocomplete autoActivateFirstOption #ProductoAuto="matAutocomplete"
+                                    (optionSelected)="productoChange($event.option.value)">
+                    <mat-option *ngFor="let producto of filterProductos | async" [value]="producto">
+                        {{producto.nombre}}
+                    </mat-option>
+                </mat-autocomplete>
+
+                <mat-icon matSuffix style="color: #268656;" matTooltip="Nuevo Producto" (click)="NuevoProducto();$event.stopPropagation();">add_circle</mat-icon>       
+            </mat-form-field>
+
+            <div class="doble">
+                <!-- Cantidad -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Cantidad</mat-label>
+                    <input #inputCantidad matInput type="text" formControlName="cantidad" [imask]="decimal_mask">
+                    <mat-hint class="unidad">{{unidadProd}}</mat-hint>
+                </mat-form-field>
+
+                <!-- Precio -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Precio</mat-label>
+                    <input matInput type="text" formControlName="precio" [imask]="decimal_mask" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+        <ng-template #productoVario>
+            <div class="doble">
+                <!-- Precio -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Precio</mat-label>
+                    <input #inputPrecioVario matInput type="text" formControlName="precioVario" [imask]="decimal_mask" >
+                </mat-form-field>
+
+                <!-- Cantidad -->
+                <mat-form-field *ngIf="codigoControl==='*'" appearance="outline" class="full-width">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput type="text" formControlName="cantVario" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                </mat-form-field>
+            </div>
+        </ng-template>
+        
+
+        <button mat-raised-button color="primary" class="btnAdd" type="button" (click)="AgregarProducto()"><mat-icon>add</mat-icon>AGREGAR</button>
+    </form>
+    <div class="der">
+        <mat-table mat-table [dataSource]="dataSource" class="full-width mat-elevation-z1 ppalTable" matSort >
+
+            <!-- Cantidad -->
+            <ng-container matColumnDef="cantidad">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cant:</span><p>{{element.cantidad}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Unidad -->
+            <ng-container matColumnDef="unidad">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Unidad</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Unidad:</span><p>{{element.producto.unidad}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Producto -->
+            <ng-container matColumnDef="producto">
+              <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Prod:</span><p>{{element.producto.nombre}}</p></mat-cell>
+            </ng-container>
+            
+            <!-- Precio -->
+            <ng-container matColumnDef="precio">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>{{element.precio | decimalFormat}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Total -->
+            <ng-container matColumnDef="total">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p>{{element.total | decimalFormat}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Acciones -->
+            <ng-container matColumnDef="acciones">
+                <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element;  let i = index">
+                    <div *ngIf="element.producto.codigo!=='*' && !element.producto.soloPrecio" matTooltip="Editar" class="boton editar"  (click)="Editar(i)"><mat-icon>edit</mat-icon></div>
+                    <div matTooltip="Borrar" class="boton borrar"  (click)="Borrar(i)"><mat-icon>delete</mat-icon></div>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index"
+                (click)="OnCellClick(i)">
+            </mat-row>
+          </mat-table>
+
+          <div class="acciones">
+            <div class="botones">
+                <button type="button" class="btn btn-success btn-sm" (click)="Vender()">VENDER (F1)</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" (click)="CancelarVenta()">CANCELAR (F2)</button>
+            </div>
+            <div class="total">
+                ${{totalItems | decimalFormat}}
+            </div>
+          </div>
+    </div>
+</div>

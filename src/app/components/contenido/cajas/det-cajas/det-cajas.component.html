@@ -1,0 +1,70 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
+
+<div class="contenido">
+    <div class="encabezado">
+        <div class="izq">
+            <p><i>Responsable: </i> <span>{{caja.responsable?.nombre}}</span></p> 
+            |
+            <p>{{caja.fecha | date:'dd-MM-yy'}} -- {{caja.hora}}</p>
+            <div class="estado" [ngClass]="{'finalizada': estado==='FINALIZADA', 'enCurso': estado==='EN CURSO'}">{{estado}}</div>
+        </div>
+        <div class="der">
+            <div class="btn-estado">
+                <button *ngIf="estado==='FINALIZADA'" type="button" class="btn btn-outline-warning btn-sm" (click)="ActualizarEstado()">REVERTIR</button>
+                <button *ngIf="estado==='EN CURSO'" type="button" class="btn btn-outline-custom-primary btn-sm" (click)="ActualizarEstado()">FINALIZAR</button>
+            </div>
+                      
+            <button mat-mini-fab color="primary" matTooltip="Editar Caja" (click)="Modificar()"><mat-icon>edit</mat-icon></button>
+        </div>
+    </div>
+
+    <mat-tab-group class="tabs" mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="TabChanged($event)">
+        <mat-tab> 
+            <div class="tab">
+                <!-- Nueva Venta -->
+                <ng-template mat-tab-label><mat-icon class="tab-icon">shopping_cart</mat-icon>Nueva Venta</ng-template>
+                <app-new-venta #tab1 [idCaja]="idCaja" [estadoCaja]="estado"></app-new-venta>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <div class="tab">
+                <!-- Ventas Realizadas -->
+                <ng-template mat-tab-label><mat-icon class="tab-icon">checklist</mat-icon>Ventas Realizadas</ng-template>
+                <app-ventas  *ngIf="tabSeleccionada==1" [idCaja]="idCaja"></app-ventas>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <div class="tab">
+                <!-- Movimientos -->
+                <ng-template mat-tab-label><mat-icon class="tab-icon">swap_horiz</mat-icon>Movimientos</ng-template>
+                <app-movimientos *ngIf="tabSeleccionada==2" [idCaja]="idCaja" [estadoCaja]="estado"></app-movimientos>
+            </div>
+        </mat-tab>
+        <mat-tab>
+            <div class="tab">
+                <!-- Inventario -->
+                <ng-template mat-tab-label><mat-icon class="tab-icon">inventory_2</mat-icon>Inventario</ng-template>
+                <app-inventario *ngIf="tabSeleccionada==3"></app-inventario>
+            </div>
+        </mat-tab>
+        <mat-tab *ngIf="estado === 'EN CURSO'">
+            <div class="tab">
+                <!-- Resumen -->
+                <ng-template mat-tab-label><mat-icon class="tab-icon">analytics</mat-icon>Resumen</ng-template>
+
+                <div *ngIf="!sinPermiso; else ocultarVentana">
+                    <app-estado *ngIf="tabSeleccionada==4" [idCaja]="idCaja"></app-estado>
+                </div>
+                <ng-template #ocultarVentana>
+                    <div class="sinPermiso">
+                        <mat-icon>visibility_off</mat-icon>
+                        <p>Parece que no tienes permiso para ver esta sección</p>
+                    </div>
+                </ng-template>
+                
+            </div>
+        </mat-tab>
+        
+    </mat-tab-group>
+</div>
+

@@ -1,0 +1,73 @@
+<mat-tab-group (selectedIndexChange)="TabChange($event)" class="tabs">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">bug_report</mat-icon>
+      Generales
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">receipt_long</mat-icon>
+      Facturación
+    </ng-template>
+  </mat-tab>
+
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">dns</mat-icon>
+      Respaldos
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">file_download</mat-icon>
+      Actualizaciones
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
+
+<!-- Tabla reutilizable -->
+<mat-table mat-table [dataSource]="getCurrentDataSource()" class="ppalTable mat-elevation-z1 full-width" >
+
+  <!-- Descripcion -->
+  <ng-container matColumnDef="message">
+    <mat-header-cell mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
+    <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Desc:</span><p>{{element.message}}</p></mat-cell>
+  </ng-container>
+
+  <!-- Fecha Hora -->
+  <ng-container matColumnDef="timestamp">
+    <mat-header-cell mat-header-cell *matHeaderCellDef>Fecha | Hora</mat-header-cell>
+    <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Fecha:</span><p>{{element.timestamp}}</p></mat-cell>
+  </ng-container>
+
+  <!-- Tipo -->
+  <ng-container matColumnDef="level">
+    <mat-header-cell mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+    <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">tipo:</span>
+      <p>
+        <mat-icon class="info" *ngIf="element.level === 'info'">error_outline</mat-icon>
+        <mat-icon class="error" *ngIf="element.level === 'error'">bug_report</mat-icon>
+    </p></mat-cell>
+  </ng-container>
+
+
+  <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+  <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+
+
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10]"
+        aria-label="Select page"
+        class="mat-elevation-z1">
+</mat-paginator>
+
+<hr>
+<div class="botones">
+  <button mat-raised-button color="warn" (click)="LimpiarRegistros()"><mat-icon>clear</mat-icon>LIMPIAR REGISTROS</button>
+</div>

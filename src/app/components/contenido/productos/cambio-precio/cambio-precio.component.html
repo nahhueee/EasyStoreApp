@@ -1,0 +1,257 @@
+<div class="cabecera">
+    <mat-icon>currency_exchange</mat-icon>
+    <h2>Cambio de Precios</h2>
+</div>
+
+<div class="contenido">
+    <p class="info">Seleccionaste <span>{{totalProductos}}</span> productos con precio tipo <span>{{tipoPrecio==='$'?'$(Fijo)':'%(Porcentaje)'}}</span> para modificar su precio</p>
+
+    <mat-stepper linear #stepper class="stepper">
+    <mat-step class="step">
+        <ng-template matStepLabel>Actualización de Precios</ng-template>
+
+        <mat-accordion class="headers-align">
+
+            <!-- Actualiazar Precios -->
+            <mat-expansion-panel [expanded]="true" (opened)="panelAbierto = 1">
+            
+                <!-- Encabezado -->
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Actualizar precios
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Actualiza el precio costo, venta y porcentaje de ganancia 
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+
+                    <div class="precios">
+                        <div *ngIf="tipoPrecio==='$'">
+
+                            <!-- Costo Fijo -->
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nuevo Costo</mat-label>
+                                <input matInput type="text" formControlName="costoF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Precio Fijo -->
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nuevo Precio</mat-label>
+                                <input matInput type="text" formControlName="precioF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                            </mat-form-field>
+                            
+                        </div>
+                        <div *ngIf="tipoPrecio==='%'">
+
+                            <!-- Costo Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Nuevo Costo</mat-label>
+                                <input matInput type="text" formControlName="costoP" [imask]="decimal_mask" (change)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Nuevo % Ganancia</mat-label>
+                                <input matInput type="number" formControlName="porcentaje" (input)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Redondeo -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Redondear</mat-label>
+                                <mat-select formControlName="redondeo" (selectionChange)="CalcularPrecioPorcentajeInput()">
+                                    <mat-option *ngFor="let redondeo of redondeos" [value]="redondeo.codigo">{{redondeo.descripcion}}</mat-option >
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!-- Precio Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Nuevo Precio</mat-label>
+                                <input matInput type="text" formControlName="precioP" [imask]="decimal_mask" readonly>
+                            </mat-form-field>
+
+                            <p class="redondeo">Valor Real: <i>{{real | decimalFormat}}</i> | 
+                                Redondeo: <span [ngClass]="getClaseRedondeo()"><i>{{redondeo | decimalFormat}}</i></span>
+                            </p>
+                            
+
+                        </div>
+                    </div>
+
+                </form>
+
+            </mat-expansion-panel>
+
+            <!-- Sumar porcentaje Precios -->
+            <mat-expansion-panel (opened)="panelAbierto = 2">
+            
+                <!-- Encabezado -->
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Sumar porcentaje a precios
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Suma a la base de costos o precios un porcentaje  
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+
+                    <div class="precios">
+                        <!-- Suma a costo -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Sumar % al Costo</mat-label>
+                            <input matInput type="text" formControlName="sumaCosto" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                        </mat-form-field>
+
+                        <!-- Suma a precio -->
+                        <mat-form-field *ngIf="tipoPrecio==='$'" appearance="outline" class="full-width">
+                            <mat-label>Sumar % al Precio</mat-label>
+                            <input matInput type="text" formControlName="sumaPrecio" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                        </mat-form-field>
+
+                            <!-- Redondeo -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Redondear</mat-label>
+                            <mat-select formControlName="redondeo">
+                                <mat-option *ngFor="let redondeo of redondeos" [value]="redondeo.codigo">{{redondeo.descripcion}}</mat-option >
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                </form>
+
+            </mat-expansion-panel>
+
+            <!-- Cambiar tipo de Precio -->
+            <mat-expansion-panel (opened)="panelAbierto = 3">
+            
+                <!-- Encabezado -->
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Cambiar tipo de precio
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Cambia de precio fijo a porcentaje y viceversa
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+
+                    <div class="precios">
+                        <div *ngIf="tipoPrecio==='$'">
+
+                            <!-- Costo Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Costo</mat-label>
+                                <input matInput type="text" formControlName="costoP" [imask]="decimal_mask" (change)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>% Ganancia</mat-label>
+                                <input matInput type="number" formControlName="porcentaje" (input)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Redondeo -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Redondear</mat-label>
+                                <mat-select formControlName="redondeo" (selectionChange)="CalcularPrecioPorcentajeInput()">
+                                    <mat-option *ngFor="let redondeo of redondeos" [value]="redondeo.codigo">{{redondeo.descripcion}}</mat-option >
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!-- Precio Porcentaje -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Precio</mat-label>
+                                <input matInput type="text" formControlName="precioP" [imask]="decimal_mask" readonly>
+                            </mat-form-field>
+
+                            <p class="redondeo">Valor Real: <i>{{real | decimalFormat}}</i> | 
+                                Redondeo: <span [ngClass]="getClaseRedondeo()"><i>{{redondeo | decimalFormat}}</i></span>
+                            </p>
+
+                        </div>
+                        <div *ngIf="tipoPrecio==='%'">
+                            <!-- Costo Fijo -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Costo</mat-label>
+                                <input matInput type="text" formControlName="costoF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                            </mat-form-field>
+
+                            <!-- Precio Fijo -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Precio</mat-label>
+                                <input matInput type="text" formControlName="precioF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </form>
+
+            </mat-expansion-panel>
+
+        </mat-accordion>
+
+        <div class="botones">
+            <button mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+            <button mat-flat-button color="primary" matStepperNext (click)="MostrarResultados()">SIGUIENTE</button>
+        </div>
+    </mat-step>
+    <mat-step>
+
+        <ng-template matStepLabel>Confirmación</ng-template>
+
+        <div class="alert alert-warning" role="alert">
+            Tené en cuenta que los siguientes productos cambiaran su precio de costo y venta por el indicado en pantalla al presionar GUARDAR
+        </div>
+        <mat-table mat-table [dataSource]="dataSourceProductos" class="ppalTable mat-elevation-z1 full-width" matSort >
+
+            <!-- Nombre -->
+            <ng-container matColumnDef="nombre">
+                <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.nombre}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Costo -->
+            <ng-container matColumnDef="costo">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Costo</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Costo:</span><p>${{element.costo | decimalFormat}}</p> </mat-cell>
+            </ng-container>
+
+            <!-- Porcentaje -->
+            <ng-container matColumnDef="porcentaje">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Porcentaje</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Porcentaje:</span><p>{{element.porcentaje | decimalFormat}}%</p></mat-cell>
+            </ng-container>
+
+            <!-- Precio -->
+            <ng-container matColumnDef="precio">
+                <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>${{element.precio | decimalFormat}}</p></mat-cell>
+            </ng-container>
+
+            <!-- Borrar -->
+            <ng-container matColumnDef="borrar">
+            <mat-header-cell mat-header-cell *matHeaderCellDef> Quitar </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index"> 
+                    <mat-icon (click)="BorrarFila(i)" class="borrar">clear</mat-icon>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="productosColumns; sticky: true"></mat-header-row>
+            <mat-row class="table-row" mat-row *matRowDef="let row; columns: productosColumns; let i = index" [ngClass]="{'activa': row.activo}">
+            </mat-row>
+        </mat-table>
+
+        <div class="botones">
+            <button mat-flat-button color="warn" matStepperPrevious>ANTERIOR</button>
+            <button mat-flat-button color="primary" (click)='Guardar()'>GUARDAR</button>
+        </div>
+        
+    </mat-step>
+    
+    
+    </mat-stepper>
+</div>

@@ -1,0 +1,42 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
+
+<div *ngIf="verificando; else ocultar" class="verificando">
+    <mat-spinner></mat-spinner>
+    <p>Estamos verificando su identidad</p>
+</div>
+<ng-template #ocultar >
+    <div class="botones">
+        <button mat-raised-button color="accent" (click)="GenerarUnBackup()"><mat-icon>settings_backup_restore</mat-icon>GENERAR UN BACKUP</button>
+    </div>
+
+    <hr>
+
+    <form [formGroup]="formulario" class="form">
+        <mat-slide-toggle color="primary" formControlName="activar"><span>Activar respaldo de datos</span></mat-slide-toggle>
+        
+        <div class="dias">
+            <mat-checkbox *ngFor="let dia of dias"
+            [disabled]="LimiteMaximo(dia)"
+            (change)="changeSeleccion(dia)"
+            [checked]="diasSeleccionados.includes(dia)">
+            {{ dia }}
+            </mat-checkbox>
+        </div>
+        <p class="info" *ngIf="LimiteMaximo()">Solo puedes seleccionar máximo 3 dias</p>
+    
+    
+        <mat-form-field appearance="outline" class="full-width hora">
+            <mat-label>Hora</mat-label>
+            <input matInput type="time" formControlName="hora">
+            <mat-error>
+            El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+        
+    </form>
+    
+    <hr>
+    <div class="botones">
+      <button mat-raised-button color="primary" (click)="GuardarParametros()"><mat-icon>save</mat-icon>GUARDAR</button>
+    </div>
+</ng-template>

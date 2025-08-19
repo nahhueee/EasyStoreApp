@@ -1,0 +1,76 @@
+<div class="cabecera">
+    <mat-icon>receipt_long</mat-icon>
+    <h2>Confirmar Facturación</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" (keyup.enter)='Facturar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+    <div class="monto">
+        ${{data.total | decimalFormat}}
+    </div>
+    <span>MONTO A FACTURAR</span>
+
+    <p class="info">Selecciona un tipo de Factura</p>
+    <div class="tipoFactura">
+        <mat-button-toggle-group formControlName="tFactura" appearance="legacy" exclusive (change)="tFacturaChange()">
+            <ng-container *ngFor="let tipo of tiposFactura">
+                <mat-button-toggle 
+                  [ngClass]="{'esDark':esDark}"
+                  *ngIf="tipo.habilitada"
+                  [value]="tipo.codigo"
+                  class="cuadro-opcion">
+                  {{ tipo.nombre }}
+                </mat-button-toggle>
+              </ng-container>
+        </mat-button-toggle-group>
+    </div>
+    <div class="fact-seleccion" *ngIf="noSelecciono">Selecciona el tipo de factura</div>
+
+
+    <div class="datos" *ngIf="datosRequeridos">
+        <p> El tipo, número de documento y cond. Iva del receptor es requerido para facturas A o B con monto mayor a $417.288,00</p>
+        <!-- Tipo Documento -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo Documento</mat-label>
+            <mat-select formControlName="tDocumento">
+                <mat-option *ngFor="let td of tiposDocumentoFiltrados" [value]="td.id">{{td.descripcion}}</mat-option >
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Documento -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Documento</mat-label>
+            <input #codigoInput matInput type="number" formControlName="documento">
+            <mat-error *ngIf="documento?.hasError('required')">
+                El documento es obligatorio
+            </mat-error>
+        
+            <mat-error *ngIf="documento?.hasError('pattern') && formulario.get('tDocumento')?.value === 96">
+            El DNI debe tener entre 7 y 8 dígitos numéricos
+            </mat-error>
+        
+            <mat-error *ngIf="documento?.hasError('pattern') && (formulario.get('tDocumento')?.value === 80 || formulario.get('tDocumento')?.value === 86)">
+                El CUIT/CUIL debe ser válido (11 dígitos sin guiones, comenzando con 20, 23, 24, 27, 30, 33 o 34)
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Condicion IVA Receptor -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cond. Iva Receptor</mat-label>
+            <mat-select formControlName="condReceptor">
+                <mat-option *ngFor="let option of condicionesIVAReceptor" [value]="option.id">{{option.id}} - {{option.descripcion}}</mat-option>
+            </mat-select>
+            <mat-error>
+                Selecciona una opción
+            </mat-error>
+        </mat-form-field>
+    </div>
+</form>
+
+<div class="alert alert-warning" role="alert">
+    Vas a realizar una factura válida ante ARCA. Se necesita Internet.
+</div>
+
+<mat-dialog-actions align="center" class="botones">
+    <button class="btn-action" mat-flat-button color="primary" (click)="Facturar()">CONFIRMAR (F9)</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="null">CANCELAR (ESC)</button>
+</mat-dialog-actions>

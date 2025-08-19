@@ -1,0 +1,49 @@
+.tabs{
+    margin-top: 30px;
+}
+
+.tab-icon{
+    margin-right: 10px;
+}
+.ppalTable{
+    margin-top: 15px;
+}
+
+
+.botones{
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+
+    button{
+        width: 220px;
+    }
+}
+
+.info{
+    color: #3282dd;
+}
+.error{
+    color: #f85f5f;
+}
+
+@media (min-width: 700px) {
+    .mat-column-timestamp{
+        max-width: 220px;
+    }
+    .mat-column-level{
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 700px) {
+    mat-cell{
+        margin-top: 0px !important;
+        line-height: 1.3 !important;
+    }
+}
+
+
+

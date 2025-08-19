@@ -1,0 +1,179 @@
+.cabecera{
+    margin: 0%;
+}
+.stepper{
+    background-color: var(--color-background);
+}
+::ng-deep.mat-horizontal-stepper-header-container{
+        margin: 10px 25px !important;
+}
+.step{
+    margin-top: 30px;
+}
+
+
+.plantillas{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.plantilla{
+    flex: 1;
+    background-color: var(--color-element-back);
+    padding: 15px;
+    transition: ease 0.5s;
+
+    .nombre{
+        font-size: 15px;
+        font-family: "Poppins-Light";
+        margin-bottom: 2px;
+    }
+    .tamanio{
+        color: var(--warn-text);
+        font-size: 11px;
+        border-bottom: 3px;
+    }
+}
+.plantilla:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+}
+.seleccionada{
+    border: 2px solid var(--color-primary);
+}
+
+.recuadro{
+    background-color: whitesmoke;
+    border-style: solid;
+
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+    
+    .titulo{
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin: 5px 10px 3px 10px;
+
+        p{
+            margin: 0%;
+            font-size: 18px;
+            font-family: "Poppins-Regular";
+        }
+    }
+
+    .oferta{
+        color: #1b1b1b;
+        padding: 5px 0px;
+        font-size: 25px;
+        margin-bottom: 10px;
+
+        p{
+            margin: 0px 10px;
+        }
+    }
+
+    .codigo{
+        color: #1b1b1b;
+
+        .codBarras{
+            font-family: '3OF9';
+            font-size: 50px;
+            margin-bottom: -20px;
+            margin-top:  -16px;
+        }
+
+        p{
+            margin-bottom: 0%;
+        }
+    }
+    
+
+    .precio{
+        font-size: 35px;
+        margin-bottom: -5px;
+        margin-top: -5px;
+        font-weight: 500;
+        margin-left: 10px;
+        margin-right: 10px;
+        font-family: 'Roboto-Medium';
+    }
+
+    .producto{
+        color: #1b1b1b;
+        font-size: 14px;
+        margin: 2px 10px;
+    }
+}
+
+.sinEtiquetas{
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-element-back);
+
+    mat-icon{
+        transform: scale(2);
+        color: var(--color-primary);
+        margin-bottom: 15px;
+    }
+}
+
+
+.cantidades{
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+    max-width: 400px;
+
+    button{
+        height: 55px;
+    }
+
+    mat-icon{
+        margin-left: 5px;
+    }
+}
+
+.botones{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+//Tabla Resultados
+.activa{
+    background-color: var(--color-background);
+}
+.borrar{
+    color: #ff9696;
+    cursor: pointer;
+}
+
+.mat-column-cantidad{
+    max-width: 110px;
+    padding: 0px 10px;
+    cursor: pointer;
+    input{
+        width: 100%;
+    }
+}
+.mat-column-cantidad:not(mat-header-cell.mat-mdc-header-cell):hover{
+    cursor: pointer;
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    transition: border ease 1s;
+}
+@media (min-width: 700px) {
+    .mat-column-borrar{
+        max-width: 90px;
+    }
+}

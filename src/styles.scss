@@ -1,0 +1,435 @@
+//#D0D0D0 ILUSTRACIONES
+
+/*#region ANGULAR MATERIAL*/
+@use '@angular/material' as mat;
+@include mat.elevation-classes();
+@include mat.app-background();
+
+$easysales-app-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$easysales-app-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+
+$easysales-app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$easysales-app-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $easysales-app-primary,
+    accent: $easysales-app-accent,
+    warn: $easysales-app-warn,
+  )
+));
+
+@include mat.all-component-themes($easysales-app-theme);
+/*#endregion */
+
+/*#region FONTS*/
+@font-face {
+  font-family: "Poppins-Light";
+  src: url('../src/assets/fonts/Poppins-Light.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+ }
+ @font-face {
+  font-family: "Poppins-Regular";
+  src: url('../src/assets/fonts/Poppins-Regular.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+ }
+ @font-face {
+  font-family: "Roboto-Medium";
+  src: url('../src/assets/fonts/Roboto-Medium.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url('../src/assets/fonts/Roboto-Regular.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url('../src/assets/fonts/Roboto-Bold.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Quantum";
+  src: url('../src/assets/fonts/Quantum.otf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "LEMONMILK";
+  src: url('../src/assets/fonts/LEMONMILK-Medium.otf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Afacad";
+  src: url('../src/assets/fonts/Afacad.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "3OF9";
+  src: url('../src/assets/fonts/3OF9.ttf') format("truetype");
+  font-weight: normal;
+  font-style: normal;
+ }
+/*#endregion */
+
+// Importacion de boostrap css
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+html, body { height: 100%; }
+body { 
+  margin: 0; 
+  font-family: Roboto, 
+  "Helvetica Neue", sans-serif; 
+  background-color: var(--color-background);
+}
+.full-width{
+  width: 100%;
+}
+.medium-width{
+  width: 100%;
+}
+
+.spanToggle{
+  margin-left: 10px;
+}
+
+.mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
+  margin-top: 0px !important; // tu valor
+}
+
+
+/*#region Configuraciones globales para TABLAS ABMC*/
+mat-header-cell{
+  font-size: 15px;
+  color: var(--color-font) !important;
+}
+//reduce el alto de las filas
+mat-row{
+  min-height: 40px !important;
+}
+mat-row:hover {
+  background: var(--color-row) !important;
+}
+mat-cell p{
+  width: 150px;
+  margin: 0px !important;
+  flex-grow: 1;
+}
+
+
+.ppalTable{
+  //max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.mobile-label {
+  display: none;
+}
+
+//Scrolls
+.ppalTable::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.ppalTable::-webkit-scrollbar:vertical {
+  width: 8px;
+}
+.ppalTable::-webkit-scrollbar-button:increment,.ppalTable::-webkit-scrollbar-button {
+  display: none;
+} 
+
+.ppalTable::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+.ppalTable::-webkit-scrollbar-thumb {
+  background-color: #979797;
+  border-radius: 10px;
+}
+
+.ppalTable::-webkit-scrollbar-track {
+  border-radius: 10px;  
+}
+
+mat-row.selected-row {
+  background-color: rgba(66, 157, 255, 0.068) !important;
+}
+
+
+
+
+//Paginador
+.mat-mdc-paginator-container{
+  display: flex;
+  justify-content: center !important;
+}
+mat-paginator{
+  margin-top: 10px;
+}
+
+
+//Tamaño de columna para el check
+.mat-column-select{
+  flex: 0 0 80px !important;
+  white-space: unset !important;
+}
+//Configuración de la tabla para dispositivos Móviles
+@media (max-width: 700px) {
+  .ppalTable{
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: y;
+  }
+  .mobile-label {
+    width: 85px;
+    display: inline-block;
+    font-family: 'LEMONMILK';
+    font-size: 12px;
+    margin-right: 5px;
+  }
+
+  mat-header-row {
+    display: none;
+    min-height: 0px !important;
+  }
+ 
+  mat-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color) !important;
+  }
+  mat-cell {
+    background-color: transparent !important;
+    margin-top: -15px;
+    word-wrap: initial;
+    width: auto;
+    line-height: 1 !important;
+  }
+  .mat-mdc-cell{
+    border: none !important;
+  }
+  .mdc-data-table__cell{
+    padding: 0% !important;
+  }
+
+  .mat-column-select{
+    display: flex;
+    justify-content: right;
+    margin-bottom: -12px;
+    margin-right: -12px;
+    margin-top: -35px;
+  }
+  
+  .mat-mdc-header-cell{
+    display: none !important;
+  }
+  
+  .mat-mdc-paginator-page-size{
+    display:none !important;
+  }
+}
+/*#endregion */
+
+/*#region BOTONES ABMC*/
+.abmc{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.abmc .botones{
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.botones button{
+  display: flex;
+  align-items: center;
+}
+.botones mat-icon{
+  margin-right: 3px;
+}
+
+@media only screen and (max-width: 767px){
+  .abmc{
+    justify-content: center;
+  }
+}
+
+.filtro{
+  display: flex;
+  gap: 15px;
+}
+/*#endregion */
+
+/*#region HERRAMIENTAS*/
+.herramientas{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  padding: 10px;
+  margin-bottom: 15px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+
+  .acciones{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    button{
+      height: 30px;
+    }
+  }
+  
+}
+
+.etiqueta{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 15px;
+
+  border-right: 1px solid var(--border-color);
+}
+/*#endregion*/
+
+/*#region MODAL ADD-MOD*/
+.cabecera{
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-alternative) !important;
+  margin-bottom: 20px;
+}
+.cabecera h2{
+  margin: 0%;
+  color: white;
+  font-size: 20px;
+  font-family: "Poppins-Light";
+}
+.cabecera mat-icon{
+  color: var(--color-primary) !important;
+  transform: scale(1.2);
+}
+
+.form{
+  padding: 15px 50px 3px 50px;
+}
+
+.btn-action{
+  width: 120px;
+  margin: 0px 3px;
+}
+
+@media only screen and (max-width: 700px){
+  .cabecera h2{
+    font-size: 17px;
+  }
+  .cabecera mat-icon{
+    transform: scale(1);
+  }
+  .cabecera{
+    margin-bottom: 15px;
+  }
+
+  .form{
+    padding: 15px 20px 3px 20px;
+  }
+}
+/*#endregion*/
+
+/*#region NOTIFICACIONES*/
+.toast-error{
+    background-color: #DC3545 !important;
+}
+.toast-warning{
+background-color: #ff9152 !important;
+}
+.toast-success{
+background-color: #28A745 !important;
+}
+
+.toast-container .ngx-toastr{
+box-shadow: none !important;
+}
+.toast-title{
+letter-spacing: normal !important;
+text-transform: uppercase;
+font-size: 18px !important;
+font-family: 'Poppins-Light' !important;
+font-weight: normal !important;
+}
+.toast-close-button{
+font-weight: normal !important;
+}
+/*#endregion */
+
+/*#region Input Filtro*/
+.inputFiltro{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+
+  border: 1px solid rgb(156, 156, 156);
+  border-radius: 3px;
+  width: 98%;
+  margin-bottom: 8px;
+  margin-left: 3px;
+  padding: 3px;
+}
+.inputFiltro input{
+  width: 85%;
+  border: none;
+  background-color: transparent;
+  color: var(--color-font) !important;
+}
+.inputFiltro input:focus {
+  outline: none; /* Elimina el borde del input al hacer clic */
+}
+/*#endregion */
+
+
+/*#region Scroll Selects*/
+.mat-mdc-select-panel::-webkit-scrollbar {
+  -webkit-appearance: none !important;
+}
+.mat-mdc-select-panel::-webkit-scrollbar:vertical {
+  width:5px !important;
+}
+.mat-mdc-select-panel::-webkit-scrollbar-button:increment,.mat-mdc-select-panel::-webkit-scrollbar-button {
+  display: none !important;
+} 
+.mat-mdc-select-panel::-webkit-scrollbar:horizontal {
+  height: 10px !important;
+}
+.mat-mdc-select-panel::-webkit-scrollbar-thumb {
+  background-color: #979797;
+  border-radius: 10px;
+}
+
+.mat-mdc-select-panel::-webkit-scrollbar-track {
+  border-radius: 10px;  
+}
+/*#endregion */
+
+

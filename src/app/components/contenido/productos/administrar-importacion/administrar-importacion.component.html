@@ -1,0 +1,233 @@
+<div class="cabecera">
+    <mat-icon>description</mat-icon>
+    <h2>Importación de Productos</h2>
+</div>
+
+<div class="contenido">
+
+    <div class="alert alert-warning" role="alert">
+        Se procesó correctamente el archivo, a continuación puedes ver en detalle los productos que puedes insertar y que errores se encontraron en el archivo
+    </div>
+   
+    <div class="elementos">
+        <div class="totales">
+            <h5>Totales</h5>
+            <div class="item">
+                <mat-icon>assignment_turned_in</mat-icon><span>Productos válidos para insertar: {{resultados.datosValidos.length}}</span>
+            </div>
+            <div class="item">
+                <mat-icon>bug_report</mat-icon><span>Errores encontrados en el archivo: {{resultados.errores.length}}</span>
+            </div>
+        </div>
+        <div class="acciones">
+            <h5>Acción sobre productos existentes</h5>
+            <mat-radio-group class="radio-group"
+                [(ngModel)]="accionActualizar">
+                <mat-radio-button value="ACTUALIZAR">Actualizar Información</mat-radio-button>
+                <mat-radio-button value="SUMARSTOCK">Sumar Cantidad</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+
+    <mat-tab-group class="tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+        <hr>
+        <mat-tab label="Productos a crear" >
+            <div class="tabProductos">
+
+                <div class="izq">
+                    <mat-table mat-table [dataSource]="dataSourceProductos" class="ppalTable mat-elevation-z1 full-width" matSort >
+
+                        <!-- Codigo -->
+                        <ng-container matColumnDef="codigo">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.codigo}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Nombre -->
+                        <ng-container matColumnDef="nombre">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.nombre}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Cantidad -->
+                        <ng-container matColumnDef="cantidad">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cantidad:</span><p>{{element.cantidad}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Unidad -->
+                        <ng-container matColumnDef="unidad">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Unidad</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Unidad:</span><p>{{element.unidad}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Costo -->
+                        <ng-container matColumnDef="costo">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Costo</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Costo:</span><p>${{element.costo | decimalFormat}}</p> </mat-cell>
+                        </ng-container>
+
+                        <!-- Precio -->
+                        <ng-container matColumnDef="precio">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>${{element.precio | decimalFormat}}</p></mat-cell>
+                        </ng-container>
+
+                        <!-- Borrar -->
+                        <ng-container matColumnDef="borrar">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef> Quitar </mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element; let i = index"> 
+                                <mat-icon (click)="BorrarFila(i)" class="borrar">clear</mat-icon>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row mat-header-row *matHeaderRowDef="productosColumns; sticky: true"></mat-header-row>
+                        <mat-row class="table-row" mat-row *matRowDef="let row; columns: productosColumns; let i = index" (click)="EditarFila(i);" [ngClass]="{'activa': row.activo}">
+                        </mat-row>
+                    </mat-table>
+
+                </div>
+                <div class="der">
+                    <div *ngIf="seleccionoProducto; else noSeleccionado" class="seleccionado">
+                        <form [formGroup]="formulario">
+                            <!-- Codigo -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Código</mat-label>
+                                <input #codigoInput matInput class="uppercase" type="text" formControlName="codigo" (focus)="SelectContent($event)">
+                                
+                                <mat-error *ngIf="formulario.get('codigo')?.hasError('required')">
+                                    El código es obligatorio.
+                                </mat-error>
+                                <mat-error *ngIf="formulario.get('codigo')?.hasError('maxlength')">
+                                    El código no puede tener más de 30 caracteres.
+                                </mat-error>
+                            </mat-form-field>
+
+                            <!-- Nombre -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Nombre</mat-label>
+                                <input #nombreInput matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
+                                <mat-error *ngIf="formulario.get('nombre')?.hasError('required')">
+                                    El nombre es obligatorio.
+                                </mat-error>
+                                <mat-error *ngIf="formulario.get('nombre')?.hasError('maxlength')">
+                                    El nombre no puede tener más de 100 caracteres.
+                                </mat-error>
+                            </mat-form-field>
+
+                            <div class="doble">
+                                <!-- Cantidad -->
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Cantidad</mat-label>
+                                    <input matInput type="number" formControlName="cantidad" (focus)="SelectContent($event)">
+                                </mat-form-field>
+                                <!-- Unidad -->
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label>Unidad</mat-label>
+                                    <mat-select formControlName="unidad">
+                                        <mat-option *ngFor="let uni of unidades" [value]="uni.codigo">{{uni.descripcion}}</mat-option >
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="precios">
+                                <div *ngIf="tipoPrecio==='$'">
+        
+                                    <div class="doble">
+                                        <!-- Costo Fijo -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>Costo</mat-label>
+                                            <input matInput type="text" formControlName="costoF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                                        </mat-form-field>
+        
+                                        <!-- Precio Fijo -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>Precio</mat-label>
+                                            <input matInput type="text" formControlName="precioF" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                                        </mat-form-field>
+                                    </div>
+                                    
+                                </div>
+                                <div *ngIf="tipoPrecio==='%'">
+        
+                                    <div class="doble">
+                                        <!-- Costo Porcentaje -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>Costo</mat-label>
+                                            <input matInput type="text" formControlName="costoP" [imask]="decimal_mask" (change)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                                        </mat-form-field>
+        
+                                        <!-- Porcentaje -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>% Ganancia</mat-label>
+                                            <input matInput type="number" formControlName="porcentaje" (input)="CalcularPrecioPorcentajeInput()" (focus)="SelectContent($event)">
+                                        </mat-form-field>
+                                    </div>
+        
+                                    <div class="doble">
+                                        <!-- Redondeo -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>Redondear</mat-label>
+                                            <mat-select formControlName="redondeo" (selectionChange)="CalcularPrecioPorcentajeInput()">
+                                                <mat-option *ngFor="let redondeo of redondeos" [value]="redondeo.codigo">{{redondeo.descripcion}}</mat-option >
+                                            </mat-select>
+                                        </mat-form-field>
+        
+                                        <!-- Precio Porcentaje -->
+                                        <mat-form-field appearance="outline" class="full-width">
+                                            <mat-label>Precio</mat-label>
+                                            <input matInput type="text" formControlName="precioP" readonly [imask]="decimal_mask">
+                                        </mat-form-field>
+                                    </div>
+                                    <p class="redondeo">Valor Real: <i>{{real| decimalFormat}}</i> | 
+                                        Redondeo: <span [ngClass]="getClaseRedondeo()"><i>{{redondeo.toLocaleString('es-AR', {minimumFractionDigits:2})}}</i></span>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="confirmacion">
+                                <button class="btn-action" mat-flat-button color="primary" (click)='GuardarFila()'><mat-icon>done</mat-icon>Confirmar Cambios</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                    <ng-template #noSeleccionado >
+                        <div class="noSeleccionado">
+                            <mat-icon>edit_note</mat-icon>
+                            <p>Selecciona una fila si deseas editar</p>
+                        </div>
+                    </ng-template>
+                </div>
+
+            </div>
+        </mat-tab>
+        <mat-tab label="Lista de Errores"> 
+              <mat-table [dataSource]="dataSourceErrores" class="ppalTable mat-elevation-z1 full-width" >
+
+                <!-- Fila -->
+                <ng-container matColumnDef="fila">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Fila</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fila:</span><p>{{element.fila}}</p></mat-cell>
+                </ng-container>
+
+                <!-- Error -->
+                <ng-container matColumnDef="mensaje">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef>Mensaje</mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Error:</span><p>{{element.mensaje}}</p></mat-cell>
+                </ng-container>
+
+                <mat-header-row mat-header-row *matHeaderRowDef="erroresColumns; sticky: true"></mat-header-row>
+                <mat-row class="table-row" mat-row *matRowDef="let row; columns: erroresColumns; let i = index">
+                </mat-row>
+            </mat-table>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
+  
+<div class="botones">
+    <button mat-flat-button color="primary" (click)="Guardar()">GUARDAR</button>
+    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>
+  

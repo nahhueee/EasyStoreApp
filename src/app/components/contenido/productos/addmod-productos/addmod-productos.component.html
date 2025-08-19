@@ -1,0 +1,161 @@
+<div class="cabecera">
+    <mat-icon>inventory_2</mat-icon>
+    <h2>{{titulo}}</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off" novalidate>
+    
+    <div class="datos">
+        <div class="izq">
+            <!-- Codigo -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Código</mat-label>
+                <input #codigoInput matInput class="uppercase" type="text" formControlName="codigo" (focus)="SelectContent($event)">
+                
+                <mat-error *ngIf="formulario.get('codigo')?.hasError('required')">
+                    El código es obligatorio.
+                </mat-error>
+                <mat-error *ngIf="formulario.get('codigo')?.hasError('maxlength')">
+                    El código no puede tener más de 30 caracteres.
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Nombre -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nombre</mat-label>
+                <input #nombreInput matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
+                <mat-error *ngIf="formulario.get('nombre')?.hasError('required')">
+                    El nombre es obligatorio.
+                </mat-error>
+                <mat-error *ngIf="formulario.get('nombre')?.hasError('maxlength')">
+                    El nombre no puede tener más de 100 caracteres.
+                </mat-error>
+            </mat-form-field>
+
+            <div class="doble">
+                <!-- Cantidad -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Cantidad</mat-label>
+                    <input matInput type="number" formControlName="cantidad" (focus)="SelectContent($event)" [readonly]="soloPrecio">
+                    <button type="button" 
+                        mat-icon-button 
+                        matSuffix 
+                        (click)="soloPrecioChange()"
+                        [matTooltip]="soloPrecio ? 'Registrar Cantidad' : 'No registra Cantidad'"
+                    >
+                        <mat-icon class="texto-verde" *ngIf="soloPrecio">playlist_add_check</mat-icon>
+                        <mat-icon class="texto-rojo" *ngIf="!soloPrecio">block</mat-icon>
+                    </button>
+                </mat-form-field>
+                <!-- Unidad -->
+                <mat-form-field appearance="outline" class="full-width" >
+                    <mat-label>Unidad</mat-label>
+                    <mat-select formControlName="unidad" [disabled]="soloPrecio">
+                        <mat-option *ngFor="let uni of unidades" [value]="uni.codigo">{{uni.descripcion}}</mat-option >
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="doble" *ngIf="!soloPrecio">
+                <!-- Faltante -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Aviso Faltante</mat-label>
+                    <input matInput type="number" formControlName="faltante">
+                </mat-form-field>
+
+                <!-- Vencimiento -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Vencimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="vencimiento"
+                    (input)="onDateInput($event)" (dateChange)="onDateInput($event)">
+
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="der">
+            <div class="precios">
+                <!--TipoPrecio-->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Tipo Precio</mat-label>
+                    <mat-select formControlName="tipoPrecio" [disabled]="soloPrecio">
+                        <mat-option *ngFor="let tipo of tiposPrecio" [value]="tipo.codigo">{{tipo.descripcion}}</mat-option >
+                    </mat-select>
+                </mat-form-field>
+
+                <div *ngIf="tipoPrecioControl==='$'">
+
+                    <div class="doble">
+                        <!-- Costo Fijo -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Costo</mat-label>
+                            <input matInput type="text" formControlName="costoF" [readonly]="soloPrecio" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                        </mat-form-field>
+
+                        <!-- Precio Fijo -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Precio</mat-label>
+                            <input matInput type="text" formControlName="precioF" [readonly]="soloPrecio" [imask]="decimal_mask" (focus)="SelectContent($event)">
+                        </mat-form-field>
+                    </div>
+                    
+                </div>
+                <div *ngIf="tipoPrecioControl==='%'">
+
+                    <div class="doble">
+                        <!-- Costo Porcentaje -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Costo</mat-label>
+                            <input matInput type="text" formControlName="costoP" [imask]="decimal_mask" (change)="CalcularPrecioPorcentaje()"
+                            (keyup.enter)='Guardar()'
+                            (keyup.esc)="dialogRef.close(false)"
+                            (focus)="SelectContent($event)">
+                        </mat-form-field>
+
+                        <!-- Porcentaje -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>% Ganancia</mat-label>
+                            <input matInput type="number" formControlName="porcentaje" (input)="CalcularPrecioPorcentaje()" (focus)="SelectContent($event)">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="doble">
+                        <!-- Redondeo -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Redondear</mat-label>
+                            <mat-select formControlName="redondeo" (selectionChange)="CalcularPrecioPorcentaje()">
+                                <mat-option *ngFor="let redondeo of redondeos" [value]="redondeo.codigo">{{redondeo.descripcion}}</mat-option >
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Precio Porcentaje -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Precio</mat-label>
+                            <input matInput type="text" formControlName="precioP" readonly [imask]="decimal_mask">
+                        </mat-form-field>
+                    </div>
+                    <p class="redondeo">Valor Real: <i>{{real| decimalFormat}}</i> | 
+                        Redondeo: <span [ngClass]="getClaseRedondeo()"><i>{{redondeo.toLocaleString('es-AR', {minimumFractionDigits:2})}}</i></span>
+                    </p>
+                    
+
+                </div>
+            </div>
+
+            <div class="alert alert-warning" role="alert" *ngIf="soloPrecio">
+                Se marcó como producto que no usa cantidad, solo registrará ventas acumuladas. El costo y precio de venta van a ser $1
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+  
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()'>ACEPTAR</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>
+  

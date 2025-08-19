@@ -1,0 +1,135 @@
+.contenido{
+  padding: 10px 0px 30px 0px;
+  margin: 15px 20px;
+  background-color: var(--color-background);
+  border-radius: 4px;
+
+  display: flex;
+  gap: 30px;
+
+  .izq{
+    flex: 2;
+    width: 100%;
+  }
+  .der{
+    flex: 1;
+    //max-width: 40%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+
+    .filtro{
+      margin: 24px 0px;
+    }
+  }
+}
+
+::ng-deep .der{
+  .mat-mdc-form-field-subscript-wrapper{
+    display: none;
+  }
+}
+apx-chart{
+  width: 100%;
+}
+
+//Seccion Encabezado
+.encabezado{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+ 
+  h5{
+      margin: 0%;
+      font-size: 16px;
+      font-family: 'Poppins-Regular';
+  }
+}
+
+//Tarjetas
+.tarjetas{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tarjeta{
+  width: 250px;
+  height: 150px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+ 
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+
+  mat-icon{
+    color: var(--color-primary);
+    transform: scale(1.8);
+  }
+
+  p{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 23px;
+    font-family: 'Poppins-Regular';
+    padding-bottom: 8px;
+    width: 80%;
+    text-align: center;
+
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  span{
+    color: var(--color-elements);
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+}
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}
+
+@media only screen and (min-width: 701px){
+  .mat-column-total{
+      flex: 0 0 130px !important;
+      white-space: unset !important;
+  }
+}
+/*#region Mobile */
+@media only screen and (max-width: 700px){
+  .encabezado{
+    margin-bottom: 20px;
+    gap: 10px;
+   
+    h5{ font-size: 14px; }
+  }
+
+  .contenido{
+    flex-direction: column;
+    .izq{
+      flex: 1;
+    }
+    .der{
+      flex: 1;
+    }
+  }
+}

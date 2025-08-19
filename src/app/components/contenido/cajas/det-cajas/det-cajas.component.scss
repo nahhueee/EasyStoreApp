@@ -1,0 +1,136 @@
+.contenido{
+    background-color: var(--color-background);
+    min-height: 100vh;
+}
+
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--color-background);
+    min-height: calc(100vh - 178px);
+
+    mat-icon{
+        transform: scale(5);
+        color: var(--color-primary);
+    }
+
+    .alert{
+        text-align: center;
+        max-height: 50px;
+    }
+}
+
+
+.encabezado{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 30px;
+    height: 55px;
+    background: var(--color-alternative) !important;
+    margin-bottom: 25px;
+
+    .izq{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        p{
+            margin: 0%;
+            font-size: 15px;
+            color: white;
+        }
+        i{
+            margin-right: 5px;
+            color: #919191;
+        }
+        span{
+            text-transform: uppercase;
+        }
+    }
+
+    .der{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .btn-estado{
+            margin-right: 10px;
+            padding-right: 18px;
+            border-right: 1px solid rgb(58, 58, 58);
+
+            button{
+                width: 200px;
+            }
+
+            // Sobrescribir el color de borde y texto del botón btn-outline-primary
+            .btn-outline-custom-primary {
+                color: #39a070; /* Color del texto */
+                border-color: #39a070; /* Color del borde */
+            }
+            
+            // Cambiar el color de fondo al hacer hover sobre el botón
+            .btn-outline-custom-primary:hover {
+                background-color: #39a070; /* Cambiar el color de fondo al hacer hover */
+                color: #ffff; /* Cambiar el color del texto al hacer hover */
+            }
+        }
+    }
+}
+
+/*#region Estado*/
+.estado{
+    padding: 1px 10px;
+    border-radius: 4px;
+    margin: 0px 10px 0px 0px;
+}
+.finalizada{
+    background-color: #258d5c;
+    color: white;
+}
+.enCurso{
+    background-color: #ffc107;
+    color: #3a3a3a;
+}
+/*#endregion */
+
+.tab-icon{
+    margin-right: 10px;
+}
+.tab{
+    background: var(--color-alternative) !important;
+    padding: 25px;
+}
+.sinPermiso{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 250px;
+
+    mat-icon{
+        transform: scale(2.5);
+        color: var(--color-primary);
+    }
+
+    p{
+        margin-top: 20px;
+        font-size: 16px;
+        font-family: "Poppins-Regular";
+    }
+}
+
+//Mobile
+@media (max-width: 700px) {
+    .encabezado .der{
+        display: none;
+    }
+    .encabezado .izq{
+        gap:8px;
+    }
+}

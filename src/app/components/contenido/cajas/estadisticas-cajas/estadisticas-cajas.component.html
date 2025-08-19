@@ -1,0 +1,105 @@
+<div class="cabecera">
+    <mat-icon>show_chart</mat-icon>
+    <h2>Estadisticas de Caja</h2>
+</div>
+
+<div class="encabezado">
+  <h5>{{caja.responsable?.nombre}}</h5>
+  |
+  <h5>{{caja.fecha | date:'dd-MM-yyyy'}}</h5>
+</div>
+
+<div class="contenido">
+  <div class="izq">
+    <div class="tarjetas">
+      <div class="tarjeta">
+        <mat-icon>shopping_cart</mat-icon>
+        <p>{{datosVentaCaja.cantVentas}}</p>
+        <span>Ventas Realizadas</span>
+      </div>
+
+      <div class="tarjeta">
+        <mat-icon>paid</mat-icon>
+        <p>${{datosVentaCaja.totalVentas! | decimalFormat}}</p>
+        <span>Importe Ventas</span>
+      </div>
+
+      <div class="tarjeta">
+        <mat-icon>auto_graph</mat-icon>
+        <p>${{datosVentaCaja.ganancias! | decimalFormat}}</p>
+        <span>Ganancias</span>
+      </div>
+    </div>
+
+    <!-- Grafico de ganancias -->
+    <div *ngIf="gananciasReady">
+      <apx-chart
+      [series]="chartGananciasOptions?.series!"
+      [chart]="chartGananciasOptions?.chart!"
+      [xaxis]="chartGananciasOptions?.xaxis!"
+      [dataLabels]="chartGananciasOptions?.dataLabels!"
+      [grid]="chartGananciasOptions?.grid!"
+      [stroke]="chartGananciasOptions?.stroke!"
+      [title]="chartGananciasOptions?.title!"
+      [theme]="chartGananciasOptions?.theme!"
+      [colors]="chartGananciasOptions?.colors!"
+      [tooltip]="chartGananciasOptions?.tooltip!"
+      ></apx-chart>
+    </div>
+    
+  </div>
+  <div class="der">
+      <mat-tab-group class="tabs" mat-align-tabs="center">
+          <mat-tab label="Totales Acumulados X Producto">
+          </mat-tab>
+      </mat-tab-group>
+
+      <mat-form-field appearance="outline" class="full-width filtro">
+          <mat-label>Filtrar</mat-label>
+          <input #nombreInput matInput class="uppercase" type="text" [formControl]="filtro" 
+            (focus)="SelectContent($event)"
+            (keyup)="this.BuscarProductosRubrosAcumulados();"
+          >
+      </mat-form-field>
+
+      <mat-table mat-table [dataSource]="dtacumulados" class="ppalTable full-width">
+          <ng-container matColumnDef="nombre">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Producto: </span>{{element.nombre}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+              <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+              <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total: </span>${{element.total | decimalFormat}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row class="table-header" mat-header-row *matHeaderRowDef="displayedColumn; sticky: true"></mat-header-row>
+          <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumn;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [pageSize]="10" hidePageSize="true"
+                  (page)="BuscarProductosRubrosAcumulados($event)"
+                  aria-label="Select page"
+                  class="mat-elevation-z1">
+      </mat-paginator>
+  </div>
+</div>
+  
+  
+<div class="botones">
+  <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>
+
+<!-- Grafico de productos populares -->
+<!-- <apx-chart
+  [series]="chartProductosOptions?.series!"
+  [chart]="chartProductosOptions?.chart!"
+  [dataLabels]="chartProductosOptions?.dataLabels!"
+  [plotOptions]="chartProductosOptions?.plotOptions!"
+  [yaxis]="chartProductosOptions?.yaxis!"
+  [xaxis]="chartProductosOptions?.xaxis!"
+  [legend]="chartProductosOptions?.legend!"
+  [colors]="chartProductosOptions?.colors!"
+  [grid]="chartProductosOptions?.grid!"
+  [theme]="chartProductosOptions?.theme!"
+  [title]="chartProductosOptions?.title!"
+></apx-chart> -->

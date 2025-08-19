@@ -1,0 +1,74 @@
+<div class="contenedor">
+    <!-- #region ABMC -->
+    <div class="abmc">
+        <div class="botones">
+          <button type="button" class="btn btn-success btn-sm" (click)="Agregar()"><mat-icon>add_circle</mat-icon>Agregar</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
+        </div>
+
+        <!--Tipos Movimiento-->
+        <div class="select">
+          <mat-select placeholder="Tipo Movimiento"  (selectionChange)="Buscar($event.value)" [formControl]="tipoControl">
+            <mat-option *ngFor="let option of tiposMovimiento" [value]="option.id">{{option.descripcion}}</mat-option>
+          </mat-select>
+          <mat-icon>change_circle</mat-icon>
+        </div>
+    </div>
+    <!-- #endregion ABMC -->
+    
+
+    <!-- #region TABLA -->
+    <div class="table-container">
+      <mat-table mat-table [dataSource]="dataSource" class="ppalTable mat-elevation-z1 full-width">
+
+        <!-- Checkbox -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="seleccionados.hasValue() && isAllSelected()"
+                          [indeterminate]="seleccionados.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? seleccionados.toggle(row) : null"
+                          [checked]="seleccionados.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Tipo -->
+        <ng-container matColumnDef="tipo">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Tipo Movimiento</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> 
+            <span *ngIf="element.tipoMovimiento==='ENTRADA'" class="entrada">🡇</span> 
+            <span *ngIf="element.tipoMovimiento==='SALIDA'" class="salida">🡅</span> 
+            {{element.tipoMovimiento}} 
+          </mat-cell>
+        </ng-container>
+
+        <!-- Monto -->
+        <ng-container matColumnDef="monto">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Monto</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Monto:</span><p>{{element.monto | decimalFormat}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Descripcion -->
+        <ng-container matColumnDef="descripcion">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Descr:</span><p>{{element.descripcion}}</p></mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="OnCellClick(row)"></mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[15, 30, 60]"
+        (page)="Buscar($event)"
+        aria-label="Select page"
+        class="mat-elevation-z1">
+      </mat-paginator>
+    </div>
+    <!-- #endregion TABLA -->
+  </div>
+  

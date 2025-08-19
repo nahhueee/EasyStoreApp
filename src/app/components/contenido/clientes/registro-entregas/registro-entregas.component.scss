@@ -1,0 +1,19 @@
+.cabecera{
+    margin-bottom: 0%;
+}
+
+.contenido{
+    padding: 20px;
+    background-color: var(--color-background);
+    
+    .derecha{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    button{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+}

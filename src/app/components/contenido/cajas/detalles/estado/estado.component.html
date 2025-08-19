@@ -1,0 +1,37 @@
+<div class="contenedor">
+     <div class="tipoPago">
+        <div class="recuadro efectivo">
+            
+            <img src="assets/ilustraciones/dinero.png" alt="vector money">
+            <span>${{totalEfectivo! | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Efectivo</p>
+                <h5>Inicial + Ventas + Entradas - Salidas</h5>
+            </div>
+        </div>
+        <div class="recuadro transferencia">
+            <img src="assets/ilustraciones/transferencia.png" alt="vector mobile">
+            <span>${{totalTransferencias | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Transferencias</p>
+                <h5>Transferencias y codigos QR</h5>
+            </div>
+        </div>
+        <div class="recuadro tarjeta">
+            <img src="assets/ilustraciones/tarjeta.png" alt="vector card">
+            <span>${{totalTarjetas | decimalFormat}}</span>
+            <div>
+                <p>Dinero en Tarjetas</p>
+                <h5>Tarjetas debito y credito</h5>
+            </div>
+        </div>
+        <div class="recuadro resto">
+            <img src="assets/ilustraciones/otros.png" alt="vector card">
+            <span>${{totalRestoCombinados | decimalFormat}}</span>
+            <div>
+                <p>Dinero Resto Combinado</p>
+                <h5>Resto en digital de pago combinado</h5>
+            </div>
+        </div>
+    </div>
+</div>

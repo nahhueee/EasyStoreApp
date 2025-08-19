@@ -1,0 +1,23 @@
+<div class="cabecera">
+    <mat-icon>escalator_warning</mat-icon>
+    <h2>{{titulo}}</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
+        <mat-error>
+            Completa con un nombre
+        </mat-error>
+    </mat-form-field>
+
+</form>
+  
+<mat-dialog-actions align="center">
+    <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()' >ACEPTAR</button>
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>
+  

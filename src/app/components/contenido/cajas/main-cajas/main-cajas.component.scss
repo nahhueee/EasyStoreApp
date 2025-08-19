@@ -1,0 +1,122 @@
+.table-container{
+    margin-top: 10px;
+}
+.herramientas{
+    margin-top: 10px;
+}
+
+/*#region Filtros*/
+.encabezado{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+
+    span{
+        font-family: 'Poppins-Regular';
+    }
+}
+.filtros{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 10px;
+}
+@media only screen and (max-width: 862px){
+    .finalizado{ width: 100%; text-align: center;}
+}
+
+::ng-deep .filtros mat-slide-toggle{
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 4px;
+    padding: 6.5px 15px;
+    width: 200px;
+    span{
+        color: var(--placeholders) !important;
+    }
+}
+
+.activo span{
+    color: var(--color-font) !important;
+}
+
+.campo{
+    display: flex;
+    align-items: center;
+    width: 230px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    padding: 0px 10px;
+    height: 40px;
+}
+.campo mat-icon{
+    cursor: pointer;
+    margin-left: 8px;
+}
+.campo input{
+    width: 90%;
+    border: none;
+    background-color: transparent;
+    color: var(--color-font) !important;
+}
+.campo input:focus {
+    outline: none; /* Elimina el borde del input al hacer clic */
+}
+.campo input::placeholder {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: var(--placeholders);
+    font-weight: 400;
+}
+.campo .picker{
+    width: 30px;
+    margin: 0%;
+}
+
+
+.btns{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+
+    button{
+        width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/*#endregion */
+
+::ng-deep .mdc-switch__ripple{
+    opacity: 0%;
+}
+
+.finalizada{
+    color: #20b972;
+}
+.noFinalizada{
+    color: #FFCA2D;
+}
+
+//Tabla
+@media (min-width: 701px) {
+    .mat-column-entradas{
+        max-width: 110px;
+    }
+}
+
+@media (max-width: 700px) {
+    .mat-column-estado{
+        justify-content: end;
+        margin-bottom: -15px;
+        margin-right: -5px;
+    }
+}
+
+

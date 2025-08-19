@@ -1,0 +1,145 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="large" color="#fff" type="fire" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner>
+
+
+<div class="contenedor">
+    <!-- #region ABMC -->
+    <div class="abmc">
+        <div class="botones">
+          <button #btnAgregar type="button" class="btn btn-success btn-sm" (click)="Agregar()" ><mat-icon>add_circle</mat-icon>Agregar</button>
+          <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Modificar</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
+        </div>
+        
+        <div class="filtros">
+          <!-- Boton para cambiar el tipo de vista  -->
+          <mat-button-toggle-group [(ngModel)]="vistaSeleccionada" (change)="CambioDeVista()" class="vista">
+            <mat-button-toggle value="lista" matTooltip="Vista en Lista"><mat-icon>view_headline</mat-icon></mat-button-toggle>
+            <mat-button-toggle value="grilla" matTooltip="Vista con Imágenes"><mat-icon>view_list</mat-icon></mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <!-- Input de Busqueda -->
+          <app-busqueda (busqueda)="Buscar(undefined, $event)"></app-busqueda>
+        </div>
+        
+      </div>
+    <!-- #endregion ABMC -->
+
+    <!-- #region HERRAMIENTAS -->
+    <div class="herramientas">
+
+      <div class="etiqueta">
+        <mat-icon>construction</mat-icon>
+        <span>Herramientas</span>
+      </div>
+      <div class="acciones">
+        <button mat-flat-button color="primary" (click)="ActualizarPrecio()"><mat-icon>currency_exchange</mat-icon>Actualizar Precio</button>
+        <button mat-flat-button color="primary" (click)="AbrirFaltantes()"><mat-icon>cancel_presentation</mat-icon>Faltantes</button>
+        <button mat-flat-button color="primary" (click)="AbrirVencimientos()"><mat-icon>alarm</mat-icon>Vencimientos</button>
+
+        <!-- <button mat-flat-button color="primary" (click)="AgregarCantidad()"><mat-icon>post_add</mat-icon>Añadir Cantidad</button> -->
+
+        <!-- Boton para importar excel -->
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="menuImportar">
+            <mat-icon>description</mat-icon>
+            Importar Excel
+        </button>
+        <input type="file" id="fileInput" (change)="onFileChange($event)" accept=".xlsx, .xls" style="display: none;"/>
+        
+        <mat-menu #menuImportar="matMenu">
+          <button mat-menu-item (click)="seleccionarExcel(); tipoImportacionExcel = '$'">
+              <span>Prod. de Precio Fijo</span>
+          </button>
+          <button mat-menu-item (click)="seleccionarExcel(); tipoImportacionExcel = '%'"> 
+              <span>Prod. de Precio Porcentaje</span>
+          </button>
+        </mat-menu>
+        
+        <button mat-flat-button color="primary" (click)="AbrirEtiquetas()"><mat-icon>more</mat-icon>Etiquetas</button>
+
+      </div>
+    </div>
+    <!-- #endregion HERRAMIENTAS -->
+
+    <!-- #region TABLA -->
+    <div class="table-container">
+      <mat-table mat-table [dataSource]="dataSource" class="ppalTable mat-elevation-z1 full-width" matSort >
+
+        <!-- Checkbox -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="seleccionados.hasValue() && isAllSelected()"
+                          [indeterminate]="seleccionados.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? seleccionados.toggle(row) : null"
+                          [checked]="seleccionados.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Codigo -->
+        <ng-container matColumnDef="codigo">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.codigo}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Nombre -->
+        <ng-container matColumnDef="nombre">
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.nombre}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Cantidad -->
+        <ng-container matColumnDef="cantidad">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cantidad:</span><p>{{element.cantidad}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Unidad -->
+        <ng-container matColumnDef="unidad">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Unidad</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Unidad:</span><p>{{element.unidad}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Costo -->
+        <ng-container matColumnDef="costo">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Costo</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Costo:</span><p>${{element.costo | decimalFormat}}</p> </mat-cell>
+        </ng-container>
+
+        <!-- Precio -->
+        <ng-container matColumnDef="precio">
+            <mat-header-cell mat-header-cell *matHeaderCellDef>Precio</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Precio:</span><p>${{element.precio | decimalFormat}}</p></mat-cell>
+        </ng-container>
+
+        <!-- TipoPrecio -->
+        <ng-container matColumnDef="tipoPrecio">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>TP</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">TP:</span><p>{{element.tipoPrecio}}</p></mat-cell>
+        </ng-container>
+
+        <!-- Imagen -->
+        <ng-container matColumnDef="imagen">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Imagen</mat-header-cell>
+          <mat-cell class="cellImagen" mat-cell *matCellDef="let element"><img (click)="AbrirImagen(element.pathImagen, element.id)" src="{{element.pathImagen}}" alt="Imagen No Encontrada" width="130px"></mat-cell>
+        </ng-container>
+
+        <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]="seleccionados.isSelected(row)"
+            (click)="OnCellClick(row)">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[15, 30, 60]"
+        (page)="Buscar($event)"
+        aria-label="Select page"
+        class="mat-elevation-z1">
+      </mat-paginator>
+    </div>
+    <!-- #endregion TABLA -->
+  </div>
+  

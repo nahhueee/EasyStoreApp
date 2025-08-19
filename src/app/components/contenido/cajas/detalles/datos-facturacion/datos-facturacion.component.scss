@@ -1,0 +1,68 @@
+.form{
+    text-align: center;
+
+    span{
+        font-size: 10px;
+    }
+}
+.monto{
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-primary);
+    font-size: 22px;
+    font-family: "Poppins-Regular";
+    margin: 0px 30px;
+}
+
+.tipoFactura{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+.fact-seleccion{
+    font-size: 14px;
+    color: #f44336;
+    margin-top: 5px;
+}
+.cuadro-opcion {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+    text-align: center;
+    font-family: "LEMONMILK";
+    border-radius: 4px;
+    display: flex;
+    color: rgb(37, 37, 37);
+    border: 1px solid var(--color-primary);
+    margin: 0px 3px;
+}
+
+.esDark{
+    color: white;
+}
+
+.datos{
+    p{
+        margin-bottom: 5px;
+        margin-top: 20px;
+        font-size: 13px;
+        color: var(--warn-text);
+    }
+}
+
+.info{
+    text-align: center;
+    font-size: 14px;
+    font-family: "Poppins-Regular";
+    margin-bottom: 2px;
+    margin-top: 20px;
+}
+
+.alert{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.botones button{
+    width: 170px;
+}
