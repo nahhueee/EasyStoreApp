@@ -80,7 +80,6 @@ import { InventarioComponent } from './components/contenido/cajas/detalles/inven
 import { ConfirmacionComponent } from './components/compartidos/confirmacion/confirmacion.component';
 import { VentasClientesComponent } from './components/contenido/clientes/ventas-clientes/ventas-clientes.component';
 import { EntregaVentasComponent } from './components/contenido/clientes/entrega-ventas/entrega-ventas.component';
-import { CambioPrecioComponent } from './components/contenido/productos/cambio-precio/cambio-precio.component';
 import { ResumenCajasComponent } from './components/contenido/cajas/resumen-cajas/resumen-cajas.component';
 import { EstadisticasCajasComponent } from './components/contenido/cajas/estadisticas-cajas/estadisticas-cajas.component';
 import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
@@ -88,26 +87,19 @@ import { MaxLengthNumberDirective } from './others/max-length-number.directive';
 import { RespaldosComponent } from './components/herramientas/respaldos/respaldos.component';
 import { ActualizacionComponent } from './components/herramientas/actualizacion/actualizacion.component';
 import { IdentidadComponent } from './components/herramientas/identidad/identidad.component';
-import { AgregarProductoComponent } from './components/contenido/productos/agregar-producto/agregar-producto.component';
 import { DetCajasComponent } from './components/contenido/cajas/det-cajas/det-cajas.component';
 import { ErroresComponent } from './components/herramientas/errores/errores.component';
 import { ImagenProductoComponent } from './components/contenido/productos/imagen-producto/imagen-producto.component';
 import { DatosFacturacionComponent } from './components/contenido/cajas/detalles/datos-facturacion/datos-facturacion.component';
 import { ServidorComponent } from './components/herramientas/servidor/servidor.component';
-import { AdministrarImportacionComponent } from './components/contenido/productos/administrar-importacion/administrar-importacion.component';
-import { ResultadosImportacionComponent } from './components/contenido/productos/resultados-importacion/resultados-importacion.component';
 import { ComputadorHabilitadoDirective } from './directives/computadorHabilitado.directive';
 import { ModoTrabajoComponent } from './components/herramientas/modo-trabajo/modo-trabajo.component';
 import { EstadoComponent } from './components/contenido/cajas/detalles/estado/estado.component';
-import { FaltantesComponent } from './components/contenido/productos/faltantes/faltantes.component';
-import { ActualizarFaltantesComponent } from './components/contenido/productos/actualizar-faltantes/actualizar-faltantes.component';
 import { RegistroEntregasComponent } from './components/contenido/clientes/registro-entregas/registro-entregas.component';
 import { TomarFotoComponent } from './components/contenido/productos/tomar-foto/tomar-foto.component';
 import { MainEtiquetasComponent } from './components/contenido/etiquetas/main-etiquetas/main-etiquetas.component';
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
 import { ImpimirEtiquetasComponent } from './components/contenido/productos/impimir-etiquetas/impimir-etiquetas.component';
-import { VencimientosComponent } from './components/contenido/productos/vencimientos/vencimientos.component';
-import { ActualizarVencimientosComponent } from './components/contenido/productos/actualizar-vencimientos/actualizar-vencimientos.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -137,7 +129,6 @@ import { ActualizarVencimientosComponent } from './components/contenido/producto
         ConfirmacionComponent,
         VentasClientesComponent,
         EntregaVentasComponent,
-        CambioPrecioComponent,
         ResumenCajasComponent,
         EstadisticasCajasComponent,
         DecimalFormatPipe,
@@ -145,25 +136,18 @@ import { ActualizarVencimientosComponent } from './components/contenido/producto
         RespaldosComponent,
         ActualizacionComponent,
         IdentidadComponent,
-        AgregarProductoComponent,
         ErroresComponent,
         ImagenProductoComponent,
         DatosFacturacionComponent,
         ServidorComponent,
-        AdministrarImportacionComponent,
-        ResultadosImportacionComponent,
         ComputadorHabilitadoDirective,
         ModoTrabajoComponent,
         EstadoComponent,
-        FaltantesComponent,
-        ActualizarFaltantesComponent,
         RegistroEntregasComponent,
         TomarFotoComponent,
         MainEtiquetasComponent,
         AddmodEtiquetasComponent,
         ImpimirEtiquetasComponent,
-        VencimientosComponent,
-        ActualizarVencimientosComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

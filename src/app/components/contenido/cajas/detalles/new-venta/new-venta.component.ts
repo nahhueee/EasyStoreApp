@@ -121,8 +121,6 @@ export class NewVentaComponent implements OnInit, AfterViewInit {
       this.pathIcon = "assets/IconoBlack.png"
     }
 
-    this.ObtenerProductosSoloPrecio();
-
     //Detecta el cambio en el input autocomplete
     //Busca en base de datos los productos relacionados con lo escrito por el usuario
     this.formulario.get('producto')?.valueChanges
@@ -193,32 +191,14 @@ export class NewVentaComponent implements OnInit, AfterViewInit {
     input.select();
   }
 
-  ObtenerProductosSoloPrecio(){
-    this.productosService.ObtenerProductosSoloPrecio()
-      .subscribe(response => {
-        this.productosSoloPrecio = response;
-      });
-  }
-
   CompletarInputs(producto:Producto){
     this.formulario.get('producto')!.setValue(producto.nombre);
     this.formulario.get('codigo')!.setValue(producto.codigo);
-    this.formulario.get('precio')!.setValue(producto.precio?.toString());
+    //this.formulario.get('precio')!.setValue(producto.precio?.toString());
 
     if(this.formulario.get('cantidad')?.value == "")
       this.formulario.get('cantidad')?.setValue("1");
-
-    switch(producto.unidad){
-      case 'KG':
-        this.unidadProd = 'Kilogramos';
-        break;
-      case 'UNI':
-        this.unidadProd = 'Unidades';
-        break;
-      case 'LT':
-        this.unidadProd = 'Litros';
-        break;
-    }
+   
   }
 
   //#region FORMULARIO
@@ -227,7 +207,7 @@ export class NewVentaComponent implements OnInit, AfterViewInit {
   productoChange(seleccionado: Producto) { //Detecta el cambio de seleccion de producto
     this.desdeSeleccionable = true;
     this.nvoDetalleVenta.producto = seleccionado;
-    this.nvoDetalleVenta.precio = seleccionado.precio;
+    //this.nvoDetalleVenta.precio = seleccionado.precio;
     this.CompletarInputs(seleccionado)
   }
   //--------------------------------
@@ -282,15 +262,15 @@ export class NewVentaComponent implements OnInit, AfterViewInit {
     if (this.codigoControl === '*' || (this.codigoControl.startsWith('/') && this.codigoControl.length > 1)) {
       const producto = this.productosSoloPrecio.find(p => p.codigo === this.codigoControl.replace("/", ""));
       if (producto) {
-        this.nvoDetalleVenta.producto = new Producto({
-          id: producto.id,
-          codigo: producto.codigo,
-          nombre: producto.nombre,
-          unidad: "---",
-          soloPrecio: true
-        });
+        // this.nvoDetalleVenta.producto = new Producto({
+        //   id: producto.id,
+        //   codigo: producto.codigo,
+        //   nombre: producto.nombre,
+        //   unidad: "---",
+        //   soloPrecio: true
+        // });
       } else {
-        this.nvoDetalleVenta.producto = new Producto({ id: 1, codigo: "*", nombre: "VARIOS", unidad: "---" });
+        //this.nvoDetalleVenta.producto = new Producto({ id: 1, codigo: "*", nombre: "VARIOS", unidad: "---" });
       }
       this.nvoDetalleVenta.precio = this.precioVarioControl;
       this.nvoDetalleVenta.costo = this.precioVarioControl;
@@ -454,7 +434,7 @@ export class NewVentaComponent implements OnInit, AfterViewInit {
   Editar(index:number){
     //Seteamos los inputs
     this.nvoDetalleVenta = this.detalles[index];
-    if(this.nvoDetalleVenta.producto?.codigo == "*" || this.nvoDetalleVenta.producto?.soloPrecio) return;
+    if(this.nvoDetalleVenta.producto?.codigo == "*") return;
 
     this.CompletarInputs(this.nvoDetalleVenta.producto!);
        

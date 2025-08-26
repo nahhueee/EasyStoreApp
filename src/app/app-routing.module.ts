@@ -7,10 +7,7 @@ import { ResumenCajasComponent } from './components/contenido/cajas/resumen-caja
 import { EstadisticasCajasComponent } from './components/contenido/cajas/estadisticas-cajas/estadisticas-cajas.component';
 import { VentasClientesComponent } from './components/contenido/clientes/ventas-clientes/ventas-clientes.component';
 import { DetCajasComponent } from './components/contenido/cajas/det-cajas/det-cajas.component';
-import { AdministrarImportacionComponent, } from './components/contenido/productos/administrar-importacion/administrar-importacion.component';
-import { FaltantesComponent } from './components/contenido/productos/faltantes/faltantes.component';
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
-import { VencimientosComponent } from './components/contenido/productos/vencimientos/vencimientos.component';
 
 const routes: Routes = [
   {
@@ -33,10 +30,6 @@ const routes: Routes = [
     component:LoginComponent,
   },
   {
-    path: 'administrar-excel/:tipo',
-    component:AdministrarImportacionComponent,
-  },
-  {
     path:"cajas/detalle/:idCaja",
     component:DetCajasComponent,
     canActivate: [AuthGuard]
@@ -56,17 +49,7 @@ const routes: Routes = [
     component:VentasClientesComponent,
     canActivate: [AuthGuard]
   },
-  {
-    path:"productos/faltantes",
-    component:FaltantesComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path:"productos/vencimientos",
-    component:VencimientosComponent,
-    canActivate: [AuthGuard]
-  },
-  {
+{
     path:"administrar-etiqueta/:idEtiqueta",
     component:AddmodEtiquetasComponent,
     canActivate: [AuthGuard]

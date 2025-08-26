@@ -72,3 +72,106 @@
         display: none;
     }
 }
+
+
+//Tabla
+.mat-column-genero{
+    max-width: 60px;
+}
+.mat-column-color, .mat-column-proceso{
+    max-width: 80wpx;
+}
+
+.talles{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.linea{
+    display: flex;
+    width: 500px;
+    margin-right: 50px;
+
+    .item{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 35px;
+        border-left: 1px solid rgb(255, 255, 255);
+        font-size: 13px;
+        font-weight: bold;
+    }
+}
+
+.talle-dark1{
+    background-color: #006674;
+}
+.talle-dark2{
+    background-color: #8e0000;
+}
+.talle-dark3{
+    background-color: #864500;
+}
+.talle-light1{
+    background-color: #d5fbd7;
+}
+.talle-light2{
+    background-color: #fed4d4;
+}
+.talle-light3{
+    background-color: #ffe4c4;
+}
+
+.cuadrado{
+    height: 20px;
+    width: 35px;
+    border-radius: 4px;
+}
+
+
+.mat-column-t1, .mat-column-t2, .mat-column-t3, .mat-column-t4, .mat-column-t5, 
+.mat-column-t6, .mat-column-t7, .mat-column-t8, .mat-column-t9, .mat-column-t10, .mat-column-total{
+    max-width: 50px;
+    min-width: 50px;
+    padding: 0px !important;
+    text-align: center;
+    border-left: 1px solid rgb(255, 255, 255);
+}
+
+mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
+mat-header-cell.mat-column-total {
+  background-color: #e4e4e4;
+  border-left: 1px solid #fff;
+  justify-content: center;
+}
+
+mat-header-cell.mat-column-total{
+    background-color: var(--color-element-back) !important;
+}
+
+.dark-mode mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
+.dark-mode mat-header-cell.mat-column-total {
+  background-color: #2e2e2e;  
+}
+.dark-mode mat-header-cell.mat-column-total{
+    background-color: var(--color-element-back) !important;
+}
+
+::ng-deep .tabla-productos mat-header-row {
+  height: 35px; 
+  max-height: 35px;
+  min-height: 35px; 
+}
+
+::ng-deep .tabla-productos mat-header-cell {
+  //padding: 4px 2px; 
+  line-height: 32px;
+  font-size: 13px; 
+  font-weight: bold;
+  min-height: 35px;
+  height: 35px;
+  text-transform: uppercase;
+}
+
+

@@ -181,18 +181,13 @@ export class AddmodProductosComponent implements OnInit, AfterViewInit {
       this.producto.codigo = this.formulario.get('codigo')?.value;
   
       if (this.producto.codigo != '') {
-        const response = await firstValueFrom(this.productosService.VerificarYObtener(this.producto.codigo!));
+        const response = await firstValueFrom(this.productosService.ObtenerProducto(this.producto.codigo!));
 
-        if (response.existe === true) {
-          if(response.producto.soloPrecio){
-            this.Notificaciones.warning("Ya existe un producto con el mismo código");
-            return;
-          }
-
+        if (response) {
           const confirmacion = await this.abrirConfirmacion("Se encontró un producto con el código ingresado, ¿Deseas obtener la info de este producto para modificación?");
           
           if (confirmacion) {
-            this.data.producto = response.producto;
+            this.data.producto = response;
             this.completarInputs();
             this.titulo = "Modificar Producto";
             this.modificando = true;
@@ -223,57 +218,37 @@ export class AddmodProductosComponent implements OnInit, AfterViewInit {
     } 
 
     this.producto.codigo =  this.formulario.get('codigo')?.value;
-    this.producto.soloPrecio = this.soloPrecio;
-
-    //valida que no se usen numeros de solo precio
-    if (!this.producto.soloPrecio && this.producto.codigo) {
-      const codigo = this.producto.codigo.toString();
-
-      // Verifica si el código está entre "0" y "9"
-      if (/^[0-9]$/.test(codigo)) {
-        this.Notificaciones.warning('Los códigos del 0 al 9 están reservados para productos con "Solo Precio".');
-        return;
-      }
-    }
-
-    //Valida que los productos solo precio no tengan mas de un caracter
-    if(this.producto.soloPrecio && this.producto.codigo?.length!>1){
-      this.Notificaciones.warning('Los productos marcados como "Solo Precio", deben tener código de un solo caracter.');
-      return;
-    }
-
     this.producto.nombre =  this.formulario.get('nombre')?.value;
-    this.producto.unidad =  this.formulario.get('unidad')?.value;
-    this.producto.tipoPrecio =  this.formulario.get('tipoPrecio')?.value;
+    // this.producto.tipoPrecio =  this.formulario.get('tipoPrecio')?.value;
 
-    if(this.formulario.get('cantidad')?.value == "")
-      this.formulario.get('cantidad')?.setValue("1");
+    // if(this.formulario.get('cantidad')?.value == "")
+    //   this.formulario.get('cantidad')?.setValue("1");
 
-    this.producto.cantidad =  this.formulario.get('cantidad')?.value;
+    // this.producto.cantidad =  this.formulario.get('cantidad')?.value;
 
-    if(this.tipoPrecioControl == '$'){
-      this.producto.costo = this.Globales.EstandarizarDecimal(this.formulario.get('costoF')?.value);
-      this.producto.precio =  this.Globales.EstandarizarDecimal(this.formulario.get('precioF')?.value);
-    }else if(this.tipoPrecioControl == '%'){
-      this.producto.costo =  this.Globales.EstandarizarDecimal(this.formulario.get('costoP')?.value);
-      this.producto.precio =  this.Globales.EstandarizarDecimal(this.formulario.get('precioP')?.value);
-      this.producto.porcentaje =  this.formulario.get('porcentaje')?.value;
-      this.producto.redondeo =  this.formulario.get('redondeo')?.value;
-    }
+    // if(this.tipoPrecioControl == '$'){
+    //   this.producto.costo = this.Globales.EstandarizarDecimal(this.formulario.get('costoF')?.value);
+    //   this.producto.precio =  this.Globales.EstandarizarDecimal(this.formulario.get('precioF')?.value);
+    // }else if(this.tipoPrecioControl == '%'){
+    //   this.producto.costo =  this.Globales.EstandarizarDecimal(this.formulario.get('costoP')?.value);
+    //   this.producto.precio =  this.Globales.EstandarizarDecimal(this.formulario.get('precioP')?.value);
+    //   this.producto.porcentaje =  this.formulario.get('porcentaje')?.value;
+    //   this.producto.redondeo =  this.formulario.get('redondeo')?.value;
+    // }
     
-    if(this.formulario.get('idRubro')?.value == "")
-      this.formulario.get('idRubro')?.setValue(1);
+    // if(this.formulario.get('idRubro')?.value == "")
+    //   this.formulario.get('idRubro')?.setValue(1);
 
-    if(this.formulario.get('vencimiento')?.value)
-      this.producto.vencimiento =  this.formulario.get('vencimiento')?.value;
-    else
-      this.producto.vencimiento = null;
+    // if(this.formulario.get('vencimiento')?.value)
+    //   this.producto.vencimiento =  this.formulario.get('vencimiento')?.value;
+    // else
+    //   this.producto.vencimiento = null;
 
-    if(this.formulario.get('faltante')?.value != ''){
-      this.producto.faltante = this.formulario.get('faltante')?.value
-    }else{
-      this.producto.faltante = 1;
-    }
+    // if(this.formulario.get('faltante')?.value != ''){
+    //   this.producto.faltante = this.formulario.get('faltante')?.value
+    // }else{
+    //   this.producto.faltante = 1;
+    // }
 
     if(this.modificando){
       this.Modificar();

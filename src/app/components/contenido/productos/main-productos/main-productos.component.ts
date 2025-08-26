@@ -4,24 +4,20 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Producto } from 'src/app/models/Producto';
+import { LineasTalle, Producto, TablaProducto } from 'src/app/models/Producto';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { AddmodProductosComponent } from '../addmod-productos/addmod-productos.component';
 import { EliminarComponent } from '../../../compartidos/eliminar/eliminar.component';
 import { ProductosService } from 'src/app/services/productos.service';
-import { CambioPrecioComponent } from '../cambio-precio/cambio-precio.component';
-import { AgregarProductoComponent } from '../agregar-producto/agregar-producto.component';
 import { environment } from 'src/environments/environment';
 import { ParametrosService } from 'src/app/services/parametros.service';
 import { ImagenProductoComponent } from '../imagen-producto/imagen-producto.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { FilesService } from 'src/app/services/files.service';
 import { Router } from '@angular/router';
 import { BusquedaComponent } from 'src/app/components/compartidos/busqueda/busqueda.component';
-import { of, forkJoin } from 'rxjs';
-import { ImpimirEtiquetasComponent } from '../impimir-etiquetas/impimir-etiquetas.component';
-import { ProductoImprimir } from 'src/app/models/ProductoImprimir';
+import { forkJoin } from 'rxjs';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
+import { MiscService } from 'src/app/services/misc.service';
 
 @Component({
     selector: 'app-productos',
@@ -31,19 +27,19 @@ import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 })
 export class MainProductosComponent implements OnInit, AfterViewInit {
   //#region VARIABLES
-    productos: Producto[] =[];
+    productos: TablaProducto[] =[];
     filtroActual: FiltroProducto;
     vistaSeleccionada = "lista"
+    lineasTalles: LineasTalle[] = [];
 
     tipoImportacionExcel:string;
 
     clickCount=0; //Para saber si se hace un solo click o dos sobre una celda
-
-    displayedColumns: string[] = ['select', 'codigo', 'nombre', 'cantidad', 'unidad', 'precio']; //Columnas a mostrar
-    adminColumns: string[] = [ 'costo', 'tipoPrecio'] //Columnas a mostrar para admin
+    esDark:boolean;
+    displayedColumns: string[] = ['select', 'proceso', 'codigo', 'nombre', 'tipo', 'subtipo', 'genero', 'material', 'color', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 'total']; //Columnas a mostrar
     
-    dataSource = new MatTableDataSource<Producto>(this.productos); //Data source de la tabla
-    seleccionados = new SelectionModel<Producto>(true, []); //Data source de seleccionados
+    dataSource = new MatTableDataSource<TablaProducto>(this.productos); //Data source de la tabla
+    seleccionados = new SelectionModel<TablaProducto>(true, []); //Data source de seleccionados
 
     @ViewChild(MatPaginator) paginator: MatPaginator; //Para manejar el Paginador del front
     @ViewChild(MatSort) sort: MatSort; //Para manejar el Reordenar del front
@@ -61,7 +57,10 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     private parametrosService: ParametrosService,
     private productosService:ProductosService,
     private authService:AuthService,
-    private filesService:FilesService) {}
+    private miscService:MiscService,
+  ) {
+    this.esDark = this.parametrosService.EsDark();
+  }
 
   
   //Obtiene el tamaño actual de la pantalla 
@@ -80,6 +79,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
     this.vistaSeleccionada = this.parametrosService.GetVistaProductos();
     this.CambioDeVista();
+    this.ObtenerLineasTalle();
   }
 
   ngAfterViewInit() {
@@ -89,11 +89,19 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
       this.Buscar(); 
     });
 
-    setTimeout(() => {
+  setTimeout(() => {
       //Obtenemos los datos de tabla
       this.Buscar();
       this.btnAgregar.nativeElement.focus();
     }, 0.5);
+  }
+
+  ObtenerLineasTalle(){
+    this.miscService.ObtenerLineasTalle()
+      .subscribe(response => {
+        this.lineasTalles = response;
+        console.log(response)
+      });
   }
 
   //#region TABLA
@@ -141,16 +149,9 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
       // Obtiene listado de productos y el total
       this.productosService.ObtenerProductos(this.filtroActual)
           .subscribe(response => {
-            
+
             //Llenamos el total del paginador
             this.paginator.length = response.total;
-
-            //Agrega campos extras si es administrador
-            if (this.authService.GetCargo() === "ADMINISTRADOR") {
-              // Filtramos para evitar duplicados
-              const columnasFaltantes = this.adminColumns.filter(col => !this.displayedColumns.includes(col));
-              this.displayedColumns.push(...columnasFaltantes);
-            }
 
             //Llenamos la tabla con los resultados
             this.productos = [];
@@ -164,8 +165,8 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
             //Verificamos la vista seleccionada
             this.CambioDeVista();
 
-            this.dataSource = new MatTableDataSource<Producto>(this.productos);
-            
+            this.dataSource = new MatTableDataSource<TablaProducto>(this.productos);
+
             //Edicion rapida
             //Si esta activo el parametro, en a busqueda si encuentra un resultado unico lo pone en editar
             //Si no encuentra te permite agregarlo
@@ -292,95 +293,85 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
   //Actualizar precio masivo
   ActualizarPrecio(){
     //Verificamos que haya algun producto seleccionado
-    if(this.seleccionados.selected.length==0)return
+    // if(this.seleccionados.selected.length==0)return
 
-    if(this.seleccionados.selected[0].soloPrecio){
-      this.Notificaciones.info("Este producto fue marcado para no registrar cantidad")
-      return;
-    }
+    // if(this.seleccionados.selected[0].soloPrecio){
+    //   this.Notificaciones.info("Este producto fue marcado para no registrar cantidad")
+    //   return;
+    // }
 
-    if(this.authService.GetCargo() == "EMPLEADO"){
-      if(!this.parametrosService.PermitirCambioPrecio()){
-        this.Notificaciones.info(`Parece que no tienes permiso para realizar esta acción`);
-        return;
-      }
-    }
+    // if(this.authService.GetCargo() == "EMPLEADO"){
+    //   if(!this.parametrosService.PermitirCambioPrecio()){
+    //     this.Notificaciones.info(`Parece que no tienes permiso para realizar esta acción`);
+    //     return;
+    //   }
+    // }
     
-    //Obtenemos el nro de registros seleccionados
-    const lstEditar = this.seleccionados.selected.filter(x=>x.tipoPrecio==this.seleccionados.selected[0].tipoPrecio)
+    // //Obtenemos el nro de registros seleccionados
+    // const lstEditar = this.seleccionados.selected.filter(x=>x.tipoPrecio==this.seleccionados.selected[0].tipoPrecio)
 
-    if(lstEditar.length>0){
-      this.dialogConfig.width = "100vw";
-      this.dialogConfig.data = {registros:lstEditar } //Pasa como dato la lista de registros a modificar
+    // if(lstEditar.length>0){
+    //   this.dialogConfig.width = "100vw";
+    //   this.dialogConfig.data = {registros:lstEditar } //Pasa como dato la lista de registros a modificar
 
-      //Abrimos la ventana emergente de cambio de precio
-      this.dialog.open(CambioPrecioComponent, this.dialogConfig)
-      .afterClosed()
-      .subscribe((actualizar:boolean) => {
-        if (actualizar){
-          this.Buscar(undefined,"",true); //Recarga la tabla
-          this.seleccionados.clear();
-        }
-      });
-    }
+    //   //Abrimos la ventana emergente de cambio de precio
+    //   this.dialog.open(CambioPrecioComponent, this.dialogConfig)
+    //   .afterClosed()
+    //   .subscribe((actualizar:boolean) => {
+    //     if (actualizar){
+    //       this.Buscar(undefined,"",true); //Recarga la tabla
+    //       this.seleccionados.clear();
+    //     }
+    //   });
+    // }
   }
 
   //Anañir cantidad al producto
   AgregarCantidad(){
 
     //Verificamos que haya algun producto seleccionado
-    if(this.seleccionados.selected.length==0)return
-    if(this.seleccionados.selected[0].soloPrecio){
-      this.Notificaciones.info("Este producto fue marcado para no registrar cantidad")
-      return;
-    }
+    // if(this.seleccionados.selected.length==0)return
+    // if(this.seleccionados.selected[0].soloPrecio){
+    //   this.Notificaciones.info("Este producto fue marcado para no registrar cantidad")
+    //   return;
+    // }
 
-    this.dialogConfig.width = "400px";
-    this.dialogConfig.data = {producto:this.seleccionados.selected[0] } //Pasa como dato el producto al que se le agrega la cantidad
+    // this.dialogConfig.width = "400px";
+    // this.dialogConfig.data = {producto:this.seleccionados.selected[0] } //Pasa como dato el producto al que se le agrega la cantidad
 
-    //Abrimos la ventana emergente de cambio agregar-cantidad-producto
-    this.dialog.open(AgregarProductoComponent, this.dialogConfig)
-    .afterClosed()
-    .subscribe((actualizar:boolean) => {
-      if (actualizar){
-        this.Buscar(undefined,"",true); //Recarga la tabla
-        this.seleccionados.clear();
-      }
-    });
-  }
-
-  //Abre la lista de faltantes de productos
-  AbrirFaltantes(){
-    this.router.navigateByUrl("productos/faltantes");
-  }
-
-  //Abre la lista de vencimientos de productos
-  AbrirVencimientos(){
-    this.router.navigateByUrl("productos/vencimientos");
+    // //Abrimos la ventana emergente de cambio agregar-cantidad-producto
+    // this.dialog.open(AgregarProductoComponent, this.dialogConfig)
+    // .afterClosed()
+    // .subscribe((actualizar:boolean) => {
+    //   if (actualizar){
+    //     this.Buscar(undefined,"",true); //Recarga la tabla
+    //     this.seleccionados.clear();
+    //   }
+    // });
   }
 
   //Abre la pantalla de impresion de etiquetas
   AbrirEtiquetas(){
     //Verificamos que haya algun producto seleccionado
-    if(this.seleccionados.selected.length==0)return
+    // if(this.seleccionados.selected.length==0)return
     
-    const productosImprimir:ProductoImprimir[] = [];
-    this.seleccionados.selected.forEach(prod => {
-      const producto:ProductoImprimir = new ProductoImprimir();
-      producto.codigo = prod.codigo;
-      producto.nombre = prod.nombre;
-      producto.precio = prod.precio;
-      producto.vencimiento = prod.vencimiento?.toString();
-      producto.cantidad = 1;
+    // const productosImprimir:ProductoImprimir[] = [];
+    // this.seleccionados.selected.forEach(prod => {
+    //   const producto:ProductoImprimir = new ProductoImprimir();
+    //   producto.codigo = prod.codigo;
+    //   producto.nombre = prod.nombre;
+    //   producto.precio = prod.talles;
+    //   producto.vencimiento = prod.vencimiento?.toString();
+    //   producto.cantidad = 1;
 
-      productosImprimir.push(producto);
-    });
+    //   productosImprimir.push(producto);
+    // });
 
-    this.dialogConfig.width = "100vw";
-    this.dialogConfig.data = {productosImprimir} //Pasa como dato la lista de registros a imprimir
+    // this.dialogConfig.width = "100vw";
+    // this.dialogConfig.data = {productosImprimir} //Pasa como dato la lista de registros a imprimir
 
-    //Abrimos la ventana emergente de cambio de precio
-    this.dialog.open(ImpimirEtiquetasComponent, this.dialogConfig)
+    // //Abrimos la ventana emergente de cambio de precio
+    // this.dialog.open(ImpimirEtiquetasComponent, this.dialogConfig)
   }
 
   CambioDeVista(){
@@ -408,30 +399,5 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
         this.Buscar(undefined,"",true); //Recarga la tabla
       }
     });
-  }
-
-  //Importar Excel
-
-  seleccionarExcel(){
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput) {
-      fileInput.click(); // Simula un clic en el input de tipo file al hacer clic en el botón personalizado
-    }
-  }
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append('excel', file);
-
-    this.filesService.ImportarExcel(file, this.tipoImportacionExcel)
-      .subscribe(response => {
-        if(response){
-          this.filesService.setDatosExcel(response);
-          this.router.navigate(['/administrar-excel/' + this.tipoImportacionExcel]);
-
-        } else{
-          this.Notificaciones.error("Ocurrió un error al intentar procesar el archivo de excel.")
-        }
-      });
   }
 }

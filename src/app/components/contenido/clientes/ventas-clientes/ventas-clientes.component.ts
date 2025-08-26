@@ -158,21 +158,21 @@ export class VentasClientesComponent implements OnInit, AfterViewInit {
       this.totalActualizado = 0;
       this.prodActualizados = 0;
       
-      for (let i = 0; i < this.detallesVenta.length; i++) {
-        const precioActualizado: number = this.detallesVenta[i].producto?.precio!;
-        const precioVenta: number = this.detallesVenta[i].precio!;
+      // for (let i = 0; i < this.detallesVenta.length; i++) {
+      //   const precioActualizado: number = this.detallesVenta[i].producto?.precio!;
+      //   const precioVenta: number = this.detallesVenta[i].precio!;
 
-        if(this.detallesVenta[i].producto?.nombre!='VARIOS' && this.detallesVenta[i].producto?.soloPrecio == false){
-          this.totalActualizado += (precioActualizado * this.detallesVenta[i].cantidad);
+      //   if(this.detallesVenta[i].producto?.nombre!='VARIOS' && this.detallesVenta[i].producto?.soloPrecio == false){
+      //     this.totalActualizado += (precioActualizado * this.detallesVenta[i].cantidad);
 
-          if(precioActualizado != precioVenta)
-            this.prodActualizados += 1;
-        }else{
-          //Para productos varios o de solo precio simplemente multiplicamos el precio de venta por la cantidad
-          //No varian su precio de producto, siempre es 1
-          this.totalActualizado += (this.detallesVenta[i].precio! * this.detallesVenta[i].cantidad);
-        }
-      }
+      //     if(precioActualizado != precioVenta)
+      //       this.prodActualizados += 1;
+      //   }else{
+      //     //Para productos varios o de solo precio simplemente multiplicamos el precio de venta por la cantidad
+      //     //No varian su precio de producto, siempre es 1
+      //     this.totalActualizado += (this.detallesVenta[i].precio! * this.detallesVenta[i].cantidad);
+      //   }
+      // }
 
 
       //Informamos descuento o recarga
