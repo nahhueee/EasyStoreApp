@@ -8,6 +8,7 @@ import { EstadisticasCajasComponent } from './components/contenido/cajas/estadis
 import { VentasClientesComponent } from './components/contenido/clientes/ventas-clientes/ventas-clientes.component';
 import { DetCajasComponent } from './components/contenido/cajas/det-cajas/det-cajas.component';
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
+import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
 
 const routes: Routes = [
   {
@@ -49,9 +50,14 @@ const routes: Routes = [
     component:VentasClientesComponent,
     canActivate: [AuthGuard]
   },
-{
+  {
     path:"administrar-etiqueta/:idEtiqueta",
     component:AddmodEtiquetasComponent,
+    canActivate: [AuthGuard]
+  },
+    {
+    path:"administrar-producto/:producto",
+    component:AdministrarProductosComponent,
     canActivate: [AuthGuard]
   },
 ];

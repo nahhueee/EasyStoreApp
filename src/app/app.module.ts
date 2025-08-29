@@ -100,6 +100,7 @@ import { TomarFotoComponent } from './components/contenido/productos/tomar-foto/
 import { MainEtiquetasComponent } from './components/contenido/etiquetas/main-etiquetas/main-etiquetas.component';
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
 import { ImpimirEtiquetasComponent } from './components/contenido/productos/impimir-etiquetas/impimir-etiquetas.component';
+import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -148,6 +149,7 @@ import { ImpimirEtiquetasComponent } from './components/contenido/productos/impi
         MainEtiquetasComponent,
         AddmodEtiquetasComponent,
         ImpimirEtiquetasComponent,
+        AdministrarProductosComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,

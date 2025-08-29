@@ -1,0 +1,95 @@
+.uppercase{
+    text-transform: uppercase !important;
+}
+
+.form{
+    padding: 10px 20px;
+
+    display: flex;
+    gap: 20px;
+
+    .izq{
+        flex: 1;
+    }
+    .der{
+        flex: 1;
+    }
+}
+
+.doble{
+    display: flex;
+    gap: 10px;
+}
+
+.info{
+    text-align: center;
+    font-size: 13px;
+    font-family: "Poppins-Regular";
+}
+
+.color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.color-box {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.selected {
+    border: 5px solid var(--border-color)
+  }
+}
+
+
+.talles-grid {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+.talle-box{
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    &:hover {
+        cursor: pointer;
+        background-color: var(--border-color);
+    }
+    &.selected {
+        background-color: var(--color-alternative);
+        color: var(--color-primary);
+    }
+}
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}

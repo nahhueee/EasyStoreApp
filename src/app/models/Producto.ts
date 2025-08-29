@@ -103,6 +103,7 @@ export class LineasTalle {
 export class Material {
     id?:number;
     descripcion?:string;
+    colores?:Color[] = []
 
     constructor(data?: any) {
         if (data) {
@@ -142,5 +143,17 @@ export class TallesProducto {
           this.idLineaTalle = data.idLineaTalle;
         }
     }
+}
+
+export class TalleSeleccionable{
+  talle?:string;
+  seleccionado?:boolean;
+
+  constructor(data?: any) {
+    if (data) {
+        this.talle = data.talle;
+        this.seleccionado = data.seleccionado;
+    }
+}
 }
 

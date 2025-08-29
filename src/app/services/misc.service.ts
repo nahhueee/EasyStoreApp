@@ -12,5 +12,20 @@ export class MiscService {
   ObtenerLineasTalle(): Observable<any> {
     return this.apiService.get('misc/lineas-talle')
   }
+  ObtenerProcesos(): Observable<any> {
+    return this.apiService.get('misc/procesos')
+  }
+  ObtenerTiposProducto(): Observable<any> {
+    return this.apiService.get('misc/tipos-producto')
+  }
+  ObtenerSubtiposProducto(): Observable<any> {
+    return this.apiService.get('misc/subtipos-producto')
+  }
+  ObtenerMateriales(): Observable<any> {
+    return this.apiService.get('misc/materiales')
+  }
+  ObtenerGeneros(): Observable<any> {
+    return this.apiService.get('misc/generos')
+  }
   //#endregion
 }

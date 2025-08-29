@@ -1,0 +1,179 @@
+<div class="cabecera">
+    <mat-icon>inventory_2</mat-icon>
+    <h2>Administrar Producto</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="Cerrar()" autocomplete="off" novalidate>
+    
+    <div class="izq">
+
+        <div class="doble">
+            <!-- Empresa -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Empresa</mat-label>
+                <mat-select formControlName="empresa">
+                    @for (item of empresas; track $index) {
+                        <mat-option [value]="item">{{item}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Clientes -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Cliente</mat-label>
+                <mat-select formControlName="cliente">
+                    @for (item of clientes; track $index) {
+                        <mat-option [value]="item.id">{{item.nombre}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="doble">
+            <!-- Temporada -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Temporada</mat-label>
+                <mat-select formControlName="temporada">
+                    @for (item of temporadas; track $index) {
+                        <mat-option [value]="item">{{item}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Tipo Producto -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Producto</mat-label>
+                <mat-select formControlName="producto">
+                    @for (item of tiposProducto; track $index) {
+                        <mat-option [value]="item.id">{{item.descripcion}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="doble">
+            <!-- SubtipoProducto -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tipo</mat-label>
+                <mat-select formControlName="tipo">
+                    @for (item of tiposProducto; track $index) {
+                        <mat-option [value]="item.id">{{item.descripcion}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Generos -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Genero</mat-label>
+                <mat-select formControlName="genero">
+                    @for (item of generos; track $index) {
+                        <mat-option [value]="item.id">{{item.descripcion}}</mat-option >
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="doble">
+            <!-- Codigo -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Código</mat-label>
+                <input #codigoInput matInput class="uppercase" type="text" formControlName="codigo" (focus)="SelectContent($event)">
+                
+                <mat-error *ngIf="formulario.get('codigo')?.hasError('required')">
+                    El código es obligatorio.
+                </mat-error>
+                <mat-error *ngIf="formulario.get('codigo')?.hasError('maxlength')">
+                    El código no puede tener más de 30 caracteres.
+                </mat-error>
+            </mat-form-field>
+            
+            <!-- Moldeleria -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Moldeleria</mat-label>
+                <input matInput type="number" formControlName="moldeleria" (focus)="SelectContent($event)">
+                <mat-error>
+                    El nombre es obligatorio.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        
+        <!-- Nombre -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input #nombreInput matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
+            <mat-error *ngIf="formulario.get('nombre')?.hasError('required')">
+                El nombre es obligatorio.
+            </mat-error>
+            <mat-error *ngIf="formulario.get('nombre')?.hasError('maxlength')">
+                El nombre no puede tener más de 100 caracteres.
+            </mat-error>
+        </mat-form-field>
+
+    </div>
+    <div class="der">
+        
+        <!-- Materiales -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Materiales</mat-label>
+            <mat-select formControlName="material" (selectionChange)="MaterialChange()">
+                @for (item of materiales; track $index) {
+                    <mat-option [value]="item.id">{{item.descripcion}}</mat-option >
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Colores -->
+        @if(material != ''){
+            <div class="color-grid">
+                @for (color of coloresMaterial; track $index) {
+                    <div
+                        class="color-box"
+                        [class.selected]="colorSeleccionado === color.id"
+                        (click)="SeleccionarColor(color.id!)"
+                        [matTooltip]="color.descripcion"
+                        [ngStyle]="{'background-color':color.hexa}"
+                    ></div>
+                }
+            </div>
+        }@else {
+            <p class="info">Selecciona un material para ver colores disponibles</p>
+        }
+        
+
+        <!-- Lineas -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Lineas Talle</mat-label>
+            <mat-select formControlName="lineaTalle" (selectionChange)="LineaTalleChange()">
+                @for (item of lineasTalles; track $index) {
+                    <mat-option [value]="item.id">{{item.talles}}</mat-option >
+                }
+            </mat-select>
+        </mat-form-field>
+        
+        @if(lineaTalle != ''){
+            <div class="talles-grid">
+                @for (item of tallesSeleccionables; track $index) {
+                    <div
+                        class="talle-box"
+                        [class.selected]="item.seleccionado"
+                        (click)="SeleccionarTalle($index)"
+                    >
+                    {{item.talle}}
+                    </div>
+                }
+            </div>
+        }@else {
+            <p class="info">Selecciona una linea de talles para administrar talles</p>
+        }
+        
+    </div>
+
+</form>
+
+
+<div class="botones">
+    <button mat-flat-button color="primary" (click)='Guardar()'>GUARDAR</button>
+    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+</div>
+  
+  

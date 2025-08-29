@@ -18,6 +18,7 @@ import { BusquedaComponent } from 'src/app/components/compartidos/busqueda/busqu
 import { forkJoin } from 'rxjs';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 import { MiscService } from 'src/app/services/misc.service';
+import { AdministrarProductosComponent } from '../administrar-productos/administrar-productos.component';
 
 @Component({
     selector: 'app-productos',
@@ -201,23 +202,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     }
 
     Agregar(){
-      this.dialogConfig.width = "900px";
-      this.dialogConfig.data = {cliente:null};
-      this.dialog.open(AddmodProductosComponent, this.dialogConfig)
-                  .afterClosed()
-                  .subscribe((actualizar:boolean) => {
-                    if (actualizar){
-                      this.Buscar(); //Recarga la tabla
-                      this.seleccionados.clear();
-
-                      //Si no esta activo el parametro hacemos foco en el boton agregar
-                      if(!this.parametrosService.GetEdicionResultadoUnico())
-                        this.btnAgregar.nativeElement.focus();
-                      else //De lo contrario hacemos foco en el input de busqueda
-                        this.busquedaComponent.FocusInput();
-
-                    }
-                  });;
+      this.router.navigateByUrl(`/administrar-producto/0`); 
     }
 
     Modificar(row?:any) { 
@@ -232,7 +217,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
       this.dialogConfig.width = "900px";
       this.dialogConfig.data = {producto:data} //Pasa como dato el cliente
-      this.dialog.open(AddmodProductosComponent, this.dialogConfig)
+      this.dialog.open(AdministrarProductosComponent, this.dialogConfig)
               .afterClosed()
               .subscribe((actualizar:boolean) => {
                 if (actualizar){
