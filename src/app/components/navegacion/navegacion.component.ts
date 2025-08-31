@@ -44,9 +44,9 @@ export class NavegacionComponent implements OnInit {
   mostrarTextoChico = true;
 
   componentes = [
-    { id: 'cajas', titulo: 'Cajas', icon: 'local_atm' },
+    // { id: 'cajas', titulo: 'Cajas', icon: 'local_atm' },
     { id: 'inventario', titulo: 'Inventario', icon: 'inventory_2' },
-    { id: 'etiquetas', titulo: 'Etiquetas', icon: 'more' },
+    // { id: 'etiquetas', titulo: 'Etiquetas', icon: 'more' },
     { id: 'clientes', titulo: 'Clientes', icon: 'escalator_warning' },
     { id: 'usuarios', titulo: 'Usuarios', icon: 'group' }
   ];

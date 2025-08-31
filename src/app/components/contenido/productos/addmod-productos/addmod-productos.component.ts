@@ -181,22 +181,22 @@ export class AddmodProductosComponent implements OnInit, AfterViewInit {
       this.producto.codigo = this.formulario.get('codigo')?.value;
   
       if (this.producto.codigo != '') {
-        const response = await firstValueFrom(this.productosService.ObtenerProducto(this.producto.codigo!));
+        // const response = await firstValueFrom(this.productosService.ObtenerProducto(this.producto.codigo!));
 
-        if (response) {
-          const confirmacion = await this.abrirConfirmacion("Se encontró un producto con el código ingresado, ¿Deseas obtener la info de este producto para modificación?");
+        // if (response) {
+        //   const confirmacion = await this.abrirConfirmacion("Se encontró un producto con el código ingresado, ¿Deseas obtener la info de este producto para modificación?");
           
-          if (confirmacion) {
-            this.data.producto = response;
-            this.completarInputs();
-            this.titulo = "Modificar Producto";
-            this.modificando = true;
-          } else {
-            this.Notificaciones.warning("Ya existe un producto con el mismo código");
-          }
+        //   if (confirmacion) {
+        //     this.data.producto = response;
+        //     this.completarInputs();
+        //     this.titulo = "Modificar Producto";
+        //     this.modificando = true;
+        //   } else {
+        //     this.Notificaciones.warning("Ya existe un producto con el mismo código");
+        //   }
           
-          return; 
-        }
+        //   return; 
+        // }
       }
     }
 

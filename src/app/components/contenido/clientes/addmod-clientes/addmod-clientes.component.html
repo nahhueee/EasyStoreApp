@@ -14,6 +14,21 @@
         </mat-error>
     </mat-form-field>
 
+     <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" formControlName="email" (focus)="SelectContent($event)">
+        <mat-error>
+            El email no tiene un formato correcto
+        </mat-error>
+    </mat-form-field>
+
+    <!-- Telefono -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Telefono</mat-label>
+        <input matInput class="uppercase" type="text" formControlName="telefono" (focus)="SelectContent($event)">
+    </mat-form-field>
+
 </form>
   
 <mat-dialog-actions align="center">

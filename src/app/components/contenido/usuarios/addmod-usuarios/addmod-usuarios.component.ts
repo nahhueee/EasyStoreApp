@@ -41,7 +41,7 @@ export class AddmodUsuariosComponent implements OnInit {
       usuario: new FormControl(
         '',
         [Validators.required], // validadores síncronos
-        [this.validadoresService.usuarioValidator()] // validadores asíncronos
+        [this.validadoresService.usuarioValidator(this.data.usuario?.usuario)] // validadores asíncronos
       ),
       nombre: new FormControl('', [Validators.required]),
       idCargo: new FormControl('', [Validators.required]),
@@ -56,9 +56,9 @@ export class AddmodUsuariosComponent implements OnInit {
 
     //Llenamos la lista de cargos
     this.ObtenerCargos();
-
     if(this.modificando){
       this.formulario.get('idCargo')?.setValue(this.data.usuario.idCargo);
+      this.formulario.get('usuario')?.setValue(this.data.usuario.usuario);
       this.formulario.get('nombre')?.setValue(this.data.usuario.nombre);
       this.formulario.get('email')?.setValue(this.data.usuario.email);
       this.formulario.get('pass')?.setValue(this.data.usuario.pass);
@@ -95,10 +95,10 @@ export class AddmodUsuariosComponent implements OnInit {
   }
 
   Guardar(){
-    console.log(this.formulario)
     this.markFormTouched(this.formulario);
     if(!this.formulario.valid) return;
 
+    this.usuario.usuario =  this.formulario.get('usuario')?.value;
     this.usuario.nombre =  this.formulario.get('nombre')?.value;
     this.usuario.email =  this.formulario.get('email')?.value;
     this.usuario.pass =  this.formulario.get('pass')?.value;

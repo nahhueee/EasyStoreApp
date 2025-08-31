@@ -54,6 +54,18 @@
           <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Nombre:</span><p>{{element.nombre}}</p></mat-cell>
         </ng-container>
 
+         <!-- Email -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Email:</span><p>{{element.email}}</p></mat-cell>
+        </ng-container>
+
+         <!-- Telefono -->
+        <ng-container matColumnDef="telefono">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Telefono</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Telefono:</span><p>{{element.telefono}}</p></mat-cell>
+        </ng-container>
+
         <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
         <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]="seleccionados.isSelected(row)"
             (click)="OnCellClick(row)">

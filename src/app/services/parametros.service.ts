@@ -12,7 +12,7 @@ private apiService = inject(ApiService);
 
   //#region LOCAL STORAGE
   GetDatosServidor():DatosServidor{
-    const datosAlmacenados = localStorage.getItem('serverEasySales');
+    const datosAlmacenados = localStorage.getItem('serverEasyStore');
     let datosServidor:DatosServidor;
 
     if(datosAlmacenados==null){

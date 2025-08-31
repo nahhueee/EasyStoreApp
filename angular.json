@@ -61,7 +61,7 @@
               "outputPath": {
                 "base": "build/web/"
               },
-              "baseHref": "/apps/easysales/",
+              "baseHref": "/",                 
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

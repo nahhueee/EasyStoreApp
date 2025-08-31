@@ -79,7 +79,7 @@
     max-width: 60px;
 }
 .mat-column-color, .mat-column-proceso{
-    max-width: 80wpx;
+    max-width: 80px;
 }
 
 .talles{
@@ -111,7 +111,7 @@
     background-color: #8e0000;
 }
 .talle-dark3{
-    background-color: #864500;
+    background-color: #006d36;
 }
 .talle-light1{
     background-color: #d5fbd7;
@@ -129,7 +129,6 @@
     border-radius: 4px;
 }
 
-
 .mat-column-t1, .mat-column-t2, .mat-column-t3, .mat-column-t4, .mat-column-t5, 
 .mat-column-t6, .mat-column-t7, .mat-column-t8, .mat-column-t9, .mat-column-t10, .mat-column-total{
     max-width: 50px;
@@ -146,16 +145,24 @@ mat-header-cell.mat-column-total {
   justify-content: center;
 }
 
+
 mat-header-cell.mat-column-total{
-    background-color: var(--color-element-back) !important;
+    background-color: #faffb4 !important;
 }
+.mat-column-total{
+    background-color: #faffb4;
+}
+
 
 .dark-mode mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
 .dark-mode mat-header-cell.mat-column-total {
   background-color: #2e2e2e;  
 }
 .dark-mode mat-header-cell.mat-column-total{
-    background-color: var(--color-element-back) !important;
+    background-color: #bb5d10 !important;
+}
+.dark-mode .mat-column-total{
+    background-color: #bb5d10 !important;
 }
 
 ::ng-deep .tabla-productos mat-header-row {

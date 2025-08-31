@@ -4,7 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { LineasTalle, Producto, TablaProducto } from 'src/app/models/Producto';
+import { LineasTalle, Proceso, Producto, SubtipoProducto, TablaProducto, TipoProducto } from 'src/app/models/Producto';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { AddmodProductosComponent } from '../addmod-productos/addmod-productos.component';
 import { EliminarComponent } from '../../../compartidos/eliminar/eliminar.component';
@@ -19,6 +19,7 @@ import { forkJoin } from 'rxjs';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 import { MiscService } from 'src/app/services/misc.service';
 import { AdministrarProductosComponent } from '../administrar-productos/administrar-productos.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-productos',
@@ -49,6 +50,20 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
     dialogConfig:MatDialogConfig = new MatDialogConfig(); //Configuraciones para la ventana emergente
     pantalla: any = 0;
+
+    procesoControl = new FormControl('');
+    procesoSeleccionado = 0;
+    tipoControl = new FormControl('');
+    tipoSeleccionado = 0;
+    subtipoControl = new FormControl('');
+    subtipoSeleccionado = 0;
+
+    procesos:Proceso[] = [];
+    procesosFiltrado:Proceso[] = [];
+    tipos:TipoProducto[] = [];
+    tiposFiltrado:TipoProducto[] = [];
+    subtipos:SubtipoProducto[] = [];
+    subtiposFiltrado:SubtipoProducto[] = [];
   //#endregion
 
   constructor(
@@ -81,6 +96,9 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     this.vistaSeleccionada = this.parametrosService.GetVistaProductos();
     this.CambioDeVista();
     this.ObtenerLineasTalle();
+    this.ObtenerTiposProducto();
+    this.ObtenerSubtiposProducto();
+    this.ObtenerProcesos();    
   }
 
   ngAfterViewInit() {
@@ -101,7 +119,6 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     this.miscService.ObtenerLineasTalle()
       .subscribe(response => {
         this.lineasTalles = response;
-        console.log(response)
       });
   }
 
@@ -143,10 +160,13 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
           tamanioPagina: event.pageSize,
           busqueda: busqueda,
           orden: this.sort.active,
-          direccion: this.sort.direction
+          direccion: this.sort.direction,
+          proceso: this.procesoSeleccionado,
+          tipo: this.tipoSeleccionado,
+          subtipo: this.subtipoSeleccionado
         });
       }
-     
+
       // Obtiene listado de productos y el total
       this.productosService.ObtenerProductos(this.filtroActual)
           .subscribe(response => {
@@ -215,23 +235,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
         data = row;
       }
 
-      this.dialogConfig.width = "900px";
-      this.dialogConfig.data = {producto:data} //Pasa como dato el cliente
-      this.dialog.open(AdministrarProductosComponent, this.dialogConfig)
-              .afterClosed()
-              .subscribe((actualizar:boolean) => {
-                if (actualizar){
-                  this.Buscar(undefined,"",true); //Recarga la tabla
-                  this.seleccionados.clear();
-
-                  //Si no esta activo el parametro hacemos foco en el boton agregar
-                  if(!this.parametrosService.GetEdicionResultadoUnico())
-                    this.btnAgregar.nativeElement.focus();
-                  else //De lo contrario hacemos foco en el input de busqueda
-                    this.busquedaComponent.FocusInput();
-
-                }
-              });
+      this.router.navigateByUrl(`/administrar-producto/${data.id}`); 
     }
 
     Eliminar() {
@@ -385,4 +389,95 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  //#region FILTROS
+  ObtenerTiposProducto(){
+    this.miscService.ObtenerTiposProducto()
+    .subscribe(response => {
+      this.tipos = response;
+      this.tiposFiltrado = response;
+    });
+  }
+  ObtenerSubtiposProducto(){
+    this.miscService.ObtenerSubtiposProducto()
+    .subscribe(response => {
+      this.subtipos = response;
+      this.subtiposFiltrado = response;
+    });
+  }
+  ObtenerProcesos(){
+    this.miscService.ObtenerProcesos()
+    .subscribe(response => {
+      this.procesos = response;
+      this.procesosFiltrado = response;
+    });
+  }
+
+  LimpiarProcesos(){
+    this.procesoControl?.setValue('');
+    this.procesoSeleccionado = 0;
+    this.Buscar();
+  }
+
+  ProcesoChange(proceso:any){
+    this.procesoSeleccionado = proceso.value;
+    this.Buscar();
+  }
+
+  filtrarProcesos(event: any) {
+    if (event.target.value == '') {
+      this.procesosFiltrado = this.procesos;
+      return;
+    }
+    if (this.procesos) {
+      this.procesosFiltrado = this.procesos.filter(s =>
+        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
+    }
+  }
+
+  LimpiarTipos(){
+    this.tipoControl?.setValue('');
+    this.tipoSeleccionado = 0;
+    this.Buscar();
+  }
+
+  TipoChange(tipo:any){
+    this.tipoSeleccionado = tipo.value;
+    this.Buscar();
+  }
+
+  filtrarTipos(event: any) {
+    if (event.target.value == '') {
+      this.tiposFiltrado = this.tipos;
+      return;
+    }
+    if (this.tipos) {
+      this.tiposFiltrado = this.tipos.filter(s =>
+        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
+    }
+  }
+
+  LimpiarSubtipos(){
+    this.subtipoControl?.setValue('');
+    this.subtipoSeleccionado = 0;
+    this.Buscar();
+  }
+
+  SubtipoChange(subtipo:any){
+    this.subtipoSeleccionado = subtipo.value;
+    this.Buscar();
+  }
+
+  filtrarSubtipos(event: any) {
+    if (event.target.value == '') {
+      this.subtiposFiltrado = this.subtipos;
+      return;
+    }
+    if (this.subtipos) {
+      this.subtiposFiltrado = this.subtipos.filter(s =>
+        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
+    }
+  }
+  //#endregion
+  
 }

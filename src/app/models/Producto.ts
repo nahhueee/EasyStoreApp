@@ -2,16 +2,38 @@ export class Producto {
     id : number = 0;
     codigo? : string;
     nombre? : string;
-    proceso?: Proceso;
-    tipo?: TipoProducto;
-    subtipo?: SubtipoProducto;
-    genero?: Genero;
-    material?: Material;
-    color?: Color;
+    empresa?: string;
+    cliente?: number;
+    proceso?: number;
+    tipo?: number;
+    subtipo?: number;
+    genero?: number;
+    temporada?: string;
+    material?: number;
+    color?: number;
     moldeleria?: number;
-    imagen?: string;
+    imagen: string = "";
     talles?: TallesProducto[];
     activo:boolean;
+
+    constructor(data?: any) {
+        if (data) {
+          this.id = data.id;
+          this.codigo = data.codigo;
+          this.nombre = data.nombre;
+          this.empresa = data.empresa;
+          this.cliente = data.cliente;
+          this.proceso = data.proceso;
+          this.tipo = data.tipo;
+          this.subtipo = data.subtipo;
+          this.genero = data.genero;
+          this.material = data.material;
+          this.color = data.color;
+          this.moldeleria = data.moldeleria;
+          this.temporada = data.temporada;
+          this.talles = Array.isArray(data.talles) ? data.talles.map((talleData: any) => new TallesProducto(talleData)) : [];
+        } 
+    }
 }
 
 export class TablaProducto {
@@ -57,22 +79,26 @@ export class Proceso {
 export class TipoProducto {
     id?:number;
     descripcion?:string;
+    abreviatura?:string;
 
     constructor(data?: any) {
         if (data) {
           this.id = data.id;
           this.descripcion = data.descripcion;
+          this.abreviatura = data.abreviatura;
         }
     }
 }
 export class SubtipoProducto {
     id?:number;
     descripcion?:string;
+    abreviatura?:string;
 
     constructor(data?: any) {
         if (data) {
           this.id = data.id;
           this.descripcion = data.descripcion;
+          this.abreviatura = data.abreviatura;
         }
     }
 }
@@ -126,19 +152,19 @@ export class Color {
     }
 }
 export class TallesProducto {
-    id?:number;
+    id:number = 0;
+    ubicacion?:number;
     talle?:string;
     idLineaTalle?:number;
     cantidad?:number;
-    costo?:number;
     precio?:number;
 
     constructor(data?: any) {
         if (data) {
           this.id = data.id;
+          this.ubicacion = data.ubicacion;
           this.talle = data.talle;
           this.cantidad = data.cantidad;
-          this.costo = data.costo;
           this.precio = data.precio;
           this.idLineaTalle = data.idLineaTalle;
         }

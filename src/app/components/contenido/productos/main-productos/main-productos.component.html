@@ -12,10 +12,67 @@
         
         <div class="filtros">
           <!-- Boton para cambiar el tipo de vista  -->
-          <mat-button-toggle-group [(ngModel)]="vistaSeleccionada" (change)="CambioDeVista()" class="vista">
+          <!-- <mat-button-toggle-group [(ngModel)]="vistaSeleccionada" (change)="CambioDeVista()" class="vista">
             <mat-button-toggle value="lista" matTooltip="Vista en Lista"><mat-icon>view_headline</mat-icon></mat-button-toggle>
             <mat-button-toggle value="grilla" matTooltip="Vista con Imágenes"><mat-icon>view_list</mat-icon></mat-button-toggle>
-          </mat-button-toggle-group>
+          </mat-button-toggle-group> -->
+
+          <!-- Procesos -->
+          <div class="select">
+            <mat-select [formControl]="procesoControl" placeholder="Proceso" (selectionChange)="ProcesoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
+                <div class="inputFiltro">
+                <input matInput #inputFiltro
+                        focused="'true'"
+                        type="text"
+                        (input)="filtrarProcesos($event)"
+                        placeholder="Filtrar"
+                        (keydown)="$event.stopPropagation()"
+                        autocomplete="off">
+                <mat-icon>filter_list</mat-icon>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-option *ngFor="let option of procesosFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+            </mat-select>
+            <mat-icon matTooltip="Limpiar" (click)="LimpiarProcesos()" style="color: rgb(255, 173, 173);">close</mat-icon>
+          </div>
+
+          <!-- Tipos -->
+          <div class="select">
+            <mat-select [formControl]="tipoControl" placeholder="Producto" (selectionChange)="TipoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
+                <div class="inputFiltro">
+                <input matInput #inputFiltro
+                        focused="'true'"
+                        type="text"
+                        (input)="filtrarTipos($event)"
+                        placeholder="Filtrar"
+                        (keydown)="$event.stopPropagation()"
+                        autocomplete="off">
+                <mat-icon>filter_list</mat-icon>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-option *ngFor="let option of tiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+            </mat-select>
+            <mat-icon matTooltip="Limpiar" (click)="LimpiarTipos()" style="color: rgb(255, 173, 173);">close</mat-icon>
+          </div>
+
+          <!-- Subtipos -->
+          <div class="select">
+            <mat-select [formControl]="subtipoControl" placeholder="Tipo" (selectionChange)="SubtipoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
+                <div class="inputFiltro">
+                <input matInput #inputFiltro
+                        focused="'true'"
+                        type="text"
+                        (input)="filtrarSubtipos($event)"
+                        placeholder="Filtrar"
+                        (keydown)="$event.stopPropagation()"
+                        autocomplete="off">
+                <mat-icon>filter_list</mat-icon>
+                </div>
+                <mat-divider></mat-divider>
+                <mat-option *ngFor="let option of subtiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+            </mat-select>
+            <mat-icon matTooltip="Limpiar" (click)="LimpiarSubtipos()" style="color: rgb(255, 173, 173);">close</mat-icon>
+          </div>
 
           <!-- Input de Busqueda -->
           <app-busqueda (busqueda)="Buscar(undefined, $event)"></app-busqueda>
@@ -25,7 +82,7 @@
     <!-- #endregion ABMC -->
 
     <!-- #region HERRAMIENTAS -->
-    <div class="herramientas">
+    <!-- <div class="herramientas">
 
       <div class="etiqueta">
         <mat-icon>construction</mat-icon>
@@ -34,7 +91,7 @@
       <div class="acciones">
         <button mat-flat-button color="primary" (click)="AbrirEtiquetas()"><mat-icon>more</mat-icon>Etiquetas</button>
       </div>
-    </div>
+    </div> -->
     <!-- #endregion HERRAMIENTAS -->
 
     <div class="talles">
@@ -71,7 +128,7 @@
 
         <!-- Proceso -->
         <ng-container matColumnDef="proceso">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Proc.</mat-header-cell>
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Proc.</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Proceso:</span>
               <div [matTooltip]="element.proceso">{{element.abrevProceso}}</div>
             </mat-cell>
@@ -91,31 +148,31 @@
 
         <!-- Tipo -->
         <ng-container matColumnDef="tipo">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.tipo}}</p></mat-cell>
         </ng-container>
 
         <!-- Subtipo -->
         <ng-container matColumnDef="subtipo">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Tipo:</span><p>{{element.subtipo}}</p></mat-cell>
         </ng-container>
 
         <!-- Genero -->
         <ng-container matColumnDef="genero">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Gen.</mat-header-cell>
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Gen.</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Gen.:</span><p>{{element.genero}}</p> </mat-cell>
         </ng-container>
 
         <!-- Material -->
         <ng-container matColumnDef="material">
-            <mat-header-cell mat-header-cell *matHeaderCellDef>Material</mat-header-cell>
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Material</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Material:</span><p>{{element.material}}</p></mat-cell>
         </ng-container>
 
         <!-- Color -->
         <ng-container matColumnDef="color">
-          <mat-header-cell mat-header-cell *matHeaderCellDef>Color</mat-header-cell>
+          <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Color</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Color:</span>
             <div [matTooltip]="element.color" class="cuadrado" [ngStyle]="{'background-color': element.hexa}"></div>
           </mat-cell>

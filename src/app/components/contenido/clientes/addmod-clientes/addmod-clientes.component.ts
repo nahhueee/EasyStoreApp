@@ -18,6 +18,7 @@ export class AddmodClientesComponent implements OnInit {
 
     formulario: FormGroup;
     cliente:Cliente = new Cliente();
+    private emailPattern: any = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   //#endregion
 
   constructor(
@@ -28,6 +29,8 @@ export class AddmodClientesComponent implements OnInit {
     ) {
     this.formulario = new FormGroup({
       nombre: new FormControl('', [Validators.required]),
+      email: new FormControl('',[Validators.pattern(this.emailPattern)]),
+      telefono: new FormControl(''),
     });
   }
 
@@ -37,6 +40,8 @@ export class AddmodClientesComponent implements OnInit {
 
     if(this.modificando){
       this.formulario.get('nombre')?.setValue(this.data.cliente.nombre);
+      this.formulario.get('email')?.setValue(this.data.cliente.email);
+      this.formulario.get('telefono')?.setValue(this.data.cliente.telefono);
     }
   }
 
@@ -48,6 +53,8 @@ export class AddmodClientesComponent implements OnInit {
   Guardar(){
     if(!this.formulario.valid) return;
     this.cliente.nombre =  this.formulario.get('nombre')?.value;
+    this.cliente.email =  this.formulario.get('email')?.value;
+    this.cliente.telefono =  this.formulario.get('telefono')?.value;
 
     if(this.modificando){
       this.Modificar();

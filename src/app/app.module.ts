@@ -52,7 +52,6 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { InterceptorService } from 'src/app/services/interceptor.service';
 
-
 //Componentes
 import { NavegacionComponent } from './components/navegacion/navegacion.component';
 import { InicioComponent } from './components/contenido/inicio/inicio.component';
@@ -188,7 +187,8 @@ import { AdministrarProductosComponent } from './components/contenido/productos/
         ToastrModule.forRoot(),
         IMaskModule,
         NgxSpinnerModule,
-        NgApexchartsModule], providers: [
+        NgApexchartsModule,
+    ], providers: [
         provideAnimations(),
 
         //Configuracion regional fechas

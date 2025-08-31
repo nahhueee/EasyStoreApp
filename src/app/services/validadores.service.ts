@@ -9,10 +9,15 @@ import { catchError, map, of } from 'rxjs';
 export class ValidadoresService {
   private usuariosService = inject(UsuariosService);
   
-  usuarioValidator(): AsyncValidatorFn {
+  usuarioValidator(usuario:string): AsyncValidatorFn {
+
     return (control: AbstractControl) => {
       if (!control.value) {
         return of(null); // si está vacío, no valida
+      }
+
+      if(usuario && usuario == control.value){
+        return of(null); // si el usuario es el mismo que el original, no valida
       }
 
       return this.usuariosService.ValidarUsuario(control.value).pipe(

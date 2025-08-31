@@ -6,7 +6,9 @@ export class FiltroProducto{
   orden = "";
   direccion = "";
   faltantes:boolean;
-  vencimientos:boolean;
+  proceso:number = 0;
+  tipo:number = 0;
+  subtipo:number = 0;
 
   constructor(data?: any) {
     if (data) {
@@ -17,7 +19,9 @@ export class FiltroProducto{
       this.orden = data.orden;
       this.direccion = data.direccion;
       this.faltantes = data.faltantes;
-      this.vencimientos = data.vencimientos;
+      this.proceso = data.proceso;
+      this.tipo = data.tipo;
+      this.subtipo = data.subtipo;
     }
   }
 }

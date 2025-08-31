@@ -25,6 +25,12 @@ export class BusquedaComponent {
     this.inputBusqueda?.nativeElement.focus();
   }
 
+  keyDown() {
+    if(this.txtBusqueda == ""){
+      this.Buscar();
+    }
+  }
+
   Buscar(){
     this.busqueda.emit(this.txtBusqueda);
   }

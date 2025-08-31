@@ -15,8 +15,8 @@ export class ProductosService {
     return this.apiService.post('productos/obtener', filtro)
   }
 
-  ObtenerProducto(codigo:string): Observable<any> {
-    return this.apiService.get(`productos/obtener-uno/${codigo}`);
+  ObtenerProducto(id:number): Observable<any> {
+    return this.apiService.get(`productos/obtener-uno/${id}`);
   }
 
   BuscarProductos(metodo:string, valor:string): Observable<any>{
