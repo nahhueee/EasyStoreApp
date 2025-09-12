@@ -118,6 +118,19 @@ export class Genero {
         }
     }
 }
+export class Temporada {
+    id?:number;
+    descripcion?:string;
+    abreviatura?:string;
+
+    constructor(data?: any) {
+        if (data) {
+          this.id = data.id;
+          this.descripcion = data.descripcion;
+          this.abreviatura = data.abreviatura;
+        }
+    }
+}
 export class LineasTalle {
     id?:number;
     talles?:string[] = [];

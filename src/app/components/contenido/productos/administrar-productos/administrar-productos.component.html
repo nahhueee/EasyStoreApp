@@ -41,7 +41,7 @@
                     <mat-label>Temporada</mat-label>
                     <mat-select formControlName="temporada">
                         @for (item of temporadas; track $index) {
-                            <mat-option [value]="item">{{item}}</mat-option >
+                            <mat-option [value]="item.id">{{item.descripcion}}</mat-option >
                         }
                     </mat-select>
                 </mat-form-field>

@@ -3,13 +3,12 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
 import { Cliente } from 'src/app/models/Cliente';
-import { Color, Genero, LineasTalle, Material, Proceso, Producto, SubtipoProducto, TalleSeleccionable, TallesProducto, TipoProducto } from 'src/app/models/Producto';
+import { Color, Genero, LineasTalle, Material, Proceso, Producto, SubtipoProducto, TalleSeleccionable, TallesProducto, Temporada, TipoProducto } from 'src/app/models/Producto';
 import { MiscService } from 'src/app/services/misc.service';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { AddmodClientesComponent } from '../../clientes/addmod-clientes/addmod-clientes.component';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { P } from 'node_modules/@angular/cdk/portal-directives.d-DbeNrI5D';
 import { ProductosService } from 'src/app/services/productos.service';
 import { GlobalesService } from 'src/app/services/globales.service';
 
@@ -31,7 +30,7 @@ export class AdministrarProductosComponent {
   clientes:Cliente[]=[];
   filterClientes: Observable<Cliente[]>;
   clienteSeleccionado: Cliente = new Cliente();
-  temporadas: string[] = ['VERANO 25', 'INVIERNO 25', 'VERANO 26', 'INVIERNO 26'];
+  temporadas: Temporada[] = [];
   tiposProducto: TipoProducto[] = [];
   tipoSeleccionado: TipoProducto = new TipoProducto();
   subtiposProducto: SubtipoProducto[] = [];
@@ -182,14 +181,18 @@ export class AdministrarProductosComponent {
       this.subtiposProducto = response;
     });
 
+    this.miscService.ObtenerTemporadas()
+    .subscribe(response => {
+      this.temporadas = response;
+    });
+
     this.ObtenerClientes();
   }
 
-  ObtenerProducto(){
+  ObtenerProducto(){ 
     this.productosService.ObtenerProducto(this.idProducto)
     .subscribe(response => {
       this.producto = new Producto(response);
-      console.log(this.producto);
             
       this.colorSeleccionado = this.coloresMaterial.find(c=> c.id == this.producto.color) ?? new Color();
       this.formulario.get('empresa')?.setValue(this.producto.empresa);
