@@ -27,5 +27,11 @@ export class MiscService {
   ObtenerGeneros(): Observable<any> {
     return this.apiService.get('misc/generos')
   }
+  ObtenerColores(): Observable<any> {
+    return this.apiService.get('misc/colores')
+  }
+  ObtenerTemporadas(): Observable<any> {
+    return this.apiService.get('misc/temporadas')
+  }
   //#endregion
 }

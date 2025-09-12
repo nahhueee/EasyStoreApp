@@ -8,7 +8,7 @@ export class Producto {
     tipo?: number;
     subtipo?: number;
     genero?: number;
-    temporada?: string;
+    temporada?: number;
     material?: number;
     color?: number;
     moldeleria?: number;
@@ -45,6 +45,9 @@ export class TablaProducto {
     tipo?: string;
     subtipo?: string;
     genero?: string;
+    abrevGenero?: string;
+    temporada?: string;
+    abrevTemporada?: string;
     material?: string;
     color?: string;
     hexa?: string;
@@ -62,7 +65,7 @@ export class TablaProducto {
     t9:string = "";
     t10:string = "";
 
-    Total:number = 0;
+    total:number = 0;
 }
 
 export class Proceso {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { FiltroProducto } from '../models/filtros/FiltroProducto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class FilesService {
     formData.append('tipoPrecio', tipoImportacion);
 
     return this.apiService.post('files/importar-excel', formData)
+  }
+
+  DescargarResultadosExcel(filtros:FiltroProducto){
+    return this.apiService.getFile('files/descargar-excel', filtros);
   }
 
   //Se encarga de pasar los datos procesados en excel al otro componente

@@ -9,6 +9,10 @@ export class FiltroProducto{
   proceso:number = 0;
   tipo:number = 0;
   subtipo:number = 0;
+  genero:number = 0;
+  material:number = 0;
+  color:number = 0;
+  temporada:number = 0;
 
   constructor(data?: any) {
     if (data) {
@@ -22,6 +26,10 @@ export class FiltroProducto{
       this.proceso = data.proceso;
       this.tipo = data.tipo;
       this.subtipo = data.subtipo;
+      this.genero = data.genero;
+      this.material = data.material;
+      this.color = data.color;
+      this.temporada = data.temporada;
     }
   }
 }

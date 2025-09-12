@@ -1,7 +1,8 @@
+/*#region INPUTS FILTRO*/
 .select{
     display: flex;
     align-items: center;
-    width: 250px;
+    width: 100%;
     border: 1px solid rgb(156, 156, 156);
     border-radius: 5px;
     padding: 0px 10px;
@@ -11,12 +12,50 @@
     cursor: pointer;
     margin-left: 5px;
 }
-
-.filtros{
+.busqueda{
     display: flex;
+    align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    height: 40px;
+
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    width: 100%;
+    padding: 0px 10px;
+}
+.busqueda input{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: var(--color-font) !important;
+}
+.busqueda input:focus {
+    outline: none; /* Elimina el borde del input al hacer clic */
+}
+
+.busqueda input::placeholder {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--placeholders);
+    font-weight: 400;
+}
+
+.busqueda mat-icon{
+    cursor: pointer;
+}
+/*#endregion*/
+
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  grid-template-rows: repeat(2, auto);  
+  column-gap: 10px; 
+  align-items: start;
+  flex: 2;
+}
+.filtroTalles{
+    display: flex;
+    gap: 20px;
 }
 
 // Boton Cambio de Vista
@@ -28,14 +67,12 @@
         margin-top: -10px;
     }
 
-    /* Cambia el color del ícono cuando el botón está activo */
     .mat-button-toggle-checked mat-icon {
     color: var(--color-primary); 
     }
 
-    /* Cambia el color del ícono cuando está inactivo */
     mat-button-toggle mat-icon {
-    color: var(--placeholders); /* Ejemplo: gris */
+    color: var(--placeholders); 
     }
 } 
 
@@ -78,7 +115,7 @@
 .mat-column-genero{
     max-width: 60px;
 }
-.mat-column-color, .mat-column-proceso{
+.mat-column-color, .mat-column-proceso, .mat-column-temporada{
     max-width: 80px;
 }
 
@@ -127,6 +164,7 @@
     height: 20px;
     width: 35px;
     border-radius: 4px;
+    border: 1px solid var(--placeholders);
 }
 
 .mat-column-t1, .mat-column-t2, .mat-column-t3, .mat-column-t4, .mat-column-t5, 
@@ -138,9 +176,9 @@
     border-left: 1px solid rgb(255, 255, 255);
 }
 
-mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
+mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo, .mat-column-temporada),
 mat-header-cell.mat-column-total {
-  background-color: #e4e4e4;
+  background-color: #c7e9ff;
   border-left: 1px solid #fff;
   justify-content: center;
 }
@@ -152,11 +190,13 @@ mat-header-cell.mat-column-total{
 .mat-column-total{
     background-color: #faffb4;
 }
-
+mat-footer-cell {
+  justify-content: center;
+}
 
 .dark-mode mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
 .dark-mode mat-header-cell.mat-column-total {
-  background-color: #2e2e2e;  
+  background-color: #046adf;  
 }
 .dark-mode mat-header-cell.mat-column-total{
     background-color: #bb5d10 !important;
@@ -172,7 +212,6 @@ mat-header-cell.mat-column-total{
 }
 
 ::ng-deep .tabla-productos mat-header-cell {
-  //padding: 4px 2px; 
   line-height: 32px;
   font-size: 13px; 
   font-weight: bold;

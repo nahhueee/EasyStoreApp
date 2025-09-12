@@ -38,6 +38,14 @@ export class ApiService {
     }
   }
 
+  getFile(endpoint: string, body: any): Observable<Blob> {
+    if (this.esApp) {
+      return from(this.postToTauri<Blob>(endpoint, body, false)) as Observable<Blob>; 
+    } else {
+      return this.http.post(this.apiUrl + endpoint, body, { responseType: 'blob' });
+    }
+  }
+
   get<T>(endpoint: string): Observable<T | null> {
     return this.esApp
       ? from(this.getFromTauri<T>(endpoint))

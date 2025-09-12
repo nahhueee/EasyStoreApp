@@ -9,102 +9,81 @@
           <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Modificar</button>
           <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
         </div>
-        
+
+        |
+
+        <button mat-flat-button color="primary" (click)="DescargarResultados()"><mat-icon>upload_file</mat-icon>Exportar</button>
+
         <div class="filtros">
           <!-- Boton para cambiar el tipo de vista  -->
           <!-- <mat-button-toggle-group [(ngModel)]="vistaSeleccionada" (change)="CambioDeVista()" class="vista">
             <mat-button-toggle value="lista" matTooltip="Vista en Lista"><mat-icon>view_headline</mat-icon></mat-button-toggle>
             <mat-button-toggle value="grilla" matTooltip="Vista con Imágenes"><mat-icon>view_list</mat-icon></mat-button-toggle>
           </mat-button-toggle-group> -->
-
-          <!-- Procesos -->
-          <div class="select">
-            <mat-select [formControl]="procesoControl" placeholder="Proceso" (selectionChange)="ProcesoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
-                <div class="inputFiltro">
-                <input matInput #inputFiltro
-                        focused="'true'"
-                        type="text"
-                        (input)="filtrarProcesos($event)"
-                        placeholder="Filtrar"
-                        (keydown)="$event.stopPropagation()"
-                        autocomplete="off">
-                <mat-icon>filter_list</mat-icon>
-                </div>
-                <mat-divider></mat-divider>
-                <mat-option *ngFor="let option of procesosFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
-            </mat-select>
-            <mat-icon matTooltip="Limpiar" (click)="LimpiarProcesos()" style="color: rgb(255, 173, 173);">close</mat-icon>
-          </div>
-
-          <!-- Tipos -->
-          <div class="select">
-            <mat-select [formControl]="tipoControl" placeholder="Producto" (selectionChange)="TipoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
-                <div class="inputFiltro">
-                <input matInput #inputFiltro
-                        focused="'true'"
-                        type="text"
-                        (input)="filtrarTipos($event)"
-                        placeholder="Filtrar"
-                        (keydown)="$event.stopPropagation()"
-                        autocomplete="off">
-                <mat-icon>filter_list</mat-icon>
-                </div>
-                <mat-divider></mat-divider>
-                <mat-option *ngFor="let option of tiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
-            </mat-select>
-            <mat-icon matTooltip="Limpiar" (click)="LimpiarTipos()" style="color: rgb(255, 173, 173);">close</mat-icon>
-          </div>
-
-          <!-- Subtipos -->
-          <div class="select">
-            <mat-select [formControl]="subtipoControl" placeholder="Tipo" (selectionChange)="SubtipoChange($event)" (openedChange)="pantalla>700?inputFiltro.focus():''">
-                <div class="inputFiltro">
-                <input matInput #inputFiltro
-                        focused="'true'"
-                        type="text"
-                        (input)="filtrarSubtipos($event)"
-                        placeholder="Filtrar"
-                        (keydown)="$event.stopPropagation()"
-                        autocomplete="off">
-                <mat-icon>filter_list</mat-icon>
-                </div>
-                <mat-divider></mat-divider>
-                <mat-option *ngFor="let option of subtiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
-            </mat-select>
-            <mat-icon matTooltip="Limpiar" (click)="LimpiarSubtipos()" style="color: rgb(255, 173, 173);">close</mat-icon>
-          </div>
-
-          <!-- Input de Busqueda -->
-          <app-busqueda (busqueda)="Buscar(undefined, $event)"></app-busqueda>
         </div>
         
       </div>
     <!-- #endregion ABMC -->
 
-    <!-- #region HERRAMIENTAS -->
-    <!-- <div class="herramientas">
+    <div class="filtroTalles">
+      <div class="filtros">
+        <div class="select" *ngFor="let key of filtroKeys">
+            <mat-select
+              [formControl]="filtros[key].control"
+              [placeholder]="filtros[key].placeholder"
+              (selectionChange)="onChange(key, $event)"
+              (openedChange)="pantalla > 700 ? inputFiltro.focus() : ''"
+            >
+              <div class="inputFiltro">
+                <input
+                  matInput
+                  #inputFiltro
+                  type="text"
+                  (input)="filtrar(key, $event)"
+                  placeholder="Filtrar"
+                  (keydown)="$event.stopPropagation()"
+                  autocomplete="off"
+                />
+                <mat-icon>filter_list</mat-icon>
+              </div>
+              <mat-divider></mat-divider>
 
-      <div class="etiqueta">
-        <mat-icon>construction</mat-icon>
-        <span>Herramientas</span>
-      </div>
-      <div class="acciones">
-        <button mat-flat-button color="primary" (click)="AbrirEtiquetas()"><mat-icon>more</mat-icon>Etiquetas</button>
-      </div>
-    </div> -->
-    <!-- #endregion HERRAMIENTAS -->
+              <mat-option
+                *ngFor="let option of filtros[key].filtrado"
+                [value]="option.id"
+              >
+                {{ option.descripcion }}
+              </mat-option>
+            </mat-select>
 
-    <div class="talles">
-      @for (linea of lineasTalles; track $index) {
-        @if (linea.id != 4){
-          <div class="linea" [ngClass]="esDark ? 'talle-dark' + linea.id : 'talle-light' + linea.id">
-            @for (item of linea.talles; track $index) {
-              <div class="item">{{item}}</div>
-            }
-          </div>
+            <mat-icon
+              matTooltip="Limpiar"
+              (click)="limpiar(key)"
+              style="color: rgb(255, 173, 173);"
+            >
+              close
+            </mat-icon>
+        </div>
+        
+        <!-- Input de Busqueda -->
+        <div class="busqueda">
+            <input id="inputBusqueda" type="text" placeholder="Código o Nombre" [formControl]="busquedaControl">
+            <mat-icon matTooltip="Limpiar" (click)="busquedaControl.setValue('')" style="color: rgb(255, 173, 173);">close</mat-icon>
+        </div>
+      </div>
+      <div class="talles">
+        @for (linea of lineasTalles; track $index) {
+          @if (linea.id != 4){
+            <div class="linea" [ngClass]="esDark ? 'talle-dark' + linea.id : 'talle-light' + linea.id">
+              @for (item of linea.talles; track $index) {
+                <div class="item">{{item}}</div>
+              }
+            </div>
+          }
         }
-      }
+      </div>
     </div>
+    
 
     <!-- #region TABLA -->
     <div class="tabla-productos">
@@ -124,6 +103,7 @@
                           [checked]="seleccionados.isSelected(row)">
             </mat-checkbox>
           </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Proceso -->
@@ -132,42 +112,60 @@
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Proceso:</span>
               <div [matTooltip]="element.proceso">{{element.abrevProceso}}</div>
             </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
+        <!-- Temporada -->
+        <ng-container matColumnDef="temporada">
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Temp.</mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Temporada:</span>
+              <div [matTooltip]="element.temporada">{{element.abrevTemporada}}</div>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Codigo -->
         <ng-container matColumnDef="codigo">
             <mat-header-cell mat-header-cell *matHeaderCellDef>Codigo</mat-header-cell>
-            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Fecha:</span><p>{{element.codigo}}</p></mat-cell>
+            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Codigo:</span><p>{{element.codigo}}</p></mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Nombre:</span><p>{{element.nombre}}</p></mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Tipo -->
         <ng-container matColumnDef="tipo">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.tipo}}</p></mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Subtipo -->
         <ng-container matColumnDef="subtipo">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Tipo:</span><p>{{element.subtipo}}</p></mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Genero -->
         <ng-container matColumnDef="genero">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Gen.</mat-header-cell>
-            <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Gen.:</span><p>{{element.genero}}</p> </mat-cell>
+            <mat-cell mat-cell *matCellDef="let element">
+               <div [matTooltip]="element.genero">{{element.abrevGenero}}</div>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Material -->
         <ng-container matColumnDef="material">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Material</mat-header-cell>
             <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Material:</span><p>{{element.material}}</p></mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <!-- Color -->
@@ -176,59 +174,73 @@
           <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Color:</span>
             <div [matTooltip]="element.color" class="cuadrado" [ngStyle]="{'background-color': element.hexa}"></div>
           </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
         </ng-container>
 
         <ng-container matColumnDef="t1">
           <mat-header-cell mat-header-cell *matHeaderCellDef>XS</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t1}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t1')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t2">
           <mat-header-cell mat-header-cell *matHeaderCellDef>S</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t2}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t2')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t3">
           <mat-header-cell mat-header-cell *matHeaderCellDef>M</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t3}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t3')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t4">
           <mat-header-cell mat-header-cell *matHeaderCellDef>L</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t4}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t4')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t5">
           <mat-header-cell mat-header-cell *matHeaderCellDef>XL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t5}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t5')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t6">
           <mat-header-cell mat-header-cell *matHeaderCellDef>XXL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t6}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t6')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t7">
           <mat-header-cell mat-header-cell *matHeaderCellDef>3XL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t7}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t7')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t8">
           <mat-header-cell mat-header-cell *matHeaderCellDef>4XL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t8}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t8')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t9">
           <mat-header-cell mat-header-cell *matHeaderCellDef>5XL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t9}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t9')}}</strong></mat-footer-cell>
         </ng-container>
         <ng-container matColumnDef="t10">
           <mat-header-cell mat-header-cell *matHeaderCellDef>6XL</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"><p>{{element.t10}}</p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('t10')}}</strong></mat-footer-cell>
         </ng-container>
 
         <!-- Total -->
         <ng-container matColumnDef="total">
           <mat-header-cell mat-header-cell *matHeaderCellDef>T</mat-header-cell>
-          <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p>{{element.total}}</p></mat-cell>
+          <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p><strong>{{element.total}}</strong></p></mat-cell>
+          <mat-footer-cell *matFooterCellDef><strong>{{getTotal('total')}}</strong></mat-footer-cell>
         </ng-container>
 
         <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
         <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]="seleccionados.isSelected(row)"
             (click)="OnCellClick(row)">
         </mat-row>
+        <mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
+       
       </mat-table>
 
       <mat-paginator [pageSizeOptions]="[15, 30, 60]"

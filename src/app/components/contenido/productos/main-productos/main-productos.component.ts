@@ -4,7 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { LineasTalle, Proceso, Producto, SubtipoProducto, TablaProducto, TipoProducto } from 'src/app/models/Producto';
+import { Color, Genero, LineasTalle, Material, Proceso, Producto, SubtipoProducto, TablaProducto, TipoProducto } from 'src/app/models/Producto';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { AddmodProductosComponent } from '../addmod-productos/addmod-productos.component';
 import { EliminarComponent } from '../../../compartidos/eliminar/eliminar.component';
@@ -15,11 +15,13 @@ import { ImagenProductoComponent } from '../imagen-producto/imagen-producto.comp
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { BusquedaComponent } from 'src/app/components/compartidos/busqueda/busqueda.component';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 import { MiscService } from 'src/app/services/misc.service';
 import { AdministrarProductosComponent } from '../administrar-productos/administrar-productos.component';
 import { FormControl } from '@angular/forms';
+import { crearFiltros, PropKey } from 'src/app/models/filtros/FiltrosProducto.config';
+import { FilesService } from 'src/app/services/files.service';
 
 @Component({
     selector: 'app-productos',
@@ -38,7 +40,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
     clickCount=0; //Para saber si se hace un solo click o dos sobre una celda
     esDark:boolean;
-    displayedColumns: string[] = ['select', 'proceso', 'codigo', 'nombre', 'tipo', 'subtipo', 'genero', 'material', 'color', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 'total']; //Columnas a mostrar
+    displayedColumns: string[] = ['select', 'proceso', 'temporada', 'codigo', 'nombre', 'tipo', 'subtipo', 'genero', 'material', 'color', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 'total']; //Columnas a mostrar
     
     dataSource = new MatTableDataSource<TablaProducto>(this.productos); //Data source de la tabla
     seleccionados = new SelectionModel<TablaProducto>(true, []); //Data source de seleccionados
@@ -51,20 +53,10 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     dialogConfig:MatDialogConfig = new MatDialogConfig(); //Configuraciones para la ventana emergente
     pantalla: any = 0;
 
-    procesoControl = new FormControl('');
-    procesoSeleccionado = 0;
-    tipoControl = new FormControl('');
-    tipoSeleccionado = 0;
-    subtipoControl = new FormControl('');
-    subtipoSeleccionado = 0;
-
-    procesos:Proceso[] = [];
-    procesosFiltrado:Proceso[] = [];
-    tipos:TipoProducto[] = [];
-    tiposFiltrado:TipoProducto[] = [];
-    subtipos:SubtipoProducto[] = [];
-    subtiposFiltrado:SubtipoProducto[] = [];
-  //#endregion
+    filtros = crearFiltros();
+    filtroKeys: PropKey[] = ['procesos', 'tipos', 'subtipos', 'generos', 'materiales', 'colores', 'temporadas']; // para recorrer
+    busquedaControl: FormControl = new FormControl('');
+ //#endregion
 
   constructor(
     private router:Router,
@@ -74,6 +66,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     private productosService:ProductosService,
     private authService:AuthService,
     private miscService:MiscService,
+    private filesService:FilesService
   ) {
     this.esDark = this.parametrosService.EsDark();
   }
@@ -88,6 +81,11 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.pantalla = window.innerWidth;//Obtiene el tamaño actual de la pantalla
 
+    //Reacciona al input de busqueda
+    this.busquedaControl.valueChanges.subscribe(valor => {
+      this.Buscar(valor);
+    });
+
     //Configuraciones básicas de la ventana emergente 
     this.dialogConfig.disableClose = true;
     this.dialogConfig.autoFocus = true;
@@ -96,9 +94,14 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     this.vistaSeleccionada = this.parametrosService.GetVistaProductos();
     this.CambioDeVista();
     this.ObtenerLineasTalle();
-    this.ObtenerTiposProducto();
-    this.ObtenerSubtiposProducto();
-    this.ObtenerProcesos();    
+    
+    this.cargarDatos('tipos', this.miscService.ObtenerTiposProducto.bind(this.miscService));
+    this.cargarDatos('subtipos', this.miscService.ObtenerSubtiposProducto.bind(this.miscService));
+    this.cargarDatos('procesos', this.miscService.ObtenerProcesos.bind(this.miscService));
+    this.cargarDatos('generos', this.miscService.ObtenerGeneros.bind(this.miscService));
+    this.cargarDatos('materiales', this.miscService.ObtenerMateriales.bind(this.miscService));
+    this.cargarDatos('colores', this.miscService.ObtenerColores.bind(this.miscService));
+    this.cargarDatos('temporadas', this.miscService.ObtenerTemporadas.bind(this.miscService));
   }
 
   ngAfterViewInit() {
@@ -142,7 +145,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     }
     //#endregion
     
-    Buscar(event?: PageEvent, busqueda?:string, recargaConFiltro = false){
+    Buscar(event?: PageEvent, recargaConFiltro = false){
       this.seleccionados.clear();
 
       //Eventos de la paginación
@@ -158,12 +161,16 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
           pagina: event.pageIndex + 1,
           total: event.length,
           tamanioPagina: event.pageSize,
-          busqueda: busqueda,
+          busqueda: this.busquedaControl.value,
           orden: this.sort.active,
           direccion: this.sort.direction,
-          proceso: this.procesoSeleccionado,
-          tipo: this.tipoSeleccionado,
-          subtipo: this.subtipoSeleccionado
+          proceso: this.filtros.procesos.seleccionado,
+          tipo: this.filtros.tipos.seleccionado,
+          subtipo: this.filtros.subtipos.seleccionado,
+          genero: this.filtros.generos.seleccionado,
+          material: this.filtros.materiales.seleccionado,
+          color: this.filtros.colores.seleccionado,
+          temporada: this.filtros.temporadas.seleccionado
         });
       }
 
@@ -187,18 +194,14 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
             this.CambioDeVista();
 
             this.dataSource = new MatTableDataSource<TablaProducto>(this.productos);
-
-            //Edicion rapida
-            //Si esta activo el parametro, en a busqueda si encuentra un resultado unico lo pone en editar
-            //Si no encuentra te permite agregarlo
-            if(this.parametrosService.GetEdicionResultadoUnico() && !recargaConFiltro && busqueda){
-              if(this.productos.length===1)
-                this.Modificar(this.productos[0]);
-              else if(this.productos.length===0)
-                this.Agregar();
-            }
           });
     }
+
+    getTotal(col: keyof TablaProducto): number {
+      return this.dataSource?.data?.reduce((acc, item) => acc + Number(item[col] || 0), 0) ?? 0;
+    }
+
+
   //#endregion
 
   //#region MODAL/ABM
@@ -363,6 +366,29 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     // this.dialog.open(ImpimirEtiquetasComponent, this.dialogConfig)
   }
 
+  //Descarga los resultados en excel
+  DescargarResultados(){
+    this.filesService.DescargarResultadosExcel(this.filtroActual).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+
+      // Fecha en formato DD-MM-YY
+      const fecha = new Date();
+      const dd = String(fecha.getDate()).padStart(2, '0');
+      const mm = String(fecha.getMonth() + 1).padStart(2, '0'); // Meses empiezan en 0
+      const yy = String(fecha.getFullYear()).slice(-2); // últimos 2 dígitos del año
+
+      const nombreArchivo = `Resultados_${dd}-${mm}-${yy}.xlsx`;
+
+      a.href = url;
+      a.download = nombreArchivo; 
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+
+
   CambioDeVista(){
     if(this.vistaSeleccionada == "grilla"){
       this.displayedColumns = this.displayedColumns.filter(col => col !== 'imagen');
@@ -385,98 +411,41 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     .afterClosed()
     .subscribe((actualizar:boolean) => {
       if (actualizar){
-        this.Buscar(undefined,"",true); //Recarga la tabla
+        this.Buscar(undefined,true); //Recarga la tabla
       }
     });
   }
 
   //#region FILTROS
-  ObtenerTiposProducto(){
-    this.miscService.ObtenerTiposProducto()
-    .subscribe(response => {
-      this.tipos = response;
-      this.tiposFiltrado = response;
-    });
-  }
-  ObtenerSubtiposProducto(){
-    this.miscService.ObtenerSubtiposProducto()
-    .subscribe(response => {
-      this.subtipos = response;
-      this.subtiposFiltrado = response;
-    });
-  }
-  ObtenerProcesos(){
-    this.miscService.ObtenerProcesos()
-    .subscribe(response => {
-      this.procesos = response;
-      this.procesosFiltrado = response;
+   /** Cargar datos los arrays */
+  cargarDatos(prop: PropKey, serviceFn: () => Observable<any[]>) {
+    serviceFn().subscribe(response => {
+      this.filtros[prop].data = response;
+      this.filtros[prop].filtrado = response;
     });
   }
 
-  LimpiarProcesos(){
-    this.procesoControl?.setValue('');
-    this.procesoSeleccionado = 0;
+  /** Limpiar selección */
+  limpiar(prop: PropKey) {
+    this.filtros[prop].control.setValue('');
+    this.filtros[prop].seleccionado = 0;
     this.Buscar();
   }
 
-  ProcesoChange(proceso:any){
-    this.procesoSeleccionado = proceso.value;
+  /** Selección de un valor */
+  onChange(prop: PropKey, event: any) {
+    this.filtros[prop].seleccionado = event.value;
     this.Buscar();
   }
 
-  filtrarProcesos(event: any) {
-    if (event.target.value == '') {
-      this.procesosFiltrado = this.procesos;
-      return;
-    }
-    if (this.procesos) {
-      this.procesosFiltrado = this.procesos.filter(s =>
-        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
-    }
-  }
-
-  LimpiarTipos(){
-    this.tipoControl?.setValue('');
-    this.tipoSeleccionado = 0;
-    this.Buscar();
-  }
-
-  TipoChange(tipo:any){
-    this.tipoSeleccionado = tipo.value;
-    this.Buscar();
-  }
-
-  filtrarTipos(event: any) {
-    if (event.target.value == '') {
-      this.tiposFiltrado = this.tipos;
-      return;
-    }
-    if (this.tipos) {
-      this.tiposFiltrado = this.tipos.filter(s =>
-        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
-    }
-  }
-
-  LimpiarSubtipos(){
-    this.subtipoControl?.setValue('');
-    this.subtipoSeleccionado = 0;
-    this.Buscar();
-  }
-
-  SubtipoChange(subtipo:any){
-    this.subtipoSeleccionado = subtipo.value;
-    this.Buscar();
-  }
-
-  filtrarSubtipos(event: any) {
-    if (event.target.value == '') {
-      this.subtiposFiltrado = this.subtipos;
-      return;
-    }
-    if (this.subtipos) {
-      this.subtiposFiltrado = this.subtipos.filter(s =>
-        s.descripcion?.toUpperCase().includes(event.target.value.toUpperCase()));
-    }
+  /** Filtrar */
+  filtrar(prop: PropKey, event: any) {
+    const texto = event.target.value?.toUpperCase() || '';
+    this.filtros[prop].filtrado = !texto
+      ? this.filtros[prop].data
+      : this.filtros[prop].data.filter(s =>
+          s.descripcion?.toUpperCase().includes(texto)
+        );
   }
   //#endregion
   
