@@ -2,17 +2,31 @@
 
 
 <div class="contenedor">
+    @if(productos.length == 0){
+      <div class="alert alert-info" role="alert">
+        <mat-icon>info</mat-icon>
+        Selecciona algun filtro para comenzar la busqueda
+      </div>
+    }@else {
+      <div class="alert alert-success" role="alert">
+        <mat-icon>check</mat-icon>
+        Se encontraron {{paginator.length}} resultados para la busqueda
+      </div>
+    }
+    
+
+
     <!-- #region ABMC -->
     <div class="abmc">
-        <div class="botones">
+        <!-- <div class="botones">
           <button #btnAgregar type="button" class="btn btn-success btn-sm" (click)="Agregar()" ><mat-icon>add_circle</mat-icon>Agregar</button>
           <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Modificar</button>
           <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
-        </div>
+        </div> -->
 
-        |
+        <!-- |
 
-        <button mat-flat-button color="primary" (click)="DescargarResultados()"><mat-icon>upload_file</mat-icon>Exportar</button>
+        <button mat-flat-button color="primary" (click)="DescargarResultados()"><mat-icon>upload_file</mat-icon>Exportar</button> -->
 
         <div class="filtros">
           <!-- Boton para cambiar el tipo de vista  -->
@@ -27,49 +41,52 @@
 
     <div class="filtroTalles">
       <div class="filtros">
-        <div class="select" *ngFor="let key of filtroKeys">
-            <mat-select
-              [formControl]="filtros[key].control"
-              [placeholder]="filtros[key].placeholder"
-              (selectionChange)="onChange(key, $event)"
-              (openedChange)="pantalla > 700 ? inputFiltro.focus() : ''"
-            >
-              <div class="inputFiltro">
-                <input
-                  matInput
-                  #inputFiltro
-                  type="text"
-                  (input)="filtrar(key, $event)"
-                  placeholder="Filtrar"
-                  (keydown)="$event.stopPropagation()"
-                  autocomplete="off"
-                />
-                <mat-icon>filter_list</mat-icon>
-              </div>
-              <mat-divider></mat-divider>
+        @for(key of filtroKeys; track $index){
+          @if(key !== 'codigo'){
+            <div class="select">
+                <mat-select
+                  [formControl]="filtros[key].control"
+                  [placeholder]="filtros[key].placeholder"
+                  (selectionChange)="onChange(key, $event)"
+                  (openedChange)="pantalla > 700 ? inputFiltro.focus() : ''"
+                >
+                  <div class="inputFiltro">
+                    <input
+                      matInput
+                      #inputFiltro
+                      type="text"
+                      (input)="filtrar(key, $event)"
+                      placeholder="Filtrar"
+                      (keydown)="$event.stopPropagation()"
+                      autocomplete="off"
+                    />
+                    <mat-icon>filter_list</mat-icon>
+                  </div>
+                  <mat-divider></mat-divider>
 
-              <mat-option
-                *ngFor="let option of filtros[key].filtrado"
-                [value]="option.id"
+                  <mat-option
+                    *ngFor="let option of filtros[key].filtrado"
+                    [value]="option.id"
+                  >
+                    {{ option.descripcion }}
+                  </mat-option>
+              </mat-select>
+
+              <mat-icon
+                matTooltip="Limpiar"
+                (click)="limpiar(key)"
+                style="color: rgb(255, 173, 173);"
               >
-                {{ option.descripcion }}
-              </mat-option>
-            </mat-select>
-
-            <mat-icon
-              matTooltip="Limpiar"
-              (click)="limpiar(key)"
-              style="color: rgb(255, 173, 173);"
-            >
-              close
-            </mat-icon>
-        </div>
-        
-        <!-- Input de Busqueda -->
-        <div class="busqueda">
-            <input id="inputBusqueda" type="text" placeholder="Código o Nombre" [formControl]="busquedaControl">
-            <mat-icon matTooltip="Limpiar" (click)="busquedaControl.setValue('')" style="color: rgb(255, 173, 173);">close</mat-icon>
-        </div>
+                close
+              </mat-icon>
+            </div>
+          }@else {
+            <div class="busqueda">
+              <input id="inputBusqueda" type="text" placeholder="Código o Nombre" [formControl]="busquedaControl">
+              <mat-icon matTooltip="Limpiar" (click)="busquedaControl.setValue('')" style="color: rgb(255, 173, 173);">close</mat-icon>
+            </div>
+          }
+        }
       </div>
       <div class="talles">
         @for (linea of lineasTalles; track $index) {
@@ -252,3 +269,9 @@
     <!-- #endregion TABLA -->
   </div>
   
+
+<div class="botones">
+    <button mat-flat-button color="primary" (click)="DescargarResultados()" [disabled]="productos.length == 0"><mat-icon>upload_file</mat-icon>Exportar</button>
+    <!-- <button mat-flat-button color="primary" (click)='Guardar()' [disabled]="formulario.invalid">GUARDAR</button> -->
+    <!-- <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button> -->
+</div>

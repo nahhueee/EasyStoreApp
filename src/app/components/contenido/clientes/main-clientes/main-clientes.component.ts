@@ -27,7 +27,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
 
     clickCount=0; //Para saber si se hace un solo click o dos sobre una celda
 
-    displayedColumns: string[] = ['select', 'nombre', 'email', 'telefono']; //Columnas a mostrar
+    displayedColumns: string[] = ['select', 'nombre', 'email', 'telefono', 'condicion', 'documento']; //Columnas a mostrar
     dataSource = new MatTableDataSource<Cliente>(this.clientes); //Data source de la tabla
     seleccionados = new SelectionModel<Cliente>(true, []); //Data source de seleccionados
 

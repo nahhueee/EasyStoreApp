@@ -2,7 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Cliente } from 'src/app/models/Cliente';
+import { CondicionesIva } from 'src/app/models/CondicionesIva';
 import { ClientesService } from 'src/app/services/clientes.service';
+import { MiscService } from 'src/app/services/misc.service';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 
 @Component({
@@ -18,6 +20,10 @@ export class AddmodClientesComponent implements OnInit {
 
     formulario: FormGroup;
     cliente:Cliente = new Cliente();
+    
+    condicionesIVAReceptor: CondicionesIva[] = [];
+
+    private cuitcuilPattern: any = /^[2037][0-9]{9}[0-9]$/;
     private emailPattern: any = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   //#endregion
 
@@ -25,23 +31,36 @@ export class AddmodClientesComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any, //Datos que envia la pantalla anterior
     public dialogRef: MatDialogRef<AddmodClientesComponent>, //Ventana emergente actual
     private Notificaciones:NotificacionesService, //Servicio de notificaciones
-    private clientesService:ClientesService
+    private clientesService:ClientesService,
+    private miscService:MiscService
     ) {
     this.formulario = new FormGroup({
       nombre: new FormControl('', [Validators.required]),
       email: new FormControl('',[Validators.pattern(this.emailPattern)]),
       telefono: new FormControl(''),
+      direccion: new FormControl(''),
+      condIva: new FormControl(5),
+      documento: new FormControl('', [Validators.required, Validators.pattern(this.cuitcuilPattern)])
     });
+  }
+
+  get documento() {
+    return this.formulario.get('documento');
   }
 
   ngOnInit(): void {
     this.modificando = this.data.cliente!=null ? true : false; //Si recibo un cliente está modificando
     this.titulo= this.modificando == true ? 'Modificar Cliente' : 'Agregar Nuevo Cliente';
 
+    this.ObtenerCondiciones();
+
     if(this.modificando){
       this.formulario.get('nombre')?.setValue(this.data.cliente.nombre);
       this.formulario.get('email')?.setValue(this.data.cliente.email);
       this.formulario.get('telefono')?.setValue(this.data.cliente.telefono);
+      this.formulario.get('direccion')?.setValue(this.data.cliente.direccion);
+      this.formulario.get('condIva')?.setValue(this.data.cliente.idCondIva);
+      this.formulario.get('documento')?.setValue(this.data.cliente.documento);
     }
   }
 
@@ -50,11 +69,21 @@ export class AddmodClientesComponent implements OnInit {
     input.select();
   }
 
+  ObtenerCondiciones(){
+    this.miscService.ObtenerCondicionesIva()
+      .subscribe(response => {
+        this.condicionesIVAReceptor = response;
+      });
+  }
+
   Guardar(){
     if(!this.formulario.valid) return;
     this.cliente.nombre =  this.formulario.get('nombre')?.value;
     this.cliente.email =  this.formulario.get('email')?.value;
     this.cliente.telefono =  this.formulario.get('telefono')?.value;
+    this.cliente.direccion = this.formulario.get('direccion')?.value;
+    this.cliente.condIva = this.formulario.get('condIva')?.value;
+    this.cliente.documento = this.formulario.get('documento')?.value;
 
     if(this.modificando){
       this.Modificar();

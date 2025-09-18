@@ -1,7 +1,7 @@
-<div class="cabecera">
+<!-- <div class="cabecera">
     <mat-icon>inventory_2</mat-icon>
     <h2>{{titulo}}</h2>
-</div>
+</div> -->
 
 <div class="contenido">
     <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="Cerrar()" autocomplete="off" novalidate>
@@ -196,7 +196,7 @@
 
 <div class="botones">
     <button mat-flat-button color="primary" (click)='Guardar()' [disabled]="formulario.invalid">GUARDAR</button>
-    <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button>
+    <!-- <button mat-flat-button color="warn" (click)="Cerrar()">CERRAR</button> -->
 </div>
   
   

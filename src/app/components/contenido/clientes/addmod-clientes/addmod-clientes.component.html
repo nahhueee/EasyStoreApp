@@ -29,6 +29,32 @@
         <input matInput class="uppercase" type="text" formControlName="telefono" (focus)="SelectContent($event)">
     </mat-form-field>
 
+    <hr>
+
+    <!-- Condicion IVA Receptor -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cond. Iva</mat-label>
+        <mat-select formControlName="condIva">
+            <mat-option *ngFor="let option of condicionesIVAReceptor" [value]="option.id">{{option.id}} - {{option.descripcion}}</mat-option>
+        </mat-select>
+        <mat-error>
+            Selecciona una opción
+        </mat-error>
+    </mat-form-field>
+
+    <!-- Documento -->
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>CUIL / CUIT</mat-label>
+        <input #codigoInput matInput type="number" formControlName="documento">
+        <mat-error *ngIf="documento?.hasError('required')">
+            El documento es obligatorio
+        </mat-error>
+    
+        <mat-error *ngIf="documento?.hasError('pattern') && (formulario.get('tDocumento')?.value === 80 || formulario.get('tDocumento')?.value === 86)">
+            El CUIT/CUIL debe ser válido (11 dígitos sin guiones, comenzando con 20, 23, 24, 27, 30, 33 o 34)
+        </mat-error>
+    </mat-form-field>
+
 </form>
   
 <mat-dialog-actions align="center">

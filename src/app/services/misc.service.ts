@@ -33,5 +33,8 @@ export class MiscService {
   ObtenerTemporadas(): Observable<any> {
     return this.apiService.get('misc/temporadas')
   }
+ ObtenerCondicionesIva(): Observable<any> {
+    return this.apiService.get('misc/condiciones-iva')
+  }
   //#endregion
 }

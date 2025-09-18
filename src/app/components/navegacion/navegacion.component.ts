@@ -43,9 +43,13 @@ export class NavegacionComponent implements OnInit {
   menuPlegado = false;
   mostrarTextoChico = true;
 
+  isCollapsed = true;
+  tipoProducto: string = '';
+
+
   componentes = [
     // { id: 'cajas', titulo: 'Cajas', icon: 'local_atm' },
-    { id: 'inventario', titulo: 'Inventario', icon: 'inventory_2' },
+    { id: 'inventario', titulo: 'Productos', icon: 'inventory_2' },
     // { id: 'etiquetas', titulo: 'Etiquetas', icon: 'more' },
     { id: 'clientes', titulo: 'Clientes', icon: 'escalator_warning' },
     { id: 'usuarios', titulo: 'Usuarios', icon: 'group' }
@@ -83,6 +87,12 @@ export class NavegacionComponent implements OnInit {
       this.titlepage.setTitle(menu?.toLocaleUpperCase() + ' | EasySales App')
     });
 
+    if(this.componente == "inventario" 
+      || this.componente == "nuevo-producto"
+    ){
+      this.isCollapsed = false;
+    }
+
     this.pantalla = window.innerWidth;//Obtiene el tamaño actual de la pantalla
     this.VerificarComputadorHabilitado(false);
 
@@ -91,6 +101,9 @@ export class NavegacionComponent implements OnInit {
 
   Navegar(parametro:string){
     this.router.navigateByUrl("navegacion/" + parametro);
+  }
+  NavegarAdmProducto(){
+    this.router.navigateByUrl("administrar-producto/0");
   }
 
   AccionarMenu(valor:boolean) {

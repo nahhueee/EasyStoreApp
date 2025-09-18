@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
 
-export type PropKey = 'procesos' | 'tipos' | 'subtipos' | 'generos' | 'materiales' | 'colores' | 'temporadas' ;
+export type PropKey = 'procesos' | 'codigo' | 'tipos' | 'subtipos' | 'generos' | 'materiales' | 'colores' | 'temporadas' ;
 
 export interface FiltroConfig {
   data: any[];
@@ -17,6 +17,13 @@ export const crearFiltros = (): Record<PropKey, FiltroConfig> => ({
     seleccionado: 0,
     control: new FormControl(''),
     placeholder: 'Proceso',
+  },
+  codigo:{
+    data: [],
+    filtrado: [],
+    seleccionado: 0,
+    control: new FormControl(''),
+    placeholder: 'Codigo',
   },
   tipos: {
     data: [],

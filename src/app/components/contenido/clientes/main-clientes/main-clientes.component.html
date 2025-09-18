@@ -5,8 +5,8 @@
     <!-- #region ABMC -->
     <div class="abmc">
         <div class="botones">
-          <button type="button" class="btn btn-success btn-sm" (click)="Agregar()"><mat-icon>add_circle</mat-icon>Agregar</button>
-          <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Modificar</button>
+          <button type="button" class="btn btn-success btn-sm" (click)="Agregar()"><mat-icon>add_circle</mat-icon>Nuevo</button>
+          <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Editar</button>
           <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
         </div>
 
@@ -60,11 +60,25 @@
           <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Email:</span><p>{{element.email}}</p></mat-cell>
         </ng-container>
 
-         <!-- Telefono -->
+        <!-- Telefono -->
         <ng-container matColumnDef="telefono">
           <mat-header-cell mat-header-cell *matHeaderCellDef>Telefono</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Telefono:</span><p>{{element.telefono}}</p></mat-cell>
         </ng-container>
+        
+        <!-- Condicion -->
+        <ng-container matColumnDef="condicion">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Condicion IVA</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Condicion IVA:</span><p>{{element.condicion}}</p></mat-cell>
+        </ng-container>
+
+         <!-- Documento -->
+        <ng-container matColumnDef="documento">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>CUIL/CUIT</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">CUIL/CUIT:</span><p>{{element.documento}}</p></mat-cell>
+        </ng-container>
+
+        
 
         <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
         <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-row]="seleccionados.isSelected(row)"

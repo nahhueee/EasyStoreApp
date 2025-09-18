@@ -51,6 +51,7 @@ import { IMaskModule } from 'angular-imask';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { InterceptorService } from 'src/app/services/interceptor.service';
+import { NgxCollapseAnimatedDirective } from 'ngx-collapse-animated';
 
 //Componentes
 import { NavegacionComponent } from './components/navegacion/navegacion.component';
@@ -188,6 +189,7 @@ import { AdministrarProductosComponent } from './components/contenido/productos/
         IMaskModule,
         NgxSpinnerModule,
         NgApexchartsModule,
+        NgxCollapseAnimatedDirective
     ], providers: [
         provideAnimations(),
 

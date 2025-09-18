@@ -32,6 +32,7 @@ import { FilesService } from 'src/app/services/files.service';
 export class MainProductosComponent implements OnInit, AfterViewInit {
   //#region VARIABLES
     productos: TablaProducto[] =[];
+    totalProductos:number = 0;
     filtroActual: FiltroProducto;
     vistaSeleccionada = "lista"
     lineasTalles: LineasTalle[] = [];
@@ -54,7 +55,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     pantalla: any = 0;
 
     filtros = crearFiltros();
-    filtroKeys: PropKey[] = ['procesos', 'tipos', 'subtipos', 'generos', 'materiales', 'colores', 'temporadas']; // para recorrer
+    filtroKeys: PropKey[] = ['procesos', 'temporadas', 'codigo', 'tipos', 'subtipos', 'generos', 'materiales', 'colores']; // para recorrer
     busquedaControl: FormControl = new FormControl('');
  //#endregion
 
@@ -83,7 +84,16 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
     //Reacciona al input de busqueda
     this.busquedaControl.valueChanges.subscribe(valor => {
-      this.Buscar(valor);
+      const sinFiltros = Object.values(this.filtros)
+      .every(f => f.seleccionado == null || f.seleccionado === 0);
+
+      if(sinFiltros && this.busquedaControl.value == ""){
+        this.productos = [];
+        this.dataSource = new MatTableDataSource<TablaProducto>(this.productos);
+      }
+      else{
+        this.Buscar(valor);
+      }
     });
 
     //Configuraciones básicas de la ventana emergente 
@@ -113,8 +123,8 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
   setTimeout(() => {
       //Obtenemos los datos de tabla
-      this.Buscar();
-      this.btnAgregar.nativeElement.focus();
+      //this.Buscar();
+      //this.btnAgregar.nativeElement.focus();
     }, 0.5);
   }
 
@@ -429,7 +439,17 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
   limpiar(prop: PropKey) {
     this.filtros[prop].control.setValue('');
     this.filtros[prop].seleccionado = 0;
-    this.Buscar();
+
+    const sinFiltros = Object.values(this.filtros)
+    .every(f => f.seleccionado == null || f.seleccionado === 0);
+
+    if(sinFiltros && this.busquedaControl.value == ""){
+      this.productos = [];
+      this.dataSource = new MatTableDataSource<TablaProducto>(this.productos);
+    }
+    else{
+      this.Buscar();
+    }
   }
 
   /** Selección de un valor */

@@ -45,6 +45,17 @@
 }
 /*#endregion*/
 
+.contenedor{
+    padding-bottom: 70px;
+}
+
+.alert{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 40px;
+}
+
 .filtros {
   display: grid;
   grid-template-columns: repeat(4, 1fr); 
@@ -194,7 +205,7 @@ mat-footer-cell {
   justify-content: center;
 }
 
-.dark-mode mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo),
+.dark-mode mat-header-cell[class*="mat-column-t"]:not(.mat-column-tipo, .mat-column-temporada),
 .dark-mode mat-header-cell.mat-column-total {
   background-color: #046adf;  
 }
@@ -221,3 +232,19 @@ mat-footer-cell {
 }
 
 
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 190px);
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}

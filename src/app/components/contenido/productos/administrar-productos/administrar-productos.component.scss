@@ -133,7 +133,7 @@
     z-index: 1;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 190px);
     padding: 10px 0px;
     background: var(--color-background) !important;
 

@@ -22,7 +22,7 @@ export class AdministrarProductosComponent {
   decimal_mask: any;
   formulario: FormGroup;
 
-  idProducto:number;
+  idProducto:number = 0;
   producto:Producto = new Producto();
   titulo:string;
 
@@ -143,13 +143,13 @@ export class AdministrarProductosComponent {
         signed: true
       }
 
-      this.idProducto = this.rutaActiva.snapshot.params['producto'];
-      if(this.idProducto != 0){
-        this.titulo = "Modificar Producto";
-        this.ObtenerProducto();
-      }else{
-        this.titulo = "Crear Nuevo Producto"
-      }
+      // this.idProducto = this.rutaActiva.snapshot.params['producto'];
+      // if(this.idProducto != 0){
+      //   this.titulo = "Modificar Producto";
+      //   this.ObtenerProducto();
+      // }else{
+      //   this.titulo = "Crear Nuevo Producto"
+      // }
 
     },0);
   }

@@ -55,11 +55,11 @@ const routes: Routes = [
     component:AddmodEtiquetasComponent,
     canActivate: [AuthGuard]
   },
-    {
-    path:"administrar-producto/:producto",
-    component:AdministrarProductosComponent,
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path:"administrar-producto/:producto",
+  //   component:AdministrarProductosComponent,
+  //   canActivate: [AuthGuard]
+  // },
 ];
 
 @NgModule({
