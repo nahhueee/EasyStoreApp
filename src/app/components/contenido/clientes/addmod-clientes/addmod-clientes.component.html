@@ -5,56 +5,62 @@
 
 <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="dialogRef.close(false)" autocomplete="off">
 
-    <!-- Nombre -->
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nombre</mat-label>
-        <input matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
-        <mat-error>
-            Completa con un nombre
-        </mat-error>
-    </mat-form-field>
+    <div class="izq">
+        <!-- Nombre -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput class="uppercase" type="text" formControlName="nombre" (focus)="SelectContent($event)">
+            <mat-error>
+                Completa con un nombre
+            </mat-error>
+        </mat-form-field>
 
-     <!-- Email -->
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput type="text" formControlName="email" (focus)="SelectContent($event)">
-        <mat-error>
-            El email no tiene un formato correcto
-        </mat-error>
-    </mat-form-field>
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="text" formControlName="email" (focus)="SelectContent($event)">
+            <mat-error>
+                El email no tiene un formato correcto
+            </mat-error>
+        </mat-form-field>
 
-    <!-- Telefono -->
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Telefono</mat-label>
-        <input matInput class="uppercase" type="text" formControlName="telefono" (focus)="SelectContent($event)">
-    </mat-form-field>
+        <!-- Telefono -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefono</mat-label>
+            <input matInput type="number" formControlName="telefono" (focus)="SelectContent($event)">
+        </mat-form-field>
 
-    <hr>
+        <!-- Direccion -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Dirección</mat-label>
+            <input matInput type="text" formControlName="direccion" (focus)="SelectContent($event)">
+        </mat-form-field>
+    </div>
+    <div class="der">
+        <!-- Condicion IVA Receptor -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cond. Iva</mat-label>
+            <mat-select formControlName="condIva">
+                <mat-option *ngFor="let option of condicionesIVAReceptor" [value]="option.id">{{option.id}} - {{option.descripcion}}</mat-option>
+            </mat-select>
+            <mat-error>
+                Selecciona una opción
+            </mat-error>
+        </mat-form-field>
 
-    <!-- Condicion IVA Receptor -->
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Cond. Iva</mat-label>
-        <mat-select formControlName="condIva">
-            <mat-option *ngFor="let option of condicionesIVAReceptor" [value]="option.id">{{option.id}} - {{option.descripcion}}</mat-option>
-        </mat-select>
-        <mat-error>
-            Selecciona una opción
-        </mat-error>
-    </mat-form-field>
-
-    <!-- Documento -->
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>CUIL / CUIT</mat-label>
-        <input #codigoInput matInput type="number" formControlName="documento">
-        <mat-error *ngIf="documento?.hasError('required')">
-            El documento es obligatorio
-        </mat-error>
+        <!-- Documento -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CUIL / CUIT</mat-label>
+            <input #codigoInput matInput type="text" formControlName="documento">
+            <mat-error *ngIf="documento?.hasError('required')">
+                El documento es obligatorio
+            </mat-error>
+            <mat-error *ngIf="documento?.hasError('pattern')">
+                El CUIT/CUIL debe ser válido (11 dígitos sin guiones, comenzando con 20, 23, 24, 27, 30, 33 o 34)
+            </mat-error>
+        </mat-form-field>
+    </div>
     
-        <mat-error *ngIf="documento?.hasError('pattern') && (formulario.get('tDocumento')?.value === 80 || formulario.get('tDocumento')?.value === 86)">
-            El CUIT/CUIL debe ser válido (11 dígitos sin guiones, comenzando con 20, 23, 24, 27, 30, 33 o 34)
-        </mat-error>
-    </mat-form-field>
-
 </form>
   
 <mat-dialog-actions align="center">

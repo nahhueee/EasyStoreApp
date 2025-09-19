@@ -139,7 +139,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
     }
 
     Agregar(){
-      this.dialogConfig.width = "500px";
+      this.dialogConfig.width = "800px";
       this.dialogConfig.data = {cliente:null};
       this.dialog.open(AddmodClientesComponent, this.dialogConfig)
                   .afterClosed()
@@ -161,7 +161,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
       }
 
       
-      this.dialogConfig.width = "500px";
+      this.dialogConfig.width = "800px";
       this.dialogConfig.data = {cliente:data} //Pasa como dato el cliente
       this.dialog.open(AddmodClientesComponent, this.dialogConfig)
               .afterClosed()

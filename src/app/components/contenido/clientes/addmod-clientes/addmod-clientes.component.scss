@@ -1,3 +1,15 @@
 .uppercase{
     text-transform: uppercase;
 }
+
+.form{
+    display: flex;
+    gap: 30px;
+
+    .izq{
+        flex: 1;
+    }
+    .der{
+        flex: 1;
+    }
+}

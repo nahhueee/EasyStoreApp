@@ -312,7 +312,7 @@ export class AdministrarProductosComponent {
       element.precio = this.Globales.EstandarizarDecimal(element.precio);
     });
 
-    this.producto = new Producto({
+    const nvoProducto = new Producto({
       id: this.idProducto,
       empresa: this.formulario.get('empresa')?.value,
       cliente: this.clienteSeleccionado?.id,
@@ -325,19 +325,20 @@ export class AdministrarProductosComponent {
       codigo: this.formulario.get('codigo')?.value,
       nombre: this.formulario.get('nombre')?.value,
       moldeleria: this.formulario.get('moldeleria')?.value,
-      proceso: 1,
       talles: this.tallesProducto.value
     });
 
     if(this.idProducto != 0){
-      this.Modificar();
+      nvoProducto.proceso = this.producto.proceso
+      this.Modificar(nvoProducto);
     } else{
-      this.Agregar();
+      nvoProducto.proceso = 1;
+      this.Agregar(nvoProducto);
     }
   }
 
-  Agregar(){
-    this.productosService.Agregar(this.producto)
+  Agregar(producto:Producto){
+    this.productosService.Agregar(producto)
       .subscribe(response => {
         if(response=='OK'){
           this.Notificaciones.success("Producto creado correctamente");
@@ -348,8 +349,8 @@ export class AdministrarProductosComponent {
       });
   }
 
-  Modificar(){
-    this.productosService.Modificar(this.producto)
+  Modificar(producto:Producto){
+    this.productosService.Modificar(producto)
       .subscribe(response => {
         if(response=='OK'){
           this.Notificaciones.success("Producto modificado correctamente");
