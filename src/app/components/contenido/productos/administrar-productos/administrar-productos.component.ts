@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
@@ -8,7 +8,7 @@ import { MiscService } from 'src/app/services/misc.service';
 import { NotificacionesService } from 'src/app/services/notificaciones.service';
 import { AddmodClientesComponent } from '../../clientes/addmod-clientes/addmod-clientes.component';
 import { ClientesService } from 'src/app/services/clientes.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProductosService } from 'src/app/services/productos.service';
 import { GlobalesService } from 'src/app/services/globales.service';
 
@@ -24,7 +24,7 @@ export class AdministrarProductosComponent {
 
   idProducto:number = 0;
   producto:Producto = new Producto();
-  titulo:string;
+  titulo:string = "";
 
   empresas:string[] = ['SUCEDE', 'SERVICIOS'];
   clientes:Cliente[]=[];
@@ -47,6 +47,8 @@ export class AdministrarProductosComponent {
   dialogConfig:MatDialogConfig = new MatDialogConfig(); //Configuraciones para la ventana emergente
 
   constructor(
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any = null, //Datos que envia la pantalla anterior
+    @Optional() private dialogRef: MatDialogRef<AdministrarProductosComponent>, //Ventana emergente actual
     private Notificaciones:NotificacionesService, //Servicio de notificaciones
     private rutaActiva: ActivatedRoute, //Para manejar la ruta actual
     private router:Router, //Servicio para navegar en la aplicacion
@@ -100,6 +102,7 @@ export class AdministrarProductosComponent {
         this.formulario.get('nombre')?.setValue(cliente + "-" + tipoAbrev + "-" + subtipoAbrev , { emitEvent: false });
       }, 10);
     });
+
     // Suscripción para cuando cambia subtipo de producto
     this.formulario.get('tipo')?.valueChanges.subscribe((value) => {
       setTimeout(() => {
@@ -143,14 +146,18 @@ export class AdministrarProductosComponent {
         signed: true
       }
 
+      if(this.data){
+        this.idProducto = this.data.producto;
+        this.titulo = "Modificar Producto";
+        this.ObtenerProducto();
+      }
+      //
+
       // this.idProducto = this.rutaActiva.snapshot.params['producto'];
-      // if(this.idProducto != 0){
+      // if(this.idProducto != undefined && this.idProducto != 0){
       //   this.titulo = "Modificar Producto";
       //   this.ObtenerProducto();
-      // }else{
-      //   this.titulo = "Crear Nuevo Producto"
       // }
-
     },0);
   }
   
@@ -346,7 +353,8 @@ export class AdministrarProductosComponent {
       .subscribe(response => {
         if(response=='OK'){
           this.Notificaciones.success("Producto modificado correctamente");
-          this.router.navigate([`navegacion/inventario/`]);
+          //this.router.navigate([`navegacion/inventario/`]);
+          this.dialogRef.close(true);
         }else{
           this.Notificaciones.warning(response);
         }

@@ -41,7 +41,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
 
     clickCount=0; //Para saber si se hace un solo click o dos sobre una celda
     esDark:boolean;
-    displayedColumns: string[] = ['select', 'proceso', 'temporada', 'codigo', 'nombre', 'tipo', 'subtipo', 'genero', 'material', 'color', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 'total']; //Columnas a mostrar
+    displayedColumns: string[] = ['editar', 'proceso', 'temporada', 'codigo', 'nombre', 'tipo', 'subtipo', 'genero', 'material', 'color', 't1', 't2', 't3', 't4', 't5', 't6', 't7', 't8', 't9', 't10', 'total']; //Columnas a mostrar
     
     dataSource = new MatTableDataSource<TablaProducto>(this.productos); //Data source de la tabla
     seleccionados = new SelectionModel<TablaProducto>(true, []); //Data source de seleccionados
@@ -95,11 +95,6 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
         this.Buscar(valor);
       }
     });
-
-    //Configuraciones básicas de la ventana emergente 
-    this.dialogConfig.disableClose = true;
-    this.dialogConfig.autoFocus = true;
-    this.dialogConfig.maxHeight = "90vh";
 
     this.vistaSeleccionada = this.parametrosService.GetVistaProductos();
     this.CambioDeVista();
@@ -208,9 +203,11 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
     }
 
     getTotal(col: keyof TablaProducto): number {
-      return this.dataSource?.data?.reduce((acc, item) => acc + Number(item[col] || 0), 0) ?? 0;
+      return this.dataSource?.data?.reduce((acc, item) => {
+        const valor = Number(item[col] || 0);
+        return acc + valor;  
+      }, 0) ?? 0;
     }
-
 
   //#endregion
 
@@ -248,7 +245,20 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
         data = row;
       }
 
-      this.router.navigateByUrl(`/administrar-producto/${data.id}`); 
+      //this.router.navigateByUrl(`/administrar-producto/${data.id}`);
+      this.dialogConfig.width = "100wh";
+      this.dialogConfig.maxHeight = "90vh";
+      this.dialogConfig.disableClose = false;
+      this.dialogConfig.autoFocus = true;
+
+      this.dialogConfig.data = {producto:data.id} //Pasa como dato el cliente
+      this.dialog.open(AdministrarProductosComponent, this.dialogConfig)
+              .afterClosed()
+              .subscribe((actualizar:boolean) => {
+                if (actualizar){
+                  this.Buscar(undefined, true); //Recarga la tabla
+                }
+              }); 
     }
 
     Eliminar() {

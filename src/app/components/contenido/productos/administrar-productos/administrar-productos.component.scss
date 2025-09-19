@@ -3,14 +3,16 @@
 }
 
 .contenido{
-    padding: 30px;
-    padding-bottom: 80px;
+    padding: 10px 30px;
     display: flex;
     justify-content: center;
 }
+.nuevo{
+    padding-top: 50px;
+}
+
 
 .form{
-    padding: 50px;
     max-width: 1500px;
     border-radius: 10px;
     background-color: var(--color-element-back);
@@ -140,6 +142,10 @@
     button{
         width: 250px;
     }
+}
+
+.btnGuardar{
+    width: 250px;
 }
 
 

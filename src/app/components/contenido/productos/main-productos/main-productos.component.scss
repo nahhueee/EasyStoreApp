@@ -123,6 +123,22 @@
 
 
 //Tabla
+.signo{
+    display: none;
+}
+.mostrarSigno{
+    display: inline-block;
+}
+.text-red {
+  color: rgb(255, 71, 71);
+}
+.editar{
+    margin-left: 5px;
+    cursor: pointer
+}
+.mat-column-editar{
+    max-width: 40px;
+}
 .mat-column-genero{
     max-width: 60px;
 }
