@@ -1,0 +1,77 @@
+<div class="cabecera">
+    <mat-icon>location_on</mat-icon>
+    <h2>Dirección Cliente</h2>
+</div>
+
+<form class="form" [formGroup]="formulario" method="POST" (keyup.esc)="dialogRef.close(false)" autocomplete="off">
+    <!-- Provincia -->
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Provincia</mat-label>
+        <input type="text" matInput [matAutocomplete]="autoProv" formControlName="provincia" required="true"/>
+        <mat-autocomplete #autoProv="matAutocomplete">
+            <mat-option *ngFor="let p of provinciasFiltradas$ | async" [value]="p.nombre">
+            {{ p.nombre }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="provinciaControl?.hasError('required')">
+            El campo es obligatorio
+        </mat-error>
+    </mat-form-field>
+
+    <div class="doble">
+        <!-- Codigo Postal -->
+        <mat-form-field appearance="outline">
+            <mat-label>Código Postal</mat-label>
+            <input #codigoInput matInput type="number" formControlName="codPostal" required="true">
+            <mat-error *ngIf="codPostalControl?.hasError('required')">
+                El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Ciudad -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ciudad</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoCity" formControlName="ciudad" required="true"/>
+            <mat-autocomplete #autoCity="matAutocomplete">
+                <mat-option *ngFor="let c of ciudades" [value]="c.nombre">
+                {{ c.nombre }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="ciudadControl?.hasError('required')">
+                El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+    </div>
+    
+    <div class="doble">
+        <!-- Calle -->
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Calle</mat-label>
+            <input type="text" matInput [matAutocomplete]="autoStreet" formControlName="calle" required="true" />
+            <mat-autocomplete #autoStreet="matAutocomplete">
+                <mat-option *ngFor="let c of calles" [value]="c.nombre">
+                {{ c.nombre }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="calleControl?.hasError('required')">
+                El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Nro Calle -->
+        <mat-form-field appearance="outline">
+            <mat-label>Nro Calle</mat-label>
+            <input #codigoInput matInput type="number" formControlName="numero" required="true">
+            <mat-error *ngIf="nroControl?.hasError('required')">
+                El campo es obligatorio
+            </mat-error>
+        </mat-form-field>
+    </div>
+</form>
+  
+<mat-dialog-actions align="center">
+    <!-- <button class="btn-action" mat-flat-button color="primary" (click)='Guardar()' >ACEPTAR</button> -->
+    <button class="btn-action" mat-flat-button color="warn" [mat-dialog-close]="false">CANCELAR</button>
+</mat-dialog-actions>
+  
+<!-- <div id="map" style="height: 400px; margin-top: 1rem;"></div> -->

@@ -1,0 +1,15 @@
+.uppercase{
+    text-transform: uppercase;
+}
+
+.form{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+
+    .doble{
+        display: flex;
+        gap: 15px;
+        flex-direction: row;
+    }
+}

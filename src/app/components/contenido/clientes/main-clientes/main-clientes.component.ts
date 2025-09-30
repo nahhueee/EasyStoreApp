@@ -13,6 +13,7 @@ import { AddmodClientesComponent } from '../addmod-clientes/addmod-clientes.comp
 import { EliminarComponent } from 'src/app/components/compartidos/eliminar/eliminar.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { forkJoin } from 'rxjs';
+import { DireccionClientesComponent } from '../direccion-clientes/direccion-clientes.component';
 
 @Component({
     selector: 'app-clientes',
@@ -136,6 +137,12 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
 
       }
 
+    }
+
+    Direccion(){
+      this.dialogConfig.width = "800px";
+      this.dialogConfig.data = {cliente:null};
+      this.dialog.open(DireccionClientesComponent, this.dialogConfig)
     }
 
     Agregar(){

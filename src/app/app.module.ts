@@ -101,6 +101,7 @@ import { MainEtiquetasComponent } from './components/contenido/etiquetas/main-et
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
 import { ImpimirEtiquetasComponent } from './components/contenido/productos/impimir-etiquetas/impimir-etiquetas.component';
 import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
+import { DireccionClientesComponent } from './components/contenido/clientes/direccion-clientes/direccion-clientes.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -149,7 +150,8 @@ import { AdministrarProductosComponent } from './components/contenido/productos/
         MainEtiquetasComponent,
         AddmodEtiquetasComponent,
         ImpimirEtiquetasComponent,
-        AdministrarProductosComponent
+        AdministrarProductosComponent,
+        DireccionClientesComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
