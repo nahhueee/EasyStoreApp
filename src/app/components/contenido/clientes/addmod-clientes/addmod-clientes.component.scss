@@ -1,10 +1,22 @@
 .uppercase{
-    text-transform: uppercase;
+    text-transform: uppercase !important;
 }
+
+.contenido{
+    display: flex;
+    justify-content: center;
+}
+.nuevo{
+    padding: 50px 30px 10px 30px;
+}
+
 
 .form{
     display: flex;
     gap: 30px;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    background-color: var(--color-element-back);
 
     .izq{
         flex: 1;
@@ -12,4 +24,33 @@
     .der{
         flex: 1;
     }
+    .center{
+        flex: 1;
+    }
+
+    .doble{
+        display: flex;
+        gap: 15px;
+    }
+}
+
+.botones{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 190px);
+    padding: 10px 0px;
+    background: var(--color-background) !important;
+
+    button{
+        width: 250px;
+    }
+}
+
+.btnGuardar{
+    width: 250px;
 }

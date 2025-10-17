@@ -110,17 +110,9 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.paginator._intl.itemsPerPageLabel = 'Items por página';
-
     this.sort.sortChange.subscribe(() => {
       this.Buscar(); 
     });
-
-  setTimeout(() => {
-      //Obtenemos los datos de tabla
-      //this.Buscar();
-      //this.btnAgregar.nativeElement.focus();
-    }, 0.5);
   }
 
   ObtenerLineasTalle(){

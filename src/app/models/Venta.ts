@@ -22,7 +22,7 @@ export class Venta{
         this.fecha = data.fecha;
         this.hora = data.hora;
         
-        this.cliente = new Cliente(data.cliente);
+        this.cliente = data.cliente;
         this.pago = new PagoVenta(data.pago);
         this.factura = new FacturaVenta(data.factura);
         this.activa = data.activa;

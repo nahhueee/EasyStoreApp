@@ -100,7 +100,13 @@ body {
 }
 
 .mat-pseudo-checkbox-minimal.mat-pseudo-checkbox-checked::after {
-  margin-top: 0px !important; // tu valor
+  margin-top: 4px !important; 
+}
+.mat-button-toggle-group{
+    box-shadow: none !important;
+}
+.mat-horizontal-content-container{
+  padding-top: 10px !important;
 }
 
 

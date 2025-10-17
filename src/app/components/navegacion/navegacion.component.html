@@ -10,65 +10,96 @@
             }
         </div>
         
-        @for (opcion of componentes; track opcion.id) {
-            <!-- Si la opción es INVENTARIO -->
-            @if (opcion.id === 'inventario') {
+        <!-- @for (opcion of componentes; track opcion.id) {
+            @if (opcion.submenu) {
                 <div class="item"
-                    [ngClass]="{ 
-                    'mini': menuPlegado 
-                    }"
-                    (click)="isCollapsed = !isCollapsed"
+                    [ngClass]="{ 'mini': menuPlegado }"
+                    (click)="toggleCollapse(opcion.id)"
                     [matTooltip]="menuPlegado ? opcion.titulo : ''"
                     matTooltipPosition="right">
                 <mat-icon>{{ opcion.icon }}</mat-icon>
-
                 @if (!menuPlegado) {
                     <span class="titulo">{{ opcion.titulo }}</span>
                 }
                 </div>
 
-                <div [ngxCollapseAnimated]="isCollapsed">
-                    <!-- Contenido que se despliega -->
-                    <div class="submenu">
-                        <div class="item" 
-                            [ngClass]="{'mini': menuPlegado, 'active': componente == 'nuevo-producto'}" 
-                            (click)="Navegar('nuevo-producto');"
-                            [matTooltip]="menuPlegado ? 'Registrar Producto' : ''"
-                            matTooltipPosition="right"
-                            >
-                            <mat-icon>add_circle</mat-icon>
-                            <span> Registrar</span>
-                        </div>
-                        <div class="item" 
-                            [ngClass]="{'mini': menuPlegado, 'active': componente == 'inventario'}" 
-                            (click)="Navegar('inventario');"
-                            [matTooltip]="menuPlegado ? 'Inventario de Productos' : ''"
-                            matTooltipPosition="right"
-                            >
-                            <mat-icon>description</mat-icon>
-                            <span> Inventario</span>
-                        </div>
+                <div [ngxCollapseAnimated]="openedId !== opcion.id">
+                <div class="submenu">
+                    @for (sub of opcion.submenu; track sub.id) {
+                    <div class="item"
+                        [ngClass]="{'mini': menuPlegado, 'active': componente == sub.id}" 
+                        (click)="Navegar(sub.id)"
+                        [matTooltip]="menuPlegado ? sub.titulo : ''"
+                        matTooltipPosition="right">
+                        <mat-icon>{{ sub.icon }}</mat-icon>
+                        <span> {{ sub.titulo }}</span>
                     </div>
+                    }
+                </div>
                 </div>
             }
-            <!-- Para las demás opciones -->
             @else {
                 <div class="item"
-                    [ngClass]="{ 
-                    'active': componente === opcion.id, 
-                    'mini': menuPlegado 
-                    }"
+                    [ngClass]="{ 'active': componente === opcion.id, 'mini': menuPlegado }"
                     (click)="Navegar(opcion.id)"
                     [matTooltip]="menuPlegado ? opcion.titulo : ''"
                     matTooltipPosition="right">
                 <mat-icon>{{ opcion.icon }}</mat-icon>
-
                 @if (!menuPlegado) {
                     <span class="titulo">{{ opcion.titulo }}</span>
                 }
                 </div>
             }
+        } -->
+
+        @for (opcion of componentes; track opcion.id) {
+
+        <!-- Items con submenú -->
+        @if (opcion.submenu?.length){
+            <mat-expansion-panel [expanded]="isExpanded(opcion)" hideToggle>
+            <mat-expansion-panel-header
+                (click)="toggleAccordion(opcion.id)"
+                [matTooltip]="menuPlegado ? opcion.titulo : ''"
+                matTooltipPosition="right"
+                class="item"
+                [ngClass]="{ 'mini': menuPlegado }">
+
+                <mat-icon>{{ opcion.icon }}</mat-icon>
+                @if (!menuPlegado){
+                <span class="titulo">{{ opcion.titulo }}</span>
+                }
+            </mat-expansion-panel-header>
+
+            <div class="submenu">
+                @for (sub of opcion.submenu; track sub.id){
+                <div class="item"
+                    [ngClass]="{'mini': menuPlegado, 'active': componente == sub.id}"
+                    (click)="Navegar(sub.id)"
+                    [matTooltip]="menuPlegado ? sub.titulo : ''"
+                    matTooltipPosition="right">
+                    <mat-icon>{{ sub.icon }}</mat-icon>
+                    <span>{{ sub.titulo }}</span>
+                </div>
+                }
+            </div>
+            </mat-expansion-panel>
+
+        <!-- Items sin submenú -->
+        }@else{
+            <div class="item"
+                [ngClass]="{'mini': menuPlegado, 'active': componente == opcion.id}"
+                (click)="Navegar(opcion.id)"
+                [matTooltip]="menuPlegado ? opcion.titulo : ''"
+                matTooltipPosition="right">
+            <mat-icon>{{ opcion.icon }}</mat-icon>
+            @if (!menuPlegado){
+                <span class="titulo">{{ opcion.titulo }}</span>
+            }
+            </div>
         }
+        }
+
+
 
 
 
@@ -116,10 +147,11 @@
 
     <div class="contenido">
         <app-herramientas-bar (plegado)="AccionarMenu($event)"></app-herramientas-bar>
-        
-       
+               
         <div *ngIf="componente==='usuarios'"  class="child"><app-usuarios></app-usuarios></div>
         <div *ngIf="componente==='clientes'"  class="child"><app-clientes></app-clientes></div>
+        <div *ngIf="componente==='nueva-venta'"  class="child"><app-facturar></app-facturar></div>
+        <div *ngIf="componente==='nuevo-cliente'"  class="child"><app-addmod-clientes></app-addmod-clientes></div>
         <div *ngIf="componente==='inventario'"  class="child"><app-productos></app-productos></div>
         <div *ngIf="componente==='nuevo-producto'"  class="child"><app-administrar-productos></app-administrar-productos></div>
         <div *ngIf="componente==='etiquetas'"  class="child"><app-etiquetas></app-etiquetas></div>

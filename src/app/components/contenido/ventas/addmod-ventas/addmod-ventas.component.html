@@ -1,0 +1,43 @@
+<div class="contenedor">
+    <mat-stepper #stepper>
+        <mat-step [stepControl]="formGenerales" errorMessage="Name is required.">
+            <form [formGroup]="formGenerales">
+                <ng-template matStepLabel>Datos Generales</ng-template>
+                
+                <!-- Proceso -->
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Proceso/Punto</mat-label>
+                    <mat-select formControlName="proceso">
+                        <mat-option *ngFor="let option of procesos" [value]="option.id">{{option.descripcion}}</mat-option>
+                    </mat-select>
+                    <mat-error>
+                        Selecciona una opción
+                    </mat-error>
+                </mat-form-field>
+
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="formProductos" errorMessage="Address is required.">
+            <form [formGroup]="formProductos">
+            <ng-template matStepLabel>Elegir Productos</ng-template>
+           
+            <div>
+                <p>Go to a different step to see the error state</p>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Vericar</ng-template>
+            <p>You are now done.</p>
+            <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>

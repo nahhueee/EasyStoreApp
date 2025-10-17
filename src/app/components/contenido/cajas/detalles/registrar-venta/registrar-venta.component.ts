@@ -207,8 +207,11 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
 
     //Cliente al que se le asigna la venta
     const cliente = this.formulario.get('cliente')?.value;
-    if (cliente == "")
-      this.venta.cliente = new Cliente({id: 1, nombre: ""}); //Se asigna a consumidor final
+    if (cliente == ""){
+      this.venta.cliente = new Cliente(); //Se asigna a consumidor final
+      this.venta.cliente.id = 1;
+      this.venta.cliente.nombre = "CONSUMIDOR FINAL";
+    }
 
     //Fecha y Hora de la venta
     const fechaActual = new Date();
@@ -325,7 +328,7 @@ export class RegistrarVentaComponent implements OnInit, AfterViewInit {
 
   ChangeCliente(seleccionado: Cliente) { //Detecta el cambio de seleccion de cliente
     this.formulario.get('cliente')!.setValue(seleccionado.nombre);
-    this.venta.cliente = new Cliente(seleccionado);
+    this.venta.cliente = seleccionado;
   }
 
   NuevoCliente() { 

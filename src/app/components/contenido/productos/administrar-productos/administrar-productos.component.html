@@ -7,7 +7,7 @@
 
 
 <div class="contenido" [class.nuevo] = "titulo === ''">
-    <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="Cerrar()" autocomplete="off" novalidate>
+    <form class="form" [formGroup]="formulario" method="POST" (keyup.enter)='Guardar()' (keyup.esc)="Cerrar(false)" autocomplete="off" novalidate>
         
         <div class="izq">
 

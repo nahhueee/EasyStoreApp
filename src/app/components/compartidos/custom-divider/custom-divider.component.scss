@@ -1,9 +1,11 @@
-.divider{
+.divider {
   display: flex;
   align-items: center;
-  gap: 10px; //Separacion de elementos
+  width: 100%;
+  gap: 10px; 
   margin-bottom: 10px;
 }
+
 .divider .der{ //Linea derecha
   width: 100%;
   border-top: 1px solid;
@@ -13,14 +15,12 @@
   border-top: 1px solid;
 }
 
-.texto{
+.texto {
   display: flex;
   align-items: center;
+  white-space: nowrap; /* evita saltos de línea dentro del texto */
 }
 .texto p{
   margin-bottom: 0px;
   margin-left: 5px;
-}
-.texto mat-icon{
-  font-size: 23px;
 }

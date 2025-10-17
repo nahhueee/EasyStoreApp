@@ -1,0 +1,320 @@
+<div class="contenedor">
+    <mat-stepper #stepper>
+        <mat-step [stepControl]="formGenerales" errorMessage="Name is required.">
+            <form [formGroup]="formGenerales" class="form">
+                <ng-template matStepLabel>Datos Generales</ng-template>
+                
+                <div class="enLinea">
+                    <!-- Proceso -->
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Proceso/Punto</mat-label>
+                        <mat-select formControlName="proceso">
+                            <mat-option *ngFor="let option of procesos" [value]="option.id">{{option.descripcion}}</mat-option>
+                        </mat-select>
+                        <mat-error>
+                            Selecciona una opción
+                        </mat-error>
+                    </mat-form-field>
+                    
+                    <!-- Nro Nota Empaque -->
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>N° Nota Empaque</mat-label>
+                        <input matInput type="number" formControlName="nroNota">
+                        <mat-error>
+                            El campo es requerido
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+
+                <div class="cliente">
+                    <div class="input">
+                        <!-- Cliente -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Cliente</mat-label>
+                            <input autocomplete="off" matInput type="text" class="uppercase" formControlName="cliente" [matAutocomplete]="ClienteAuto">
+                            <mat-autocomplete autoActivateFirstOption #ClienteAuto="matAutocomplete"
+                                                (optionSelected)="ChangeCliente($event.option.value)">
+                                <mat-option *ngFor="let cliente of filterClientes | async" [value]="cliente.id">
+                                {{cliente.documento}} - {{cliente.nombre}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary" (click)='NuevoCliente()'>
+                            <mat-icon>add_circle</mat-icon>       
+                            Agregar Nuevo Cliente
+                        </button>
+                    </div>
+                   
+                    @if(clienteSeleccionado){
+                        <div class="cliente-card">
+                            <div class="cliente-header">
+                                <div class="icon">
+                                    <mat-icon>person</mat-icon>
+                                </div>
+                                <div class="info">
+                                <h4>{{ clienteSeleccionado.nombre }}</h4>
+                                <span>{{ clienteSeleccionado.tipoDocumento }} {{ clienteSeleccionado.documento }}</span>
+                                </div>
+                            </div>
+
+                            <div class="datos-section">
+                                <!-- Contacto -->
+                                <div class="subcard">
+                                    <h5><mat-icon>call</mat-icon> Datos de contacto</h5>
+                                    <p><strong>Teléfono:</strong> {{ clienteSeleccionado.telefono }}</p>
+                                    <p><strong>Celular:</strong> {{ clienteSeleccionado.celular }}</p>
+                                    <p><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
+                                    <p><strong>Contacto:</strong> {{ clienteSeleccionado.contacto }}</p>
+                                </div>
+
+                                <!-- Fiscales -->
+                                <div class="subcard">
+                                    <h5><mat-icon>assignment</mat-icon> Datos fiscales</h5>
+                                    <p><strong>Razón Social:</strong> {{ clienteSeleccionado.razonSocial }}</p>
+                                    <p><strong>Condición Fiscal:</strong> {{ clienteSeleccionado.condicionIva }}</p>
+                                    <p><strong>Condición De Pago:</strong> {{ clienteSeleccionado.condicionPago }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    }@else {
+                        <div class="noSeleccionado">
+                            <div class="icon">
+                                <mat-icon>person</mat-icon>
+                            </div>
+                            <p>Selecciona un cliente para ver sus datos</p>
+                        </div>
+                    }
+                    
+                </div>
+                
+
+                <div class="botones">
+                    <button mat-flat-button color="primary" matStepperNext>SIGUIENTE</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Elegir Productos</ng-template>
+
+            <div class="productos">
+                <div class="izq">
+                    <form [formGroup]="formFiltroProducto" class="filtros" autocomplete="off">
+
+                        <div class="inputs">
+                            <!-- Codigo Nombre -->
+                            <div class="busqueda">
+                                <input id="inputBusqueda" type="text" placeholder="Código o Nombre" formControlName="codigoNombre">
+                                <mat-icon matTooltip="Limpiar" (click)="limpiarInput()" style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </div>
+
+                            <!-- Temporadas -->
+                            <div class="select">
+                                <mat-select formControlName="temporada" placeholder="Temporada" (selectionChange)="cambioSeleccionable('temporada')" (openedChange)="inputFiltro.focus()">
+                                    <div class="inputFiltro">
+                                    <input matInput #inputFiltro
+                                            focused="'true'"
+                                            type="text"
+                                            (input)="filtrarSeleccionable($event, temporadas, 'temporadasFiltrado')"
+                                            placeholder="Filtrar Temporada"
+                                            (keydown)="$event.stopPropagation()"
+                                            autocomplete="off">
+                                    <mat-icon>filter_list</mat-icon>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                    <mat-option *ngFor="let option of temporadasFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+                                </mat-select>
+                                <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccionable('temporada')" style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </div>
+
+                            <!-- Tipos -->
+                            <div class="select">
+                                <mat-select formControlName="tipo" placeholder="Producto" (selectionChange)="cambioSeleccionable('tipo')" (openedChange)="inputFiltro.focus()">
+                                    <div class="inputFiltro">
+                                    <input matInput #inputFiltro
+                                            focused="'true'"
+                                            type="text"
+                                            (input)="filtrarSeleccionable($event, tipos, 'tiposFiltrado')"
+                                            placeholder="Filtrar Producto"
+                                            (keydown)="$event.stopPropagation()"
+                                            autocomplete="off">
+                                    <mat-icon>filter_list</mat-icon>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                    <mat-option *ngFor="let option of tiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+                                </mat-select>
+                                <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccionable('tipo')" style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </div>
+
+                            <!-- Subtipos -->
+                            <div class="select">
+                                <mat-select formControlName="subtipo" placeholder="Tipo" (selectionChange)="cambioSeleccionable('subtipo')" (openedChange)="inputFiltro.focus()">
+                                    <div class="inputFiltro">
+                                    <input matInput #inputFiltro
+                                            focused="'true'"
+                                            type="text"
+                                            (input)="filtrarSeleccionable($event, subtipos, 'subtiposFiltrado')"
+                                            placeholder="Filtrar Tipo"
+                                            (keydown)="$event.stopPropagation()"
+                                            autocomplete="off">
+                                    <mat-icon>filter_list</mat-icon>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                    <mat-option *ngFor="let option of subtiposFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+                                </mat-select>
+                                <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccionable('subtipo')" style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </div>
+
+                            <!-- Material -->
+                            <div class="select">
+                                <mat-select formControlName="material" placeholder="Material" (selectionChange)="cambioSeleccionable('material')" (openedChange)="inputFiltro.focus()">
+                                    <div class="inputFiltro">
+                                    <input matInput #inputFiltro
+                                            focused="'true'"
+                                            type="text"
+                                            (input)="filtrarSeleccionable($event, materiales, 'materialesFiltrado')"
+                                            placeholder="Filtrar Tipo"
+                                            (keydown)="$event.stopPropagation()"
+                                            autocomplete="off">
+                                    <mat-icon>filter_list</mat-icon>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                    <mat-option *ngFor="let option of materialesFiltrado" [value]="option.id">{{option.descripcion}}</mat-option>
+                                </mat-select>
+                                <mat-icon matTooltip="Limpiar" (click)="limpiarSeleccionable('material')" style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </div>
+                        </div>
+                        
+
+                        <!-- Colores -->
+                        @if(coloresMaterial.length > 0){
+                            <div class="color-grid">
+                                @for (color of coloresMaterial; track $index) {
+                                    <div
+                                        class="color-box"
+                                        [class.selected]="colorSeleccionado && colorSeleccionado.id === color.id"
+                                        (click)="colorSeleccionado = color; Buscar();"
+                                        [matTooltip]="color.descripcion"
+                                        [ngStyle]="{'background-color':color.hexa}"
+                                    ></div>
+                                }
+                            </div>
+                        }@else {
+                            <div class="color-grid">
+                                @for (color of coloresMaterialNoSeleccionado; track $index) {
+                                    <div
+                                        class="color-box"
+                                        [ngStyle]="{'background-color':color.hexa}"
+                                    ></div>
+                                }
+                            </div>
+                        }
+
+                        @if(colorSeleccionado && coloresMaterial.length > 0){
+                            <p class="colorSeleccionado">Color seleccionado: <span>{{colorSeleccionado.descripcion}}</span></p>
+                        }
+
+                        <mat-button-toggle-group formControlName="genero" appearance="legacy" exclusive class="generos"> 
+                            @for (item of generos; track $index) {
+                                <mat-button-toggle class="cuadro-opcion" [ngClass]="{'esDark':esDark, 'opcionActiva': item.id === generoControl}" [value]="item.id" 
+                                [checked]="item.id === generoControl"
+                                (click)="seleccionGenero(item.id!, $event)">           
+                                    {{item.descripcion}}
+                                </mat-button-toggle>
+                            }
+                        </mat-button-toggle-group>
+                    </form>
+
+            
+                    <div class="resultados">
+                        <div class="tarjetas">
+                            <div *ngFor="let producto of productos" class="tarjeta">
+                                <span>{{producto.codigo}}</span>
+                                <p class="nombre">{{ producto.nombre }}</p>
+                                <hr>
+                                <span>{{producto.genero}}</span>
+                                <div class="color-bar" [ngStyle]="{'background': producto.color}"></div>
+                            </div>
+                        </div>
+
+                        <!-- Paginacion -->
+                        <mat-paginator #paginator [pageSize]="10" (page)="Buscar($event)"></mat-paginator>
+                        <!-- -------------------- -->
+                    </div>
+                </div>
+                <div class="der">
+                    
+                    <!-- Detalle de Pedidos -->
+                    <div class="detalle">
+                        <mat-table mat-table [dataSource]="dataSource" class="ppalTable">
+                                        
+                            <!-- Cantidad -->
+                            <ng-container matColumnDef="cantidad">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Cant</mat-header-cell>
+                                <mat-cell class="data-cell" mat-cell matTooltip="Click para editar" *matCellDef="let element; let i = index" (click)="HabEdicionItem(i,element.cantidad)"> 
+                                    <ng-container *ngIf="editarCelda === i; else nonEditable">
+                                        <span class="mobile-label">Cantidad:</span>
+                                        <input matInput type="text" [formControl]="newCantidad" #inputEditable focused="true" (keyup.enter)="EditarItemCantidad(i)" (keyup.esc)="editarCelda=undefined" (blur)="EditarItemCantidad(i)">
+                                    </ng-container>
+                                    <!-- No editable -->
+                                    <ng-template #nonEditable class="data-cell">
+                                        <span class="mobile-label">Cantidad:</span>{{element.cantidad}}
+                                    </ng-template>
+                                </mat-cell>
+                            </ng-container>
+                            
+                            <!-- Producto -->
+                            <ng-container matColumnDef="producto">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.producto}}</p>  </mat-cell>
+                            </ng-container>
+                            
+                            <!-- Unitario -->
+                            <ng-container matColumnDef="unitario">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Unitario</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">unitario:</span><p>${{element.unitario | decimalFormat}}</p></mat-cell>
+                            </ng-container>
+                            
+                            <!-- Total -->
+                            <ng-container matColumnDef="total">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p> ${{element.total | decimalFormat}}</p></mat-cell>
+                            </ng-container>
+
+                            <!-- Borrar -->
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element;  let i = index">
+                                    <div class="boton eliminar" matTooltip="Quitar" (click)="QuitarItem(i)"><mat-icon>delete_forever</mat-icon></div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Default row -->
+                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                            <mat-row class="table-row" mat-row *matRowDef="let row; columns: displayedColumns; let i = index" [ngClass]="{'hidden-row': row.accion=='B'}"></mat-row>
+
+                        </mat-table>
+                        
+                        <div class="pie">
+                            <div class="items">
+                                Cant. Items: {{cantItems}}
+                            </div>
+                            <div class="total">
+                                ${{totalItems | decimalFormat}}
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Vericar</ng-template>
+            <p>You are now done.</p>
+            <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>

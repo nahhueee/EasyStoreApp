@@ -9,6 +9,7 @@ import { VentasClientesComponent } from './components/contenido/clientes/ventas-
 import { DetCajasComponent } from './components/contenido/cajas/det-cajas/det-cajas.component';
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
 import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
+import { AddmodClientesComponent } from './components/contenido/clientes/addmod-clientes/addmod-clientes.component';
 
 const routes: Routes = [
   {

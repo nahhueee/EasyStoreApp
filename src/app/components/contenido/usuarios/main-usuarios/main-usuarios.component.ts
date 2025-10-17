@@ -50,8 +50,6 @@ export class MainUsuariosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() { 
-    this.paginator._intl.itemsPerPageLabel = 'Items por página';
-
     setTimeout(() => {
       //Obtenemos los datos de tabla
       this.Buscar();

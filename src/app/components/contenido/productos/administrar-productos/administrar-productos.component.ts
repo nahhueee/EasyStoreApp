@@ -342,7 +342,7 @@ export class AdministrarProductosComponent {
       .subscribe(response => {
         if(response=='OK'){
           this.Notificaciones.success("Producto creado correctamente");
-          this.router.navigate([`navegacion/inventario/`]);
+          this.Cerrar(true);
         }else{
           this.Notificaciones.warning(response);
         }
@@ -354,16 +354,19 @@ export class AdministrarProductosComponent {
       .subscribe(response => {
         if(response=='OK'){
           this.Notificaciones.success("Producto modificado correctamente");
-          //this.router.navigate([`navegacion/inventario/`]);
-          this.dialogRef.close(true);
+          this.Cerrar(true);
         }else{
           this.Notificaciones.warning(response);
         }
       });
   }
 
-  Cerrar(){
-    this.router.navigate([`navegacion/inventario/`]);
+  Cerrar(valor:boolean){
+    if(this.data){
+      this.dialogRef.close(valor);
+    }else{
+      this.router.navigate([`navegacion/inventario/`]);
+    }
   }
 
 

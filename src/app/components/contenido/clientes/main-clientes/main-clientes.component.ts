@@ -28,7 +28,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
 
     clickCount=0; //Para saber si se hace un solo click o dos sobre una celda
 
-    displayedColumns: string[] = ['select', 'nombre', 'email', 'telefono', 'condicion', 'documento']; //Columnas a mostrar
+    displayedColumns: string[] = ['select', 'editar', 'nombre', 'email', 'telefono', 'celular', 'condicion', 'documento']; //Columnas a mostrar
     dataSource = new MatTableDataSource<Cliente>(this.clientes); //Data source de la tabla
     seleccionados = new SelectionModel<Cliente>(true, []); //Data source de seleccionados
 
@@ -47,14 +47,12 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //Configuraciones básicas de la ventana emergente 
-    this.dialogConfig.disableClose = true;
+    this.dialogConfig.disableClose = false;
     this.dialogConfig.autoFocus = true;
     this.dialogConfig.maxHeight = "90vh";
   }
 
   ngAfterViewInit() {
-    this.paginator._intl.itemsPerPageLabel = 'Items por página';
-
     setTimeout(() => {
       //Obtenemos los datos de tabla
       this.Buscar();
@@ -146,7 +144,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
     }
 
     Agregar(){
-      this.dialogConfig.width = "800px";
+      this.dialogConfig.width = "100wv";
       this.dialogConfig.data = {cliente:null};
       this.dialog.open(AddmodClientesComponent, this.dialogConfig)
                   .afterClosed()
@@ -168,7 +166,7 @@ export class MainClientesComponent implements OnInit, AfterViewInit {
       }
 
       
-      this.dialogConfig.width = "800px";
+      this.dialogConfig.width = "100wv";
       this.dialogConfig.data = {cliente:data} //Pasa como dato el cliente
       this.dialog.open(AddmodClientesComponent, this.dialogConfig)
               .afterClosed()

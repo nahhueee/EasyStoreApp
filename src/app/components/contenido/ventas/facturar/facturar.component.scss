@@ -1,0 +1,409 @@
+.contenedor{
+    padding: 30px 5% 0px 5%; 
+    background-color: var(--color-element-back);
+    border-radius: 10px;
+}
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+//PANTALLA 1
+.form{
+  padding: 0%;
+
+  .enLinea{
+    display: flex;
+    gap: 20px;
+
+    > :first-child {
+      flex: 2;
+    }
+
+    > :not(:first-child) {
+      flex: 1;
+    }
+  }
+}
+
+.cliente{
+  display: flex;
+  gap: 35px;
+
+  .input{
+    flex: 1;
+
+    button{
+      width: 100%;
+    }
+  }
+}
+
+.cliente-card {
+  padding-top: 15px;
+  border-radius: 16px;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  transition: all 0.3s ease;
+
+  .cliente-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+
+    .icon {
+      background: var(--color-alternative);
+      border-radius: 80%;
+      padding: 5px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    mat-icon {
+      color: var(--color-primary);
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+
+      h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.2rem;
+      }
+
+      span {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .datos-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+
+    .subcard {
+      background: var(--color-alternative);
+      border-radius: 12px;
+      padding: 1rem;
+      
+      h5 {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-weight: 600;
+        color: var(--color-primary);
+        margin-bottom: 0.6rem;
+
+        mat-icon {
+          font-size: 20px;
+          margin-top: 3px;
+          color: var(--color-primary);
+        }
+      }
+
+      p {
+        margin: 0.2rem 0;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.noSeleccionado{
+  margin-top: 15px;
+  border-radius: 16px;
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-alternative);
+  flex-direction: column;
+  padding: 30px 0px;
+ 
+  p {
+    margin:0;
+    font-size: 17px;
+  }
+
+  .icon {
+    background: var(--color-alternative);
+    border-radius: 80%;
+    padding: 5px;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  mat-icon {
+    transform: scale(1.5);
+    color: var(--color-primary);
+  }
+}
+
+.botones{
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button{
+      width: 300px;
+    }
+}
+// FIN PANTALLA 1
+
+.productos{
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .izq, .der{
+    flex: 1;
+  }
+}
+
+// FILTRO DE PRODUCTOS
+/*#region INPUTS FILTRO*/
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  grid-template-rows: repeat(2, auto);  
+  column-gap: 10px; 
+  row-gap: 10px;;
+  align-items: start;
+  flex: 2;
+}
+.select{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    padding: 0px 10px;
+    height: 40px;
+}
+.select mat-icon{
+    cursor: pointer;
+    margin-left: 5px;
+}
+.busqueda{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 5px;
+    width: 100%;
+    padding: 0px 10px;
+}
+.busqueda input{
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    color: var(--color-font) !important;
+}
+.busqueda input:focus {
+    outline: none; /* Elimina el borde del input al hacer clic */
+}
+
+.busqueda input::placeholder {
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--placeholders);
+    font-weight: 400;
+}
+
+.busqueda mat-icon{
+    cursor: pointer;
+}
+
+
+.color-grid {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+}
+
+.color-box {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.selected {
+    border: 5px solid var(--border-color)
+  }
+}
+
+.colorSeleccionado{
+  text-align: center;
+  font-size: 13px;
+  font-family: "Poppins-Regular";
+  color: var(--warn-text);
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.generos{
+  width: 100%;
+  margin-top: 15px;
+}
+.cuadro-opcion {
+    width: 100%;
+    color: #000;
+    border: 1px solid var(--border-color);
+}
+.esDark{
+    color: white;
+}
+.opcionActiva{
+    color: var(--color-primary);
+}
+
+/*#endregion*/
+// FIN FILTRO DE PRODUCTOS
+
+// PRODUCTOS
+
+.resultados{
+    flex: 1;
+    border-radius: 8px;
+    
+    .tarjetas{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Cards de 160px de ancho y se ajustan al ancho del contenedor */
+        gap: 15px; /* Espacio entre las cards */
+        flex-wrap: wrap;
+    }
+
+    .tarjeta{
+        width: 100%;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);;
+        cursor: pointer;
+        transition: ease 0.2s;
+    }
+    .tarjeta:hover{
+        transform: scale(0.95);
+    }
+   
+    //Achico las tarjetas para el telefono
+    @media (max-width: 700px) {
+        .tarjetas{
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* Cards de 160px de ancho y se ajustan al ancho del contenedor */
+        }
+    }
+
+    .card-body{
+        .nombre{
+            font-size: 'Roboto-Regular';
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+        .precio{
+            font-size: 22px;
+            color: var(--color-primary);
+            font-size: 'Roboto-Regular';
+        }
+    }
+
+    .color-bar {
+        height: 10px;
+        width: 100%;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+}
+// FIN PRODUCTOS
+
+// DETALLE DE FACTURA
+.detalle{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+
+    background-color: var(--color-element-back);
+    border-radius: 8px;
+    
+    .mat-column-cantidad{
+        cursor: pointer;
+        input{
+            width: 40px;
+        }
+    }
+    .mat-column-cantidad:not(mat-header-cell.mat-mdc-header-cell):hover{
+        cursor: pointer;
+        border: 1px solid var(--color-primary);
+        border-radius: 8px;
+        transition: border ease 1s;
+    }
+    
+    .mat-column-actions{
+        cursor: pointer;
+        mat-icon{
+            margin-right: 5px;
+            color: var(--border-color);
+        }
+        
+        .eliminar{
+            mat-icon{
+                color: #ff9696;
+            }
+        }
+    }
+
+    .pie{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap-reverse;
+        padding: 20px 0px 5px 30px;
+        width: 100%;
+        border-top: 1px solid var(--border-color);
+
+        .total{
+            height: auto;
+            background-color: rgb(37, 37, 37);
+            border-radius: 8px;
+            color: #63ff44;
+            padding: 5px 20px;
+            font-size: 30px;
+            width: 50%;
+        }
+        .items{
+            color: var(--color-font);
+            font-size: 17px;
+        }
+    }
+}
+// FIN DETALLE FACTURA

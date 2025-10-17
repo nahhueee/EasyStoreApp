@@ -43,15 +43,24 @@ export class NavegacionComponent implements OnInit {
   menuPlegado = false;
   mostrarTextoChico = true;
 
-  isCollapsed = true;
+  openedId: string | null = null;
+  isCollapsed: Record<string, boolean> = {};
   tipoProducto: string = '';
 
 
   componentes = [
-    // { id: 'cajas', titulo: 'Cajas', icon: 'local_atm' },
-    { id: 'inventario', titulo: 'Productos', icon: 'inventory_2' },
-    // { id: 'etiquetas', titulo: 'Etiquetas', icon: 'more' },
-    { id: 'clientes', titulo: 'Clientes', icon: 'escalator_warning' },
+    { id: 'ventas', titulo: 'Ventas', icon: 'shopping_cart', submenu: [
+      { id: 'nueva-venta', titulo: 'Registrar', icon: 'add_shopping_cart' },
+      { id: 'ventas', titulo: 'Listado', icon: 'description' }
+    ]},
+    { id: 'inventario', titulo: 'Inventario', icon: 'inventory', submenu: [
+      { id: 'nuevo-producto', titulo: 'Registrar', icon: 'add_circle' },
+      { id: 'inventario', titulo: 'Inventario', icon: 'description' }
+    ]},
+    { id: 'clientes', titulo: 'Clientes', icon: 'groups', submenu: [
+        { id: 'nuevo-cliente', titulo: 'Registrar', icon: 'person_add' },
+        { id: 'clientes', titulo: 'Listado', icon: 'description' }
+    ]},
     { id: 'usuarios', titulo: 'Usuarios', icon: 'group' }
   ];
 
@@ -87,10 +96,13 @@ export class NavegacionComponent implements OnInit {
       this.titlepage.setTitle(menu?.toLocaleUpperCase() + ' | EasySales App')
     });
 
-    if(this.componente == "inventario" 
-      || this.componente == "nuevo-producto"
-    ){
-      this.isCollapsed = false;
+    // Buscar qué opción contiene el componente actual
+    const opcionActiva = this.componentes.find(opcion =>
+      opcion.submenu?.some(sub => sub.id === this.componente)
+    );
+
+    if (opcionActiva) {
+      this.openedId = opcionActiva.id; 
     }
 
     this.pantalla = window.innerWidth;//Obtiene el tamaño actual de la pantalla
@@ -106,18 +118,27 @@ export class NavegacionComponent implements OnInit {
     this.router.navigateByUrl("administrar-producto/0");
   }
 
-  AccionarMenu(valor:boolean) {
-  this.menuPlegado = valor;
-
-  if (this.menuPlegado) {
-    // Espera 300ms para mostrar E.S
-    setTimeout(() => this.mostrarTextoChico = true, 300);
-  } else {
-    
-    // Ocultar E.S inmediatamente y esperar para Easy Sales
-    setTimeout(() => this.mostrarTextoChico = false, 300);
+  toggleAccordion(id: string) {
+    this.openedId = this.openedId === id ? null : id;
   }
-}
+
+  isExpanded(opcion: any): boolean {
+    return this.openedId === opcion.id;
+  }
+
+
+  AccionarMenu(valor:boolean) {
+    this.menuPlegado = valor;
+
+    if (this.menuPlegado) {
+      // Espera 300ms para mostrar E.S
+      setTimeout(() => this.mostrarTextoChico = true, 300);
+    } else {
+      
+      // Ocultar E.S inmediatamente y esperar para Easy Sales
+      setTimeout(() => this.mostrarTextoChico = false, 300);
+    }
+  }
 
   //Verifica que el usuario tenga la terminal validada y habilitada
   async VerificarComputadorHabilitado(forzar:boolean){

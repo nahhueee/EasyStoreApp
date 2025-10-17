@@ -86,7 +86,7 @@ export class VentasClientesComponent implements OnInit, AfterViewInit {
   ObtenerCliente(){
     this.clientesService.ObtenerCliente(this.idCliente)
     .subscribe(response => {
-      this.cliente = new Cliente(response);
+      this.cliente = response;
     });
   }
 

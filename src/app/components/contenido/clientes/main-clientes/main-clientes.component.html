@@ -5,12 +5,8 @@
     <!-- #region ABMC -->
     <div class="abmc">
         <div class="botones">
-          <button type="button" class="btn btn-success btn-sm" (click)="Agregar()"><mat-icon>add_circle</mat-icon>Nuevo</button>
-          <button type="button" class="btn btn-warning btn-sm" (click)="Modificar()"><mat-icon>edit_square</mat-icon>Editar</button>
-          <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Eliminar</button>
-
-          <button type="button" class="btn btn-danger btn-sm" (click)="Direccion()"><mat-icon>delete_forever</mat-icon>Direccion</button>
-
+          <button mat-flat-button color="primary" (click)="VentasCliente()" disabled="true"><mat-icon>money_off</mat-icon>Cuenta Corriente</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="Eliminar()"><mat-icon>delete_forever</mat-icon>Dar De Baja</button>
         </div>
 
         <!-- Input de Busqueda -->
@@ -19,7 +15,7 @@
     <!-- #endregion ABMC -->
 
     <!-- #region HERRAMIENTAS -->
-    <div class="herramientas">
+    <!-- <div class="herramientas">
 
       <div class="etiqueta">
         <mat-icon>construction</mat-icon>
@@ -28,7 +24,7 @@
       <div class="acciones">
         <button mat-flat-button color="primary" (click)="VentasCliente()"><mat-icon>money_off</mat-icon>Deudas / Ventas</button>
       </div>
-    </div>
+    </div> -->
     <!-- #endregion HERRAMIENTAS -->
 
     <!-- #region TABLA -->
@@ -51,6 +47,14 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="editar">
+            <mat-header-cell mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell mat-cell *matCellDef="let element" matTooltip="Editar">
+              <mat-icon class="editar" (click)="Modificar(element)">edit</mat-icon>
+            </mat-cell>
+            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
           <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
@@ -68,11 +72,17 @@
           <mat-header-cell mat-header-cell *matHeaderCellDef>Telefono</mat-header-cell>
           <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Telefono:</span><p>{{element.telefono}}</p></mat-cell>
         </ng-container>
+
+        <!-- Celular -->
+        <ng-container matColumnDef="celular">
+          <mat-header-cell mat-header-cell *matHeaderCellDef>Celular</mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">CElular:</span><p>{{element.celular}}</p></mat-cell>
+        </ng-container>
         
         <!-- Condicion -->
         <ng-container matColumnDef="condicion">
           <mat-header-cell mat-header-cell *matHeaderCellDef>Condicion IVA</mat-header-cell>
-          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Condicion IVA:</span><p>{{element.condicion}}</p></mat-cell>
+          <mat-cell mat-cell *matCellDef="let element"> <span class="mobile-label">Condicion IVA:</span><p>{{element.condicionIva}}</p></mat-cell>
         </ng-container>
 
          <!-- Documento -->

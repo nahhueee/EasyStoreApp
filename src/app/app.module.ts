@@ -30,7 +30,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -102,6 +102,9 @@ import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmo
 import { ImpimirEtiquetasComponent } from './components/contenido/productos/impimir-etiquetas/impimir-etiquetas.component';
 import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
 import { DireccionClientesComponent } from './components/contenido/clientes/direccion-clientes/direccion-clientes.component';
+import { getSpanishPaginatorIntl } from './others/spanish-paginator-intl';
+import { AddmodVentasComponent } from "./components/contenido/ventas/addmod-ventas/addmod-ventas.component";
+import { FacturarComponent } from './components/contenido/ventas/facturar/facturar.component';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -151,48 +154,49 @@ import { DireccionClientesComponent } from './components/contenido/clientes/dire
         AddmodEtiquetasComponent,
         ImpimirEtiquetasComponent,
         AdministrarProductosComponent,
-        DireccionClientesComponent
+        DireccionClientesComponent,
+        AddmodVentasComponent,
+        FacturarComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatButtonModule,
-        MatSelectModule,
-        MatSliderModule,
-        MatDividerModule,
-        MatIconModule,
-        MatSlideToggleModule,
-        MatSidenavModule,
-        MatCardModule,
-        MatTooltipModule,
-        MatInputModule,
-        MatSnackBarModule,
-        MatTableModule,
-        MatCheckboxModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatDialogModule,
-        MatExpansionModule,
-        MatFormFieldModule,
-        MatRadioModule,
-        MatTabsModule,
-        MatAutocompleteModule,
-        MatProgressSpinnerModule,
-        MatProgressBarModule,
-        MatBadgeModule,
-        MatMenuModule,
-        MatButtonToggleModule,
-        MatStepperModule,
-        ToastrModule.forRoot(),
-        IMaskModule,
-        NgxSpinnerModule,
-        NgApexchartsModule,
-        NgxCollapseAnimatedDirective
-    ], providers: [
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatDividerModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatSidenavModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatInputModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatRadioModule,
+    MatTabsModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatBadgeModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    MatStepperModule,
+    ToastrModule.forRoot(),
+    IMaskModule,
+    NgxSpinnerModule,
+    NgApexchartsModule,
+    NgxCollapseAnimatedDirective], providers: [
         provideAnimations(),
 
         //Configuracion regional fechas
@@ -205,6 +209,8 @@ import { DireccionClientesComponent } from './components/contenido/clientes/dire
         },
         //Se encarga de atrapar los pedidos al back y mostrar el spinner
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+        //Se encarga de poner el paginator de material en español
+        { provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() },
         //Aplica la estrategia # para las recargas, error 404
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         //Captura los errores globales de la aplicacion
