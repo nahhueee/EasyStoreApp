@@ -105,7 +105,7 @@
                         <div class="inputs">
                             <!-- Codigo Nombre -->
                             <div class="busqueda">
-                                <input id="inputBusqueda" type="text" placeholder="Código o Nombre" formControlName="codigoNombre">
+                                <input id="inputBusqueda" type="text" placeholder="Código o Nombre" formControlName="codigoNombre" (input)="Buscar()">
                                 <mat-icon matTooltip="Limpiar" (click)="limpiarInput()" style="color: rgb(255, 173, 173);">close</mat-icon>
                             </div>
 
@@ -199,6 +199,9 @@
                                         [ngStyle]="{'background-color':color.hexa}"
                                     ></div>
                                 }
+                                <div class="color-box limpiar" matTooltip="Limpiar" (click)="limpiarColor()">
+                                    <mat-icon style="color: rgb(255, 173, 173);">close</mat-icon>
+                                </div>
                             </div>
                         }@else {
                             <div class="color-grid">
@@ -211,7 +214,7 @@
                             </div>
                         }
 
-                        @if(colorSeleccionado && coloresMaterial.length > 0){
+                        @if((colorSeleccionado && colorSeleccionado.descripcion) && coloresMaterial.length > 0){
                             <p class="colorSeleccionado">Color seleccionado: <span>{{colorSeleccionado.descripcion}}</span></p>
                         }
 
@@ -219,27 +222,35 @@
                             @for (item of generos; track $index) {
                                 <mat-button-toggle class="cuadro-opcion" [ngClass]="{'esDark':esDark, 'opcionActiva': item.id === generoControl}" [value]="item.id" 
                                 [checked]="item.id === generoControl"
-                                (click)="seleccionGenero(item.id!, $event)">           
+                                (click)="Buscar()">           
                                     {{item.descripcion}}
                                 </mat-button-toggle>
                             }
+                            <mat-button-toggle matTooltip="Limpiar" (click)="limpiarGenero()" class="cuadro-opcion limpiar">
+                                <mat-icon style="color: rgb(255, 173, 173);">close</mat-icon>
+                            </mat-button-toggle>
                         </mat-button-toggle-group>
                     </form>
 
             
                     <div class="resultados">
                         <div class="tarjetas">
-                            <div *ngFor="let producto of productos" class="tarjeta">
-                                <span>{{producto.codigo}}</span>
-                                <p class="nombre">{{ producto.nombre }}</p>
-                                <hr>
-                                <span>{{producto.genero}}</span>
-                                <div class="color-bar" [ngStyle]="{'background': producto.color}"></div>
+                            <div *ngFor="let producto of productos" class="tarjeta" 
+                            [ngClass]="{'tarjeta-seleccionada': productoSeleccionado && producto.id === productoSeleccionado.id }" 
+                            (click)="SeleccionarProducto(producto)">
+                                <div class="card-body">
+                                    <span>{{producto.codigo}}</span>
+                                    <p class="nombre">{{ producto.nombre }}</p>
+                                </div>
+                                <div class="abajo">
+                                    <p class="lblGenero">{{producto.genero}}</p>
+                                    <div class="color-bar" [ngStyle]="{'background': producto.hexa}"></div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Paginacion -->
-                        <mat-paginator #paginator [pageSize]="10" (page)="Buscar($event)"></mat-paginator>
+                        <mat-paginator #paginator [pageSize]="8" (page)="Buscar($event)"></mat-paginator>
                         <!-- -------------------- -->
                     </div>
                 </div>

@@ -246,6 +246,12 @@
   border-radius: 4px;
   padding: 10px;
   width: 100%;
+
+  .limpiar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .color-box {
@@ -276,12 +282,17 @@
 .generos{
   width: 100%;
   margin-top: 15px;
+
+  .limpiar{
+    width: 60px;
+  }
 }
 .cuadro-opcion {
     width: 100%;
     color: #000;
     border: 1px solid var(--border-color);
 }
+
 .esDark{
     color: white;
 }
@@ -297,6 +308,7 @@
 .resultados{
     flex: 1;
     border-radius: 8px;
+    padding: 20px 0px;
     
     .tarjetas{
         display: grid;
@@ -307,14 +319,23 @@
 
     .tarjeta{
         width: 100%;
+        height: 150px;
         text-align: center;
         border-radius: 8px;
+        background-color: var(--color-alternative);
         border: 1px solid var(--border-color);;
         cursor: pointer;
         transition: ease 0.2s;
+
+        display: flex;
+        flex-direction: column;
     }
     .tarjeta:hover{
-        transform: scale(0.95);
+        transform: scale(1.03);
+    }
+
+    .tarjeta-seleccionada{
+        border: 2px solid var(--color-primary);
     }
    
     //Achico las tarjetas para el telefono
@@ -325,23 +346,33 @@
     }
 
     .card-body{
-        .nombre{
-            font-size: 'Roboto-Regular';
-            font-size: 15px;
-            margin-bottom: 3px;
-        }
-        .precio{
-            font-size: 22px;
-            color: var(--color-primary);
-            font-size: 'Roboto-Regular';
-        }
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px 10px;
+      
+      p{
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 3px;
+      }
     }
 
-    .color-bar {
-        height: 10px;
+    .abajo{
+      padding-top: 5px;
+      border-top: 1px solid var(--border-color);
+
+      .lblGenero{
+          font-size: 14px;
+          color: var(--placeholders);
+          margin-bottom: 5px;
+      }
+      .color-bar {
+        height: 12px;
         width: 100%;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
+      }
     }
 }
 // FIN PRODUCTOS

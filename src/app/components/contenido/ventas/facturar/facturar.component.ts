@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DetalleFactura } from 'src/app/models/DetalleFactura';
 import { crearFiltros, PropKey } from 'src/app/models/filtros/FiltrosProducto.config';
 import { MiscService } from 'src/app/services/misc.service';
-import { Color, Genero, Material, Producto, Temporada, TipoProducto } from 'src/app/models/Producto';
+import { Color, Genero, Material, Producto, TablaProducto, Temporada, TipoProducto } from 'src/app/models/Producto';
 import { ParametrosService } from 'src/app/services/parametros.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
@@ -60,7 +60,8 @@ export class FacturarComponent {
   generos:Genero[]=[];
 
   //Productos
-  productos:Producto[]=[];
+  productos:TablaProducto[]=[];
+  productoSeleccionado:TablaProducto;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   //Lista de productos seleccionados
@@ -134,7 +135,6 @@ export class FacturarComponent {
     this.miscService.ObtenerGeneros()
     .subscribe(response => {
       this.generos = response;
-      console.log(response)
     });
   }
 
@@ -244,13 +244,13 @@ export class FacturarComponent {
     this.formFiltroProducto.get('codigoNombre')?.reset();
   }
 
-  seleccionGenero(id: number, event: MouseEvent) {
-    event.preventDefault();
-    const control = this.formFiltroProducto.get('genero');
-    if (control?.value === id) {
-      // Si el usuario hace clic sobre el mismo, se deselecciona
-      control?.setValue('');
-    } 
+  limpiarGenero(){
+    this.formFiltroProducto.get('genero')?.reset();
+    this.Buscar();
+  }
+
+  limpiarColor(){
+    this.colorSeleccionado = new Color();
     this.Buscar();
   }
   //#endregion
@@ -263,6 +263,8 @@ export class FacturarComponent {
       event.pageIndex = 0;
       event.pageSize = this.paginator.pageSize;
     }
+
+    this.productoSeleccionado = new TablaProducto();
 
    const filtro = new FiltroProducto({
       pagina: event.pageIndex + 1,
@@ -288,10 +290,11 @@ export class FacturarComponent {
           //Llenamos la tabla con los resultados
           this.productos = [];
           this.productos = response.registros;
-
-          console.log(response)
         });
   }
+
+  SeleccionarProducto(producto:TablaProducto){
+    this.productoSeleccionado = producto;  }
   //#endRegion PRODUCTOS
 
 
