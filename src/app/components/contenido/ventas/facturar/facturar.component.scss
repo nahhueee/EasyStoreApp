@@ -1,9 +1,7 @@
-.contenedor{
-    padding: 30px 5% 0px 5%; 
-    background-color: var(--color-element-back);
-    border-radius: 10px;
+.stepper{
+  padding: 20px;
+  background-color: var(--color-background);
 }
-
 .mat-mdc-form-field {
   margin-top: 16px;
 }
@@ -11,6 +9,7 @@
 //PANTALLA 1
 .form{
   padding: 0%;
+  margin-top: 20px;
 
   .enLinea{
     display: flex;
@@ -173,22 +172,33 @@
   gap: 30px;
   flex-wrap: wrap;
   width: 100%;
+  margin-top: 20px;
 
-  .izq, .der{
-    flex: 1;
+  .izq{
+    flex: 2;
   }
+  .der{
+    flex: 1.5;
+  }
+}
+
+.filtros{
+  background-color: var(--color-element-back);
+  border-radius: 10px;
+  padding: 20px;
 }
 
 // FILTRO DE PRODUCTOS
 /*#region INPUTS FILTRO*/
 .inputs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(4, 1fr); 
   grid-template-rows: repeat(2, auto);  
   column-gap: 10px; 
   row-gap: 10px;;
   align-items: start;
   flex: 2;
+  margin-top: 10px;
 }
 .select{
     display: flex;
@@ -374,6 +384,70 @@
         border-bottom-right-radius: 8px;
       }
     }
+}
+
+.renglon {
+    width: 230px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: "Poppins-Regular";
+
+    .arriba{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        p{
+            margin: 0;
+            font-size: 25px;
+            font-weight: 500;
+        }
+    }
+
+    span{
+        font-size: 14px;
+        color: var(--placeholders);
+    }
+}
+
+::ng-deep .popover.pop-dark {
+  .popover-body {
+    color: #fff;
+    background-color: var(--color-background) !important;
+    border: 1px solid #7f7f7f;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.325);
+    padding: 0px;
+  }
+  .renglon{
+    border-bottom: 1px solid #ccc;
+  }
+  .renglon:hover {
+    background-color: var(--color-element-back);
+  }
+
+ .popover-header {
+    background-color: #212529 !important; /* título oscuro */
+    color: #fff !important;
+ }
+}
+
+::ng-deep .popover.pop-light {
+  .popover-body {
+    color: #2e2e2e;
+    background-color: white;
+    border: 1px solid #a6a6a6;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.325);
+    padding: 0px;
+  }
+  .renglon{
+    border-bottom: 1px solid #a8a8a8;
+  }
+  .renglon:hover {
+    background-color: #e1e1e1;
+  }
 }
 // FIN PRODUCTOS
 

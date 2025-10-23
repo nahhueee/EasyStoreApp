@@ -158,6 +158,7 @@ export class MainProductosComponent implements OnInit, AfterViewInit {
           pagina: event.pageIndex + 1,
           total: event.length,
           tamanioPagina: event.pageSize,
+          desdeFacturacion: false,
           busqueda: this.busquedaControl.value,
           orden: this.sort.active,
           direccion: this.sort.direction,

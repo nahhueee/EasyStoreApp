@@ -10,6 +10,7 @@ import { DetCajasComponent } from './components/contenido/cajas/det-cajas/det-ca
 import { AddmodEtiquetasComponent } from './components/contenido/etiquetas/addmod-etiquetas/addmod-etiquetas.component';
 import { AdministrarProductosComponent } from './components/contenido/productos/administrar-productos/administrar-productos.component';
 import { AddmodClientesComponent } from './components/contenido/clientes/addmod-clientes/addmod-clientes.component';
+import { FacturarComponent } from './components/contenido/ventas/facturar/facturar.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,11 @@ const routes: Routes = [
   {
     path:"administrar-producto/:producto",
     component:AdministrarProductosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:"nueva-factura",
+    component:FacturarComponent,
     canActivate: [AuthGuard]
   },
 ];

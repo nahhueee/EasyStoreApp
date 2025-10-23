@@ -1,4 +1,5 @@
-//#D0D0D0 ILUSTRACIONES
+/* Importing Bootstrap SCSS file. */
+@use "bootstrap" as *;
 
 /*#region ANGULAR MATERIAL*/
 @use '@angular/material' as mat;
@@ -77,9 +78,6 @@ $easysales-app-theme: mat.m2-define-light-theme((
   font-style: normal;
  }
 /*#endregion */
-
-// Importacion de boostrap css
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
 html, body { height: 100%; }
 body { 
@@ -443,5 +441,7 @@ font-weight: normal !important;
   border-radius: 10px;  
 }
 /*#endregion */
+
+
 
 

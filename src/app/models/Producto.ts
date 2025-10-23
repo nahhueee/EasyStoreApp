@@ -5,12 +5,12 @@ export class Producto {
     empresa?: string;
     cliente?: number;
     proceso?: number;
-    tipo?: number;
-    subtipo?: number;
-    genero?: number;
-    temporada?: number;
-    material?: number;
-    color?: number;
+    tipo?: TipoProducto;
+    subtipo?: SubtipoProducto;
+    genero?: Genero;
+    temporada?: Temporada;
+    material?: Material;
+    color?: Color;
     moldeleria?: number;
     imagen: string = "";
     talles?: TallesProducto[];

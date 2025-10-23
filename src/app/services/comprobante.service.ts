@@ -1,19 +1,10 @@
 import { Injectable } from '@angular/core';
-
-//PDF MAKE
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
-
 import { ParametrosService } from './parametros.service';
 import { NotificacionesService } from './notificaciones.service';
 import { ObjComprobante } from '../models/ObjComprobante';
 import { Venta } from '../models/Venta';
 import { ObjTicketFactura } from '../models/ObjTicketFactura';
 import { VentasService } from './ventas.service';
-import { style } from '@angular/animations';
 import { FilesService } from './files.service';
 import { firstValueFrom } from 'rxjs';
 
@@ -21,6 +12,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class ComprobanteService {
+  private pdfMake: any;
 
   constructor(
     private filesService:FilesService,
@@ -29,15 +21,32 @@ export class ComprobanteService {
     private Notificaciones:NotificacionesService
   ) { }
 
+  // Método para inicializar pdfMake
+  async init() {
+    const pdfMakeModule = await import('pdfmake/build/pdfmake.js');
+    const pdfFontsModule = await import('pdfmake/build/vfs_fonts.js');
+
+    this.pdfMake = pdfMakeModule.default;
+    this.pdfMake.vfs = pdfFontsModule.default ? pdfFontsModule.default.pdfMake.vfs : pdfFontsModule.pdfMake.vfs;
+  }
+
   //#region PDF
     async VerComprobante(tipo:string, venta:Venta) {
+      if (!this.pdfMake) {
+        await this.init();
+      }
+
       const documentDefinition = await this.ArmarComprobante(false, tipo, venta);
-      pdfMake.createPdf(documentDefinition).open();
+      this.pdfMake.createPdf(documentDefinition).open();
     }
   
     async ImprimirComprobante(tipo:string, venta:Venta){
+      if (!this.pdfMake) {
+        await this.init();
+      }
+
       const documentDefinition = await this.ArmarComprobante(true, tipo, venta);
-      const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+      const pdfDocGenerator = this.pdfMake.createPdf(documentDefinition);
   
       pdfDocGenerator.getBlob((blob) => {
         const file = new File([blob], "ticket.pdf", { type: "application/pdf" });

@@ -2,6 +2,7 @@ export class FiltroProducto{
   pagina = 1;
   tamanioPagina = 15;
   total = 0;
+  desdeFacturacion:boolean = false;
   busqueda = "";
   orden = "";
   direccion = "";
@@ -19,6 +20,7 @@ export class FiltroProducto{
       this.pagina = data.pagina;
       this.tamanioPagina = data.tamanioPagina;
       this.total = data.total;
+      this.desdeFacturacion = data.desdeFacturacion;
       this.busqueda = data.busqueda;
       this.orden = data.orden;
       this.direccion = data.direccion;

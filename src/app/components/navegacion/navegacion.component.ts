@@ -50,7 +50,7 @@ export class NavegacionComponent implements OnInit {
 
   componentes = [
     { id: 'ventas', titulo: 'Ventas', icon: 'shopping_cart', submenu: [
-      { id: 'nueva-venta', titulo: 'Registrar', icon: 'add_shopping_cart' },
+      { id: 'nueva-factura', titulo: 'Registrar', icon: 'add_shopping_cart' },
       { id: 'ventas', titulo: 'Listado', icon: 'description' }
     ]},
     { id: 'inventario', titulo: 'Inventario', icon: 'inventory', submenu: [
@@ -112,7 +112,11 @@ export class NavegacionComponent implements OnInit {
   }  
 
   Navegar(parametro:string){
-    this.router.navigateByUrl("navegacion/" + parametro);
+    if(parametro == "nueva-factura"){
+      this.router.navigateByUrl(parametro);
+    }else{
+      this.router.navigateByUrl("navegacion/" + parametro);
+    }
   }
   NavegarAdmProducto(){
     this.router.navigateByUrl("administrar-producto/0");

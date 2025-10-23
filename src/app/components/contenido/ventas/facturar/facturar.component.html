@@ -1,5 +1,5 @@
 <div class="contenedor">
-    <mat-stepper #stepper>
+    <mat-stepper #stepper class="stepper">
         <mat-step [stepControl]="formGenerales" errorMessage="Name is required.">
             <form [formGroup]="formGenerales" class="form">
                 <ng-template matStepLabel>Datos Generales</ng-template>
@@ -102,13 +102,13 @@
                 <div class="izq">
                     <form [formGroup]="formFiltroProducto" class="filtros" autocomplete="off">
 
+                         <!-- Codigo Nombre -->
+                        <div class="busqueda">
+                            <input id="inputBusqueda" type="text" placeholder="Código o Nombre" formControlName="codigoNombre" (input)="Buscar()">
+                            <mat-icon matTooltip="Limpiar" (click)="limpiarInput()" style="color: rgb(255, 173, 173);">close</mat-icon>
+                        </div>
+                        
                         <div class="inputs">
-                            <!-- Codigo Nombre -->
-                            <div class="busqueda">
-                                <input id="inputBusqueda" type="text" placeholder="Código o Nombre" formControlName="codigoNombre" (input)="Buscar()">
-                                <mat-icon matTooltip="Limpiar" (click)="limpiarInput()" style="color: rgb(255, 173, 173);">close</mat-icon>
-                            </div>
-
                             <!-- Temporadas -->
                             <div class="select">
                                 <mat-select formControlName="temporada" placeholder="Temporada" (selectionChange)="cambioSeleccionable('temporada')" (openedChange)="inputFiltro.focus()">
@@ -236,18 +236,39 @@
                     <div class="resultados">
                         <div class="tarjetas">
                             <div *ngFor="let producto of productos" class="tarjeta" 
-                            [ngClass]="{'tarjeta-seleccionada': productoSeleccionado && producto.id === productoSeleccionado.id }" 
-                            (click)="SeleccionarProducto(producto)">
+                             [ngClass]="{'tarjeta-seleccionada': producto.id === productoSeleccionado.id }" 
+                             #p="ngbPopover"
+                             [ngbPopover]="productoSeleccionado ? tallesTemplate : null"
+                             [popoverClass]="esDark ? 'pop-dark' : 'pop-light'"
+                             [popoverTitle]="'Talles'"
+                             triggers="manual"
+                             [autoClose]="'outside'"
+                             placement="end"
+                             (click)="SelecionarProducto(producto, p);"
+                             (hidden)="DeseleccionarProducto();">
                                 <div class="card-body">
                                     <span>{{producto.codigo}}</span>
                                     <p class="nombre">{{ producto.nombre }}</p>
                                 </div>
                                 <div class="abajo">
-                                    <p class="lblGenero">{{producto.genero}}</p>
-                                    <div class="color-bar" [ngStyle]="{'background': producto.hexa}"></div>
+                                    <p class="lblGenero">{{producto.genero?.descripcion}}</p>
+                                    <div class="color-bar" [ngStyle]="{'background': producto.color?.hexa}"></div>
                                 </div>
                             </div>
                         </div>
+
+                         <!-- Template del popover adicionales -->
+                        <ng-template #tallesTemplate>
+                            @for(talle of productoSeleccionado.talles; track $index) {
+                                <div class="renglon" (click)="AgregarItem(talle); $event.stopPropagation()"> 
+                                    <div class="arriba">
+                                        <p>{{talle.talle}}</p>
+                                        <p>${{talle.precio! | decimalFormat}}</p>
+                                    </div>
+                                    <span>Cantidad: {{talle.cantidad}}</span>
+                                </div>
+                            }
+                        </ng-template>
 
                         <!-- Paginacion -->
                         <mat-paginator #paginator [pageSize]="8" (page)="Buscar($event)"></mat-paginator>

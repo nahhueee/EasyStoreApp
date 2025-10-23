@@ -201,13 +201,12 @@ export class AdministrarProductosComponent {
     .subscribe(response => {
       this.producto = new Producto(response);
             
-      this.colorSeleccionado = this.coloresMaterial.find(c=> c.id == this.producto.color) ?? new Color();
       this.formulario.get('empresa')?.setValue(this.producto.empresa);
-      this.formulario.get('temporada')?.setValue(this.producto.temporada);
-      this.formulario.get('producto')?.setValue(this.producto.tipo);
-      this.formulario.get('tipo')?.setValue(this.producto.subtipo);
-      this.formulario.get('genero')?.setValue(this.producto.genero);
-      this.formulario.get('material')?.setValue(this.producto.material);
+      this.formulario.get('temporada')?.setValue(this.producto.temporada?.id);
+      this.formulario.get('producto')?.setValue(this.producto.tipo?.id);
+      this.formulario.get('tipo')?.setValue(this.producto.subtipo?.id);
+      this.formulario.get('genero')?.setValue(this.producto.genero?.id);
+      this.formulario.get('material')?.setValue(this.producto.material?.id);
       this.MaterialChange();
       this.formulario.get('color')?.setValue(this.producto.color);
       this.formulario.get('moldeleria')?.setValue(this.producto.moldeleria);
@@ -215,8 +214,8 @@ export class AdministrarProductosComponent {
 
       this.clienteSeleccionado = this.clientes.find(c=> c.id == this.producto.cliente) ?? new Cliente();
       this.tipoSeleccionado = this.tiposProducto.find(t=> t.id == this.producto.tipo) ?? new TipoProducto();
-      this.subtipoSeleccionado = this.subtiposProducto.find(t=> t.id == this.producto.subtipo) ?? new SubtipoProducto();
-      this.colorSeleccionado = this.coloresMaterial.find(c=> c.id == this.producto.color) ?? new Color();
+      this.subtipoSeleccionado = this.subtiposProducto.find(t=> t.id == this.producto.subtipo?.id) ?? new SubtipoProducto();
+      this.colorSeleccionado = this.coloresMaterial.find(c=> c.id == this.producto.color?.id) ?? new Color();
 
       const lineaTalle = this.producto.talles && this.producto.talles.length > 0 ? this.producto.talles[0].idLineaTalle : null
       this.formulario.get('lineaTalle')?.setValue(lineaTalle);

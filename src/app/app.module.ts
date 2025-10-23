@@ -105,6 +105,7 @@ import { DireccionClientesComponent } from './components/contenido/clientes/dire
 import { getSpanishPaginatorIntl } from './others/spanish-paginator-intl';
 import { AddmodVentasComponent } from "./components/contenido/ventas/addmod-ventas/addmod-ventas.component";
 import { FacturarComponent } from './components/contenido/ventas/facturar/facturar.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -196,7 +197,8 @@ import { FacturarComponent } from './components/contenido/ventas/facturar/factur
     IMaskModule,
     NgxSpinnerModule,
     NgApexchartsModule,
-    NgxCollapseAnimatedDirective], providers: [
+    NgxCollapseAnimatedDirective,
+    NgbModule], providers: [
         provideAnimations(),
 
         //Configuracion regional fechas

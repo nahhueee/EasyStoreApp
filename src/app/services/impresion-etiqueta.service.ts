@@ -1,9 +1,3 @@
-//PDF MAKE
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 
 import { Injectable } from '@angular/core';
 import { Etiqueta } from '../models/Etiqueta';
@@ -15,13 +9,26 @@ import { ProductoImprimir } from '../models/ProductoImprimir';
   providedIn: 'root'
 })
 export class ImpresionEtiquetaService {
+  private pdfMake: any;
 
   constructor() { }
 
+  // Método para inicializar pdfMake
+  async init() {
+    const pdfMakeModule = await import('pdfmake/build/pdfmake.js');
+    const pdfFontsModule = await import('pdfmake/build/vfs_fonts.js');
+
+    this.pdfMake = pdfMakeModule.default;
+    this.pdfMake.vfs = pdfFontsModule.default ? pdfFontsModule.default.pdfMake.vfs : pdfFontsModule.pdfMake.vfs;
+  }
+
   //#region PDF
     async GenerarEtiquetas(etiqueta:Etiqueta, productos:ProductoImprimir[]) {
+      if (!this.pdfMake) {
+        await this.init();
+      }
       const documentDefinition = await this.ArmarArchivo(etiqueta, productos);
-      pdfMake.createPdf(documentDefinition).open();
+      this.pdfMake.createPdf(documentDefinition).open();
     }
   
     private async ArmarArchivo(etiqueta:Etiqueta, productos:ProductoImprimir[]) {

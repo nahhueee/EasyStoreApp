@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { map, Observable, startWith } from 'rxjs';
@@ -9,11 +9,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DetalleFactura } from 'src/app/models/DetalleFactura';
 import { crearFiltros, PropKey } from 'src/app/models/filtros/FiltrosProducto.config';
 import { MiscService } from 'src/app/services/misc.service';
-import { Color, Genero, Material, Producto, TablaProducto, Temporada, TipoProducto } from 'src/app/models/Producto';
+import { Color, Genero, Material, Producto, TablaProducto, TallesProducto, Temporada, TipoProducto } from 'src/app/models/Producto';
 import { ParametrosService } from 'src/app/services/parametros.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 import { ProductosService } from 'src/app/services/productos.service';
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-facturar',
@@ -60,8 +61,9 @@ export class FacturarComponent {
   generos:Genero[]=[];
 
   //Productos
-  productos:TablaProducto[]=[];
-  productoSeleccionado:TablaProducto;
+  productos:Producto[]=[];
+  productoSeleccionado:Producto = new Producto();
+  popoverAbierto: NgbPopover | null = null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   //Lista de productos seleccionados
@@ -264,12 +266,13 @@ export class FacturarComponent {
       event.pageSize = this.paginator.pageSize;
     }
 
-    this.productoSeleccionado = new TablaProducto();
+    this.productoSeleccionado = new Producto();
 
    const filtro = new FiltroProducto({
       pagina: event.pageIndex + 1,
       total: event.length,
       tamanioPagina: event.pageSize,
+      desdeFacturacion: true,
       busqueda: this.formFiltroProducto.get('codigoNombre')?.value,
       proceso: 1,
       tipo: this.formFiltroProducto.get('tipo')?.value,
@@ -293,8 +296,82 @@ export class FacturarComponent {
         });
   }
 
-  SeleccionarProducto(producto:TablaProducto){
-    this.productoSeleccionado = producto;  }
+  SelecionarProducto(producto:Producto, popover:NgbPopover){
+    // Si hago clic sobre el mismo producto y ya está abierto
+    if (this.productoSeleccionado?.id === producto.id) {
+      popover.close();
+      this.DeseleccionarProducto();
+      return;
+    }
+
+    if (this.popoverAbierto) {
+      this.popoverAbierto.close();
+      this.popoverAbierto = null;
+
+      // Esperar hasta que cierre el popover anterior antes de abrir el nuevo
+      setTimeout(() => {
+        this.abrirPopover(producto, popover);
+      }, 200); 
+    } else {
+      // Si no había ningún popover abierto, abrir directamente
+      this.abrirPopover(producto, popover);
+    }
+  }
+
+  private abrirPopover(producto: Producto, popover: NgbPopover) {
+    this.productoSeleccionado = producto;
+    popover.open();
+    this.popoverAbierto = popover;
+  }
+
+  DeseleccionarProducto(){
+    this.productoSeleccionado = new Producto();
+    this.popoverAbierto = null;
+  }
+ 
+  AgregarItem(talle:TallesProducto){
+    // Buscar si ya existe el producto con ese id y nombre
+    const existente = this.detalleFactura.find(
+      d => d.idProducto === talle.id && d.producto === talle.talle
+    );
+
+    if (existente) {
+      // Si ya existe, actualizo cantidad y totales
+      existente.cantidad! += 1;
+      existente.total = existente.unitario! * existente.cantidad!;
+    } else {
+      // Si no existe, creo uno nuevo
+      const detPedido = new DetallePedido();
+      detPedido.id = 0;
+      detPedido.idPedido = this.pedido.id!;
+      detPedido.idProducto = producto.id;
+      detPedido.producto = producto.nombre;
+      detPedido.tipoProd = producto.tipo!;
+      detPedido.cantidad = 1;
+      detPedido.costo = costo;
+      detPedido.unitario = precio;
+      detPedido.total = precio;
+      detPedido.obs = "";
+
+      this.detallePedido.push(detPedido);
+    }
+    this.dataSource = new MatTableDataSource<DetallePedido>(this.detallePedido);
+
+    this.RecontarTotales();
+    this.productoSeleccionado = new Producto();
+
+    //Le doy el foco al input de busqueda
+    setTimeout(() => {
+      if(this.pantalla>600){
+        this.inputBusqueda.nativeElement.select(); // En pc seleccionamos el input
+      }
+    })
+
+    //Informo de lo agregado en pantalla movil
+    if(this.pantalla<600){
+      this.Notificaciones.variedadAgregada();
+    }
+  }
   //#endRegion PRODUCTOS
 
 
