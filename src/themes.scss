@@ -3,15 +3,14 @@
 $mat-theme-ignore-duplication-warnings: true;
 
 // ====================
-// 🎨 Mixin genérico para crear temas
+// Mixin genérico para crear temas
 // ====================
 @mixin define-theme($name, $primary, $accent) {
   $light-theme: mat.m2-define-light-theme((color: (primary: $primary, accent: $accent)));
   $dark-theme: mat.m2-define-dark-theme((color: (primary: $primary, accent: $accent)));
 
-  // 🌞 Tema claro
+  // Tema claro
   .#{$name}-theme {
-    // ⚡ Variables CSS primero
     --color-primary: #{mat.m2-get-color-from-palette($primary)};
     --color-accent: #{mat.m2-get-color-from-palette($accent)};
     --color-background: #e6e6e6;
@@ -25,13 +24,11 @@ $mat-theme-ignore-duplication-warnings: true;
     --warn-text: #f86060;
     --placeholders: rgba(0, 0, 0, 0.6);
 
-    // Luego el mixin de Angular Material
     @include mat.all-component-colors($light-theme);
   }
 
-  // 🌚 Tema oscuro
+  // Tema oscuro
   .#{$name}-theme-dark {
-    // ⚡ Variables CSS primero
     --color-primary: #{mat.m2-get-color-from-palette($primary)};
     --color-accent: #{mat.m2-get-color-from-palette($accent)};
     --color-background: #212121;
@@ -46,7 +43,6 @@ $mat-theme-ignore-duplication-warnings: true;
     --placeholders: rgba(255, 255, 255, 0.6);
     color: var(--color-font);
 
-    // Luego el mixin de Angular Material
     @include mat.all-component-colors($dark-theme);
   }
 }

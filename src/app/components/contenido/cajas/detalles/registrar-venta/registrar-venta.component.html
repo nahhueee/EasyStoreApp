@@ -51,7 +51,7 @@
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Método de Pago</mat-label>
                 <mat-select formControlName="idTipoPago" (selectionChange)="TiposPagoChange()">
-                    <mat-option *ngFor="let tpPago of tiposDePago" [value]="tpPago.id">{{tpPago.nombre}}</mat-option>
+                    <mat-option *ngFor="let tpPago of tiposDePago" [value]="tpPago.id">{{tpPago.descripcion}}</mat-option>
                 </mat-select> 
             </mat-form-field>
 

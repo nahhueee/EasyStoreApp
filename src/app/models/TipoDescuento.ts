@@ -1,4 +1,4 @@
-export class TipoPago{
+export class TipoDescuento{
     id? : number;
     descripcion? : string;
     

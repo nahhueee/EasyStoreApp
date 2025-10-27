@@ -15,6 +15,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FiltroProducto } from 'src/app/models/filtros/FiltroProducto';
 import { ProductosService } from 'src/app/services/productos.service';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { TipoPago } from 'src/app/models/TipoPago';
+import { TipoDescuento } from 'src/app/models/TipoDescuento';
 
 @Component({
   selector: 'app-facturar',
@@ -23,18 +25,54 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
   styleUrl: './facturar.component.scss'
 })
 export class FacturarComponent {
+  decimal_mask: any;
   esDark:boolean = false;
   clientes:Cliente[]=[];
   filterClientes: Observable<Cliente[]>;
   clienteSeleccionado:Cliente;
 
   procesos = [
-    {id: 1, descripcion: 'ECOMMERCE'},
-    {id: 2, descripcion: 'DIFUSION'},
+    {id: 1, descripcion: 'FACTURA'},
+    {id: 2, descripcion: 'COTIZACION'},
     {id: 3, descripcion: 'SHOWROOM'},
-    {id: 4, descripcion: 'MAYORISTA'},
+    {id: 4, descripcion: 'DIFUSION'},
     {id: 5, descripcion: 'CON NOTA EMPAQUE'},
   ];
+
+  listas = [
+    {id: 1, descripcion: 'CONSUMIDOR FINAL'},
+    {id: 2, descripcion: 'LISTA 3 - 30%'},
+    {id: 3, descripcion: 'LISTA 4 - 45%'},
+    {id: 4, descripcion: 'LISTA 5 - 50%'},
+  ];
+
+
+  tiposDePago:TipoPago[]=[
+    {id: 1, descripcion: 'CONTADO'},
+    {id: 2, descripcion: 'TARJETA DEBITO'},
+    {id: 3, descripcion: 'TARJETA CREDITO'},
+    {id: 4, descripcion: 'MERCADO PAGO'},
+  ];
+
+  tipoDescuento:TipoDescuento[]=[
+    {id: 1, descripcion: 'PORCENTAJE'},
+    {id: 2, descripcion: 'VOUCHER'},
+    {id: 3, descripcion: 'PROMOCION'},
+  ];
+
+  empresas=[
+    {id: 1, descripcion: 'SUCEDE SRL'},
+    {id: 2, descripcion: 'GABEL MARIELA'},
+    {id: 3, descripcion: 'OMAR CHAZA'},
+  ];
+
+  comprobantes=[
+    {id: 1, descripcion: 'FACTURA A'},
+    {id: 2, descripcion: 'FACTURA B'},
+    {id: 3, descripcion: 'FACTURA C'},
+    {id: 3, descripcion: 'COTIZACION'},
+  ];
+
   
   formGenerales:FormGroup;
   dialogConfig = new MatDialogConfig(); //Configuraciones para la ventana emergente
@@ -69,7 +107,7 @@ export class FacturarComponent {
   //Lista de productos seleccionados
   detalleFactura: DetalleFactura[] = [];
   dataSource: MatTableDataSource<DetalleFactura>; //Data source de la tabla
-  displayedColumns: string[] = ['cantidad', 'producto', 'unitario', 'total', 'actions']; //Columnas a mostrar
+  displayedColumns: string[] = ['cantidad', 'producto', 'talle', 'unitario', 'total', 'actions']; //Columnas a mostrar
 
   //Variables para editar la cantidad
   editarCelda:number | undefined;
@@ -78,6 +116,10 @@ export class FacturarComponent {
 
   cantItems:number = 0;
   totalItems:number = 0;
+
+  //Lista de verificacion
+  columnsVerificar: string[] = ['cantidad', 'codigo', 'producto', 'talle', 'unitario', 'total']; //Columnas a mostrar
+  formDatosFinales:FormGroup;
 
   constructor(
     private clientesService: ClientesService,
@@ -89,8 +131,11 @@ export class FacturarComponent {
     this.formGenerales = new FormGroup({
       proceso: new FormControl(''),
       nroNota: new FormControl({ value: '', disabled: true }),
+      fecha: new FormControl(''),
       cliente: new FormControl(''),
+      lista: new FormControl(''),
     });
+
     this.formFiltroProducto = new FormGroup({
       codigoNombre: new FormControl(''),
       temporada: new FormControl(''),
@@ -100,8 +145,21 @@ export class FacturarComponent {
       genero: new FormControl(''),
     });
 
+    this.formDatosFinales = new FormGroup({
+      tipoPago: new FormControl(''),
+      tipoDescuento: new FormControl(''),
+      descuento: new FormControl({ value: '', disabled: true }),
+      empresa: new FormControl(''),
+      comprobante: new FormControl(''),
+      redondeo: new FormControl(''),
+    });
+
+
     this.esDark = this.parametrosService.EsDark();
   }
+
+  get nroNotaControl() {return this.formGenerales.get('nroNota')?.value;}
+  get procesoValor() {return this.procesos.find(p => p.id === this.formGenerales.get('proceso')?.value)?.descripcion || '';}
 
   get materialControl() {return this.formFiltroProducto.get('material')?.value;}
   get generoControl() {return this.formFiltroProducto.get('genero')?.value;}
@@ -141,6 +199,20 @@ export class FacturarComponent {
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      //Configuracion para la mascara decimal Imask
+      this.decimal_mask = {
+        mask: Number,
+        scale: 2,
+        thousandsSeparator: '.',
+        radix: ',',
+        normalizeZeros: true,
+        padFractionalZeros: true,
+        lazy: false,
+        signed: true
+      }
+    },0);
+
     //DEPENDIENDO EL PROCESO HABILITAMOS NOTA DE EMPAQUE
     this.formGenerales.get('proceso')?.valueChanges.subscribe((valor) => {
     const nroNotaControl = this.formGenerales.get('nroNota');
@@ -149,6 +221,11 @@ export class FacturarComponent {
       } else {
         nroNotaControl?.enable({ emitEvent: false });
       }
+    });
+
+    //HABILITAMOS EL CAMPO DE DESCUENTO AL SELECICONAR TIPO DE DESCUENTO
+    this.formDatosFinales.get('tipoDescuento')?.valueChanges.subscribe((valor) => {
+      this.formDatosFinales.get('descuento')?.enable({ emitEvent: false });
     });
   }
 
@@ -332,7 +409,7 @@ export class FacturarComponent {
   AgregarItem(talle:TallesProducto){
     // Buscar si ya existe el producto con ese id y nombre
     const existente = this.detalleFactura.find(
-      d => d.idProducto === talle.id && d.producto === talle.talle
+      d => d.idProducto === this.productoSeleccionado.id  && d.talle === talle.talle
     );
 
     if (existente) {
@@ -341,36 +418,28 @@ export class FacturarComponent {
       existente.total = existente.unitario! * existente.cantidad!;
     } else {
       // Si no existe, creo uno nuevo
-      const detPedido = new DetallePedido();
-      detPedido.id = 0;
-      detPedido.idPedido = this.pedido.id!;
-      detPedido.idProducto = producto.id;
-      detPedido.producto = producto.nombre;
-      detPedido.tipoProd = producto.tipo!;
-      detPedido.cantidad = 1;
-      detPedido.costo = costo;
-      detPedido.unitario = precio;
-      detPedido.total = precio;
-      detPedido.obs = "";
+      const detFactura = new DetalleFactura();
+      detFactura.id = 0;
+      detFactura.idFactura = 0;
+      detFactura.idProducto = this.productoSeleccionado.id;
+      detFactura.codProducto = this.productoSeleccionado.codigo;
+      detFactura.producto = this.productoSeleccionado.nombre;
+      detFactura.cantidad = 1;
+      detFactura.talle = talle.talle;
+      detFactura.unitario = talle.precio;
+      detFactura.total = talle.precio;
+      detFactura.obs = "";
 
-      this.detallePedido.push(detPedido);
+      this.detalleFactura.push(detFactura);
     }
-    this.dataSource = new MatTableDataSource<DetallePedido>(this.detallePedido);
+    this.dataSource = new MatTableDataSource<DetalleFactura>(this.detalleFactura);
 
     this.RecontarTotales();
-    this.productoSeleccionado = new Producto();
+  }
 
-    //Le doy el foco al input de busqueda
-    setTimeout(() => {
-      if(this.pantalla>600){
-        this.inputBusqueda.nativeElement.select(); // En pc seleccionamos el input
-      }
-    })
-
-    //Informo de lo agregado en pantalla movil
-    if(this.pantalla<600){
-      this.Notificaciones.variedadAgregada();
-    }
+   RecontarTotales() {
+    this.cantItems = this.detalleFactura.reduce((acc, d) => acc + d.cantidad!, 0);
+    this.totalItems = this.detalleFactura.reduce((acc, d) => acc + d.total!, 0);
   }
   //#endRegion PRODUCTOS
 

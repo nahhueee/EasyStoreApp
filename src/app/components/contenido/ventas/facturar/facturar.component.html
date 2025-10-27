@@ -1,4 +1,130 @@
 <div class="contenedor">
+    <div class="izq">
+        <mat-accordion class="example-headers-align" multi>
+            <!-- Panel de Generales -->
+            <mat-expansion-panel expanded>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Datos Generales
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <form [formGroup]="formGenerales" class="contenido">
+                    <div class="enLinea">
+                        <!-- Proceso -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Proceso</mat-label>
+                            <mat-select formControlName="proceso">
+                                <mat-option *ngFor="let option of procesos" [value]="option.id">{{option.descripcion}}</mat-option>
+                            </mat-select>
+                            <mat-error>
+                                Selecciona una opción
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Nro Nota Empaque -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>N° Nota Empaque</mat-label>
+                            <input matInput type="number" formControlName="nroNota">
+                            <mat-error>
+                                El campo es requerido
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Fecha -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Fecha</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="fecha">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="enLinea">
+
+                        <div class="cliente-input">
+                            <!-- Cliente -->
+                            <mat-form-field appearance="outline" class="full-width field-cliente">
+                                <mat-label>Cliente</mat-label>
+                                <input autocomplete="off" matInput type="text" class="uppercase" formControlName="cliente" [matAutocomplete]="ClienteAuto">
+                                <button type="button" mat-icon-button matSuffix matTooltip="Nuevo Cliente" (click)='NuevoCliente()'>
+                                    <mat-icon>add_circle</mat-icon>
+                                </button>
+                                <mat-autocomplete autoActivateFirstOption #ClienteAuto="matAutocomplete"
+                                                    (optionSelected)="ChangeCliente($event.option.value)">
+                                    <mat-option *ngFor="let cliente of filterClientes | async" [value]="cliente.id">
+                                    {{cliente.documento}} - {{cliente.nombre}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <!-- Lista De Precios -->
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Lista de Precios</mat-label>
+                                <mat-select formControlName="lista">
+                                    <mat-option *ngFor="let option of listas" [value]="option.id">{{option.descripcion}}</mat-option>
+                                </mat-select>
+                                <mat-error>
+                                    Selecciona una opción
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        @if(clienteSeleccionado){
+                            <div class="cliente-card">
+                                <div class="cliente-header">
+                                    <div class="icon">
+                                        <mat-icon>person</mat-icon>
+                                    </div>
+                                    <div class="info">
+                                    <h4>{{ clienteSeleccionado.nombre }}</h4>
+                                    <span>{{ clienteSeleccionado.tipoDocumento }} {{ clienteSeleccionado.documento }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="datos-section">
+                                    <!-- Contacto -->
+                                    <div class="subcard">
+                                        <h5><mat-icon>call</mat-icon> Datos de contacto</h5>
+                                        <p><strong>Teléfono:</strong> {{ clienteSeleccionado.telefono }}</p>
+                                        <p><strong>Celular:</strong> {{ clienteSeleccionado.celular }}</p>
+                                        <p><strong>Email:</strong> {{ clienteSeleccionado.email }}</p>
+                                        <p><strong>Contacto:</strong> {{ clienteSeleccionado.contacto }}</p>
+                                    </div>
+
+                                    <!-- Fiscales -->
+                                    <div class="subcard">
+                                        <h5><mat-icon>assignment</mat-icon> Datos fiscales</h5>
+                                        <p><strong>Razón Social:</strong> {{ clienteSeleccionado.razonSocial }}</p>
+                                        <p><strong>Condición Fiscal:</strong> {{ clienteSeleccionado.condicionIva }}</p>
+                                        <p><strong>Condición De Pago:</strong> {{ clienteSeleccionado.condicionPago }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }@else {
+                            <div class="noSeleccionado">
+                                <div class="icon">
+                                    <mat-icon>person</mat-icon>
+                                </div>
+                                <p>Selecciona un cliente para ver sus datos</p>
+                            </div>
+                        }
+                        
+                    </div>
+                </form>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <div class="der">
+        <div class="resumen">
+
+        </div>
+    </div>
+</div>
+
+<div>
     <mat-stepper #stepper class="stepper">
         <mat-step [stepControl]="formGenerales" errorMessage="Name is required.">
             <form [formGroup]="formGenerales" class="form">
@@ -89,10 +215,10 @@
                     
                 </div>
                 
-
                 <div class="botones">
                     <button mat-flat-button color="primary" matStepperNext>SIGUIENTE</button>
                 </div>
+
             </form>
         </mat-step>
         <mat-step>
@@ -260,7 +386,7 @@
                          <!-- Template del popover adicionales -->
                         <ng-template #tallesTemplate>
                             @for(talle of productoSeleccionado.talles; track $index) {
-                                <div class="renglon" (click)="AgregarItem(talle); $event.stopPropagation()"> 
+                                <div class="renglon" (click)="AgregarItem(talle)"> 
                                     <div class="arriba">
                                         <p>{{talle.talle}}</p>
                                         <p>${{talle.precio! | decimalFormat}}</p>
@@ -301,6 +427,12 @@
                                 <mat-header-cell mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
                                 <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Producto:</span><p>{{element.producto}}</p>  </mat-cell>
                             </ng-container>
+
+                              <!-- Talle -->
+                            <ng-container matColumnDef="talle">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef>Talle</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Talle:</span><p>{{element.talle}}</p>  </mat-cell>
+                            </ng-container>
                             
                             <!-- Unitario -->
                             <ng-container matColumnDef="unitario">
@@ -339,13 +471,169 @@
                     </div>
                 </div>  
             </div>
+
+            <div class="botones">
+                <button mat-stroked-button color="primary" matStepperPrevious>ANTERIOR</button>
+                <button mat-flat-button color="primary" matStepperNext>SIGUIENTE</button>
+            </div>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>Vericar</ng-template>
-            <p>You are now done.</p>
-            <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="stepper.reset()">Reset</button>
+            
+            <div class="datos-cliente">
+                <div class="elemento">
+                    <span>Proceso:</span> <p>{{procesoValor}}</p>
+                </div>
+                |
+                <div class="elemento" *ngIf="clienteSeleccionado">
+                    <span>Cliente:</span> <p>{{clienteSeleccionado.nombre}}</p>
+                </div>
+                <div class="elemento" *ngIf="clienteSeleccionado">
+                    <span>Email:</span> <p>{{clienteSeleccionado.email}}</p>
+                </div>
+                <div class="elemento" *ngIf="clienteSeleccionado">
+                    <span>Celular:</span> <p>{{clienteSeleccionado.celular}}</p>
+                </div>
+                <div class="elemento" *ngIf="clienteSeleccionado">
+                    <span>Historia:</span> <p>30%</p>
+                </div>
+            </div>
+
+            <div class="detalle-productos">
+                <mat-table mat-table [dataSource]="dataSource">
+                     <!-- Cantidad -->
+                    <ng-container matColumnDef="cantidad">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Cantidad:</span><p>{{element.cantidad}}</p>  </mat-cell>
+                    </ng-container>
+
+                    <!-- Codigo -->
+                    <ng-container matColumnDef="codigo">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Codigo:</span><p>{{element.codProducto}}</p>  </mat-cell>
+                    </ng-container>
+
+                    <!-- Descripcion -->
+                    <ng-container matColumnDef="producto">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Descripcion:</span><p>{{element.producto}}</p>  </mat-cell>
+                    </ng-container>
+
+                    <!-- Talle -->
+                    <ng-container matColumnDef="talle">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Talle</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Talle:</span><p>{{element.talle}}</p>  </mat-cell>
+                    </ng-container>
+                   
+                    <!-- Unitario -->
+                    <ng-container matColumnDef="unitario">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Unitario</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">unitario:</span><p>${{element.unitario | decimalFormat}}</p></mat-cell>
+                    </ng-container>
+                    
+                    <!-- Total -->
+                    <ng-container matColumnDef="total">
+                        <mat-header-cell mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+                        <mat-cell mat-cell *matCellDef="let element"><span class="mobile-label">Total:</span><p> ${{element.total | decimalFormat}}</p></mat-cell>
+                    </ng-container>
+
+                    <!-- Default row -->
+                    <mat-header-row *matHeaderRowDef="columnsVerificar; sticky: true"></mat-header-row>
+                    <mat-row class="table-row" mat-row *matRowDef="let row; columns: columnsVerificar; let i = index"></mat-row>
+                </mat-table>
+                
+            </div>
+
+            <form class="datos-finales" [formGroup]="formDatosFinales">
+                <div class="izq">
+                    <div class="enLinea">
+                        <!-- Tipo Pago -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Método de Pago</mat-label>
+                            <mat-select formControlName="tipoPago" >
+                                <mat-option *ngFor="let tpPago of tiposDePago" [value]="tpPago.id">{{tpPago.descripcion}}</mat-option>
+                            </mat-select> 
+                            <mat-error>Selecciona un metodo de pago</mat-error>
+                        </mat-form-field>
+
+                        <!-- Tipo Descuento -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Tipo de Descuento</mat-label>
+                            <mat-select formControlName="tipoDescuento" >
+                                <mat-option *ngFor="let tpDescuento of tipoDescuento" [value]="tpDescuento.id">{{tpDescuento.descripcion}}</mat-option>
+                            </mat-select> 
+                        </mat-form-field>
+
+                        <!-- Descuento -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Descuento</mat-label>
+                            <input matInput type="number" formControlName="descuento" placeholder="Descuento en porcentaje">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="enLinea">
+                        <!-- Empresa -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Empresa</mat-label>
+                            <mat-select formControlName="empresa" >
+                                <mat-option *ngFor="let item of empresas" [value]="item.id">{{item.descripcion}}</mat-option>
+                            </mat-select> 
+                        </mat-form-field>
+
+                        <!-- Comprobante -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Comprobante</mat-label>
+                            <mat-select formControlName="tipoDescuento" >
+                                <mat-option *ngFor="let item of comprobantes" [value]="item.id">{{item.descripcion}}</mat-option>
+                            </mat-select> 
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="centro">
+                    <mat-icon>shopping_cart</mat-icon>
+                    Cantidad Items: {{detalleFactura.length}}
+                </div>
+                
+                <div class="der">
+                    <div class="fila">
+                        <span>Total Productos:</span>
+                        <span class="monto">${{totalItems | decimalFormat}}</span>
+                    </div>
+
+                    <div class="fila">
+                        <span>Descuento:</span>
+                        <span class="monto">$3500</span>
+                    </div>
+
+                    <br>
+
+                    <div class="fila">
+                        <span>Total General:</span>
+                        <span class="monto">$30000</span>
+                    </div>
+
+                    <div class="fila">
+                        <span>Redondeo:</span>
+                        <input
+                        placeholder="Redondeo"
+                        type="text"
+                        formControlName="redondeo"
+                        [imask]="decimal_mask"
+                        />
+                    </div>
+
+                    <div class="fila total-final">
+                        <span>Total A Pagar:</span>
+                        <span class="monto">$30000</span>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="botones">
+                <button mat-stroked-button color="primary" matStepperPrevious>ANTERIOR</button>
+                <button mat-flat-button color="primary" matStepperNext>FACTURAR</button>
             </div>
         </mat-step>
     </mat-stepper>
